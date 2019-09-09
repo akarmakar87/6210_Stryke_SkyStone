@@ -33,14 +33,14 @@ public class MecanumLinearOpMode extends LinearOpMode{
     public DcMotor RF;
     public DcMotor LB;
     public DcMotor RB;
-    public DcMotor intakeL;
-    public DcMotor intakeR;
-    public DcMotor spinner;
+    //public DcMotor intakeL;
+    //public DcMotor intakeR;
+    //public DcMotor spinner;
     public BNO055IMU imu;
-    public DcMotor lift;
-    public Servo marker;
-    public Servo lock;
-    DistanceSensor range;
+    //public DcMotor lift;
+    //public Servo marker;
+    //public Servo lock;
+    //DistanceSensor range;
 
     //gyro variables
     Orientation angles;
@@ -68,15 +68,15 @@ public class MecanumLinearOpMode extends LinearOpMode{
         RF  = map.dcMotor.get("RF");
         LB  = map.dcMotor.get("LB");
         RB  = map.dcMotor.get("RB");
-        spinner = map.dcMotor.get("spinner");
-        intakeL  = map.dcMotor.get("intakeL");
-        intakeR  = map.dcMotor.get("intakeR");
-        marker = map.servo.get("marker");
-        range     = map.get(DistanceSensor.class, "range");
+        //spinner = map.dcMotor.get("spinner");
+        //intakeL  = map.dcMotor.get("intakeL");
+        //intakeR  = map.dcMotor.get("intakeR");
+        //marker = map.servo.get("marker");
+        //range     = map.get(DistanceSensor.class, "range");
         imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
 
-        lift  = map.dcMotor.get("lift");
-        lock  = map.servo.get("lock");
+        //lift  = map.dcMotor.get("lift");
+        //lock  = map.servo.get("lock");
 
         LF.setDirection(DcMotorSimple.Direction.FORWARD);
         RF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -88,7 +88,7 @@ public class MecanumLinearOpMode extends LinearOpMode{
         RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         resetEncoders();
 
         //SET UP GYRO
@@ -223,10 +223,10 @@ public class MecanumLinearOpMode extends LinearOpMode{
     }
 
     public void resetLift(){
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         idle();
 
-        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         idle();
     }
 
@@ -506,19 +506,19 @@ public class MecanumLinearOpMode extends LinearOpMode{
 
     public void unlatch() throws InterruptedException {
 
-        lock.setPosition(1);    //UNLOCK LIFT
+        //lock.setPosition(1);    //UNLOCK LIFT
         sleep(1000);
-        lock.setPosition(0.51); //Stop lock movement
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); //LET GRAVITY TAKE THE ROBOT DOWN
+        //lock.setPosition(0.51); //Stop lock movement
+        //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); //LET GRAVITY TAKE THE ROBOT DOWN
         sleep(1250);        /** We can speed up the auto by powering down the whole time instead of wasting time letting gravity do it **/
         //lock.setPosition(0);    //Stop lock movement
         sleep(750);
-        int liftTarget = lift.getCurrentPosition()-280; //FIND HOW FAR THE LIFT NEEDS TO RETRACT : ORIGINALLY 4000
-        while (!isStopRequested() && lift.getCurrentPosition() > liftTarget){   //RETRACT LIFT
-            lift.setPower(-1);
-        }
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.setPower(0);
+        //int liftTarget = lift.getCurrentPosition()-280; //FIND HOW FAR THE LIFT NEEDS TO RETRACT : ORIGINALLY 4000
+        //while (!isStopRequested() && lift.getCurrentPosition() > liftTarget){   //RETRACT LIFT
+          //  lift.setPower(-1);
+        //}
+        //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //lift.setPower(0);
         sleep(250);
         //MOVE A BIT TO TRIGGER CAMERA VIEWING
         strafeDistance(0.75, 6, false); //CHANGE to 5 to FIX SAMPLING
@@ -526,14 +526,14 @@ public class MecanumLinearOpMode extends LinearOpMode{
         sleep(250);
     }
 
-    public void setHook() throws InterruptedException {
+    /*public void setHook() throws InterruptedException {
         int liftTarget = lift.getCurrentPosition()-4000; //FIND HOW FAR THE LIFT NEEDS TO RETRACT
         while (!isStopRequested() && lift.getCurrentPosition() > liftTarget){   //RETRACT LIFT
             lift.setPower(-1);
         }
-    }
+    }*/
 
-    public void markerMove() throws InterruptedException{
+    /*public void markerMove() throws InterruptedException{
         resetTime();
         while (range.getDistance(DistanceUnit.INCH) > 7 && runtime.seconds() < 5 && !isStopRequested() && opModeIsActive()){
             setStrafePowers(1, true);
@@ -544,7 +544,7 @@ public class MecanumLinearOpMode extends LinearOpMode{
 
     public double getRange(){
         return range.getDistance(DistanceUnit.INCH);
-    }
+    }*/
 
     public void initVuforia() {
         /*
