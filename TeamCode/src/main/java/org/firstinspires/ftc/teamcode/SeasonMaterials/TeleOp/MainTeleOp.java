@@ -17,8 +17,6 @@ public class MainTeleOp extends MecanumLinearOpMode {
 
         boolean halfSpeed = false;
 
-        boolean servoDown = false;
-
         telemetry.addData("Mode: ", "Waiting for start");
         telemetry.update();
 
@@ -40,7 +38,7 @@ public class MainTeleOp extends MecanumLinearOpMode {
             }
 
             //HALFSPEED
-            if (gamepad1.right_trigger > 0.5 || gamepad2.right_trigger > 0.5) {
+            if (gamepad1.right_bumper == true) {
                 halfSpeed = true;
                 leftPower = leftPower / 2;
                 rightPower = rightPower / 2;
