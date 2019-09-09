@@ -47,7 +47,7 @@ public class MainTeleOp extends MecanumLinearOpMode {
             }else{
                 halfSpeed = false;
             }
-
+/*
             //LIFT CONTROLS
             if (gamepad2.right_bumper) {
                 lift.setPower(1); //LIFT DOWN
@@ -66,9 +66,9 @@ public class MainTeleOp extends MecanumLinearOpMode {
             }
 
             //DON'T NEED BECAUSE AUTO GETS IT OUT OF THE WAY AND DON'T NEED IT IN TELE-OP
-            /*if(gamepad2.a){
+            if(gamepad2.a){
                 setHook();
-            }*/
+            }
 
             //LOCK CONTROLS
             while(gamepad2.dpad_right){    //LOCK
@@ -80,7 +80,7 @@ public class MainTeleOp extends MecanumLinearOpMode {
             while(gamepad2.dpad_down){   //STAY STILL
                 lock.setPosition(0.51);
             }
-
+*/
             //Strafe Controls
             while (gamepad1.left_bumper){ //Strafe right - inverted
                 setStrafePowers(-1,true);
@@ -92,8 +92,8 @@ public class MainTeleOp extends MecanumLinearOpMode {
             setMotorPowers(leftPower, rightPower);
 
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower)
-                    .addData("Half Speed", halfSpeed)
-                    .addData("Lift pos", lift.getCurrentPosition());
+                    .addData("Half Speed", halfSpeed);
+                   // .addData("Lift pos", lift.getCurrentPosition());
             telemetry.update();
         }
     }
