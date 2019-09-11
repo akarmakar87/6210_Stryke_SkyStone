@@ -134,14 +134,19 @@ public class MecanumLinearOpMode extends LinearOpMode{
             RF.setPower(Range.clip(power, -1, 1));
             LB.setPower(Range.clip(power, -1, 1));
             RB.setPower(-Range.clip(power, -1, 1));
-        }else{
+        }
+        else{
             LF.setPower(Range.clip(power, -1, 1));
             RF.setPower(-Range.clip(power, -1, 1));
             LB.setPower(-Range.clip(power, -1, 1));
             RB.setPower(Range.clip(power, -1, 1));
         }
-
+        double preYaw = getYaw();
+        if (getYaw() > preYaw) {
+        }
     }
+
+
 
     public void strafeAdjust(double power, double distance, boolean right, int timeout){
 
