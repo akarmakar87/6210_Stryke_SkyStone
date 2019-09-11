@@ -1,15 +1,13 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.PastSeasonMaterials;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
-import org.firstinspires.ftc.teamcode.SeasonMaterials.MecanumLinearOpMode;
 
 @Autonomous(name="TurnTest", group = "auto")
 
 @Disabled
 
-public class TurnTest extends TurnPIDMethod_Asha {
+public class TurnTest extends Original_TurnPIDMethod_Asha {
 
     @Override
     public void runOpMode() throws InterruptedException {

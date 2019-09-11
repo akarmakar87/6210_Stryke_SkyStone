@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.SeasonMaterials.Testing;
+package org.firstinspires.ftc.teamcode.PastSeasonMaterials.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.SeasonMaterials.MecanumLinearOpMode;
+import org.firstinspires.ftc.teamcode.PastSeasonMaterials.MecanumLinearOpMode;
 
 @Autonomous(name="MecanumAutoCrater", group = "auto")
 @Disabled

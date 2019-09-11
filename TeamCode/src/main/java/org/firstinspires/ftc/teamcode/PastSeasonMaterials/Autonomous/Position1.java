@@ -1,10 +1,8 @@
-package org.firstinspires.ftc.teamcode.SeasonMaterials.Autonomous;
+package org.firstinspires.ftc.teamcode.PastSeasonMaterials.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.teamcode.SeasonMaterials.MecanumLinearOpMode;
+import org.firstinspires.ftc.teamcode.PastSeasonMaterials.MecanumLinearOpMode;
 
 @Autonomous(name="Position1", group = "auto")
 //@Disabled

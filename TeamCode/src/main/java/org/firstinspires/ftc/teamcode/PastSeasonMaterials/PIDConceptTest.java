@@ -1,12 +1,16 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.PastSeasonMaterials;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.teamcode.SeasonMaterials.AutoLinearOpMode;
 
 @TeleOp(name="PID concept Test", group="teleop")
 
 public class PIDConceptTest extends AutoLinearOpMode {
+
+    /**
+     * IGNORE THIS PROGRAM, IT'S WEIRD
+     *
+     */
+
 
     @Override
     public void runOpMode() throws InterruptedException {

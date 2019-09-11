@@ -1,11 +1,10 @@
-package org.firstinspires.ftc.teamcode.SeasonMaterials;
+package org.firstinspires.ftc.teamcode.PastSeasonMaterials;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -18,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.List;
 
 
-public class OldMecanumLinearOpMode extends LinearOpMode{
+public class MecanumLinearOpMode extends LinearOpMode{
 
     // DECLARE VARIABLES TO BE USED
     ElapsedTime runtime;
@@ -28,15 +27,19 @@ public class OldMecanumLinearOpMode extends LinearOpMode{
     public DcMotor RF;
     public DcMotor LB;
     public DcMotor RB;
+    //public DcMotor intakeL;
+    //public DcMotor intakeR;
+    //public DcMotor spinner;
     public BNO055IMU imu;
-    public DcMotor lift;
-    public Servo marker;
-    public Servo lock;
+    //public DcMotor lift;
+    //public Servo marker;
+    //public Servo lock;
+    //DistanceSensor range;
 
     //gyro variables
     Orientation angles;
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // REV Motor Encoder
+    static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // REV Motor Encoder (1120 for 20:1)
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
 
@@ -52,36 +55,40 @@ public class OldMecanumLinearOpMode extends LinearOpMode{
     public TFObjectDetector tfod;
 
     // INITIALIZE
-    public double init(HardwareMap map, boolean auto){
+    public void init(HardwareMap map, boolean auto){
 
         runtime     = new ElapsedTime();
         LF  = map.dcMotor.get("LF");
         RF  = map.dcMotor.get("RF");
         LB  = map.dcMotor.get("LB");
         RB  = map.dcMotor.get("RB");
-        marker = map.servo.get("marker");
-        imu            = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
+        //spinner = map.dcMotor.get("spinner");
+        //intakeL  = map.dcMotor.get("intakeL");
+        //intakeR  = map.dcMotor.get("intakeR");
+        //marker = map.servo.get("marker");
+        //range     = map.get(DistanceSensor.class, "range");
+        imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
 
-        lift  = map.dcMotor.get("lift");
-        lock  = map.servo.get("lock");
+        //lift  = map.dcMotor.get("lift");
+        //lock  = map.servo.get("lock");
 
-        LF.setDirection(DcMotorSimple.Direction.REVERSE);
-        RF.setDirection(DcMotorSimple.Direction.FORWARD);
-        RB.setDirection(DcMotorSimple.Direction.FORWARD);
-        LB.setDirection(DcMotorSimple.Direction.REVERSE);
+        LF.setDirection(DcMotorSimple.Direction.FORWARD);
+        RF.setDirection(DcMotorSimple.Direction.REVERSE);
+        RB.setDirection(DcMotorSimple.Direction.REVERSE);
+        LB.setDirection(DcMotorSimple.Direction.FORWARD);
 
 
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         resetEncoders();
 
         //SET UP GYRO
-        if (auto) {
-            angles = new Orientation();
+        angles = new Orientation();
 
+        if (auto) {
             BNO055IMU.Parameters bparameters = new BNO055IMU.Parameters();
             bparameters.mode = BNO055IMU.SensorMode.IMU;
             bparameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -89,6 +96,8 @@ public class OldMecanumLinearOpMode extends LinearOpMode{
             bparameters.loggingEnabled = false;
 
             imu.initialize(bparameters);
+
+            angles = imu.getAngularOrientation(); //GET ORIENTATION
 
             telemetry.addData("Mode", "calibrating...");
             telemetry.update();
@@ -103,7 +112,6 @@ public class OldMecanumLinearOpMode extends LinearOpMode{
         }
         telemetry.addData("Status: ", "Initialized");
         telemetry.update();
-        return getYaw();
     }
 
     //SET POWER TO DRIVE MOTORS
@@ -127,6 +135,24 @@ public class OldMecanumLinearOpMode extends LinearOpMode{
             RB.setPower(Range.clip(power, -1, 1));
         }
 
+    }
+
+    public void strafeAdjust(double power, double distance, boolean right, int timeout){
+
+        double deltaHeading = 0;
+
+        resetEncoders();
+        while (getEncoderAvg() < distance * 55 && !isStopRequested()) {
+           deltaHeading = getYaw();
+           power = Range.clip(deltaHeading/0.5, 0.25, 1);
+
+           if (Math.abs(getYaw()-90) > 5){
+               driveTime(1,0.5);
+           }else{
+               setStrafePowers(power,right);
+           }
+
+        }
     }
 
     // TIME BASED MOVEMENT
@@ -166,6 +192,7 @@ public class OldMecanumLinearOpMode extends LinearOpMode{
     public int getEncoderAvg(){
         //divided by three for now because RB encoder returns 0
         int avg = (Math.abs(LF.getCurrentPosition()) + Math.abs(RF.getCurrentPosition()) + Math.abs(LB.getCurrentPosition()) + Math.abs(RB.getCurrentPosition()))/3;
+        //MAKE SURE ALL ENCODERS WORK BEFORE DIVIDING BY 4 OR PUT IN A CONDITION TO DETERMINE IF AN ENCODER VALUE IS WEIRD, AND DIVIDE ACCORDINGLY
         return avg;
     }
 
@@ -190,10 +217,10 @@ public class OldMecanumLinearOpMode extends LinearOpMode{
     }
 
     public void resetLift(){
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         idle();
 
-        lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         idle();
     }
 
@@ -213,92 +240,114 @@ public class OldMecanumLinearOpMode extends LinearOpMode{
         resetEncoders();
         while (getEncoderAvg() < distance * 55 && !isStopRequested()){
             if (right){
+                LF.setPower(power);
+                RF.setPower(-power);
+                LB.setPower(-power);
+                RB.setPower(power);
+            }else {
                 LF.setPower(-power);
                 RF.setPower(power);
                 LB.setPower(power);
                 RB.setPower(-power);
-            }else {
+            }
+        }
+        stopMotors();
+    }
+
+    //GET ANGLE
+    public double getYaw() {
+        angles = imu.getAngularOrientation();
+        return angles.firstAngle;
+    }
+
+    public void turnPID(double tAngle, double kP, double kI, double kD, double timeOut){
+        double power, prevError, error, dT, prevTime, currTime, P, I, D; //DECLARE ALL VARIABLES
+        prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
+        power = dT = prevTime = currTime = P = I = D = 0;
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        while (Math.abs(error) > 0.5 && currTime < timeOut){
+            prevError = error;
+            error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+            prevTime = currTime;
+            currTime = time.milliseconds();
+            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
+            P = error;
+            I = error * dT;
+            D = (error - prevError)/dT;
+            power = P * kP + I * kI + D * kD;
+            setMotorPowers(Range.clip(power, 0.2, 1), -Range.clip(power, 0.2, 1));
+
+            telemetry.addData("tAngle: ", tAngle)
+                    .addData("P:", P)
+                    .addData("I:", I)
+                    .addData("D:", D)
+                    .addData("power", power)
+                    .addData("error: ", error)
+                    .addData("currTime: ", currTime);
+        }
+    }
+
+    //ROTATE USING GYRO
+    public void rotate(double targetAngleChange, int timeout) {
+
+        runtime.reset();
+
+        double power = 0;
+        double origDiff = getYaw() - targetAngleChange;
+        double deltaHeading = 0;
+
+        while ((Math.abs(getYaw()-targetAngleChange) > 1) && opModeIsActive() && (runtime.seconds() < timeout)) {
+
+            telemetry.addData("Turning:", "From " + getYaw() + " to " + targetAngleChange);
+            telemetry.update();
+
+            deltaHeading = getYaw() - targetAngleChange; //GET ANGLE LEFT UNTIL TARGET ANGLE
+            power = Range.clip(0.4 * deltaHeading/origDiff, 0.2, 1); //PROPORTIONAL SPEED
+            /** Why is dHeading/oDiff multiplied by 0.4? -Garrett **/
+            if (deltaHeading < -180 || (deltaHeading > 0 && deltaHeading < 180) ) { //LEFT IS + , RIGHT IS -
                 LF.setPower(power);
+                LB.setPower(power);
                 RF.setPower(-power);
+                RB.setPower(-power);
+            } else {
+                LF.setPower(-power);
                 LB.setPower(-power);
+                RF.setPower(power);
                 RB.setPower(power);
             }
         }
         stopMotors();
     }
 
-
-    //UPDATE ANGLE
-    public void updateValues() {
-        angles = imu.getAngularOrientation();
-    }
-
-    //GET ANGLE
-    public double getYaw() {
-        updateValues();
-        return angles.firstAngle;
-    }
-
-    public Orientation getAngles() {
-        return angles;
-    }
-
-    //ROTATE USING GYRO
-    public void rotateP(double targetAngleChange, boolean turnRight, int timeout) {
+    public void rotateS(double targetAngleChange, int timeout) {
 
         runtime.reset();
 
-        double initAngle = getYaw();
-        telemetry.addData("Initial Angle", initAngle);
-        telemetry.update();
+        double power = 0;
+        double origDiff = getYaw() - targetAngleChange;
+        double deltaHeading = 0;
 
-        double currAngleChange = getYaw() - initAngle;
-        telemetry.addData("CurrAngleChange", currAngleChange);
-        telemetry.update();
+        while ((Math.abs(getYaw()-targetAngleChange) > 0.5) && opModeIsActive() && (runtime.seconds() < timeout)) {
 
-        while ((Math.abs(getYaw() - initAngle) < targetAngleChange) && opModeIsActive() && (runtime.seconds() < timeout)) {
-            currAngleChange = getYaw() - initAngle;
-            double kP = .5/90;
-            double power = .1 + currAngleChange * kP;
-            if (turnRight){
-                setMotorPowers(power,-power);
-            }else {
-                setMotorPowers(-power, power);
-            }
-
-            telemetry.addData("Angle left", targetAngleChange - currAngleChange);
+            telemetry.addData("Turning:", "From " + getYaw() + " to " + targetAngleChange);
             telemetry.update();
 
-        }
-        stopMotors();
-    }
-
-
-    //ROTATE USING GYRO
-    public void rotate(double power, double targetAngleChange, boolean turnRight, int timeout) {
-
-        runtime.reset();
-
-        targetAngleChange -= 5;
-
-        double initAngle = getYaw();
-        telemetry.addData("Initial Angle", initAngle);
-        telemetry.update();
-
-        double currAngleChange = getYaw() - initAngle;
-        telemetry.addData("CurrAngleChange", currAngleChange);
-        telemetry.update();
-
-        while ((Math.abs(getYaw() - initAngle) < targetAngleChange) && opModeIsActive() && (runtime.seconds() < timeout)) {
-            if (turnRight){
-                setMotorPowers(power,-power);
-            }else {
-                setMotorPowers(-power, power);
+            deltaHeading = getYaw() - targetAngleChange; //GET ANGLE LEFT UNTIL TARGET ANGLE
+            //power = Range.clip(0.3 * deltaHeading/origDiff, 0.2, 1); //PROPORTIONAL SPEED
+            power = 0.2;
+            /** Why is dHeading/oDiff multiplied by 0.4? -Garrett **/
+            if (deltaHeading < -180 || (deltaHeading > 0 && deltaHeading < 180) ) { //LEFT IS + , RIGHT IS -
+                LF.setPower(power);
+                LB.setPower(power);
+                RF.setPower(-power);
+                RB.setPower(-power);
+            } else {
+                LF.setPower(-power);
+                LB.setPower(-power);
+                RF.setPower(power);
+                RB.setPower(power);
             }
-
-            telemetry.addData("Angle left", targetAngleChange - currAngleChange);
-            telemetry.update();
-
         }
         stopMotors();
     }
@@ -378,16 +427,12 @@ public class OldMecanumLinearOpMode extends LinearOpMode{
     }
 
     public void pushGoldEm(int goldpos) throws InterruptedException {
-        // double angleOff = 0;
-        // double power = 0.3;
-        double x = 0;
         resetTime();
         telemetry.addData("gold is ", goldpos);
         telemetry.update();
         switch (goldpos){
             case 1:
-                rotate(0.3, 35, true, 4); //WAS 27
-                x = 15;
+                rotate( -35, 4);
                 sleep(1000);
                 driveDistance(-0.4, 9.5); //PUSH AND BACK UP
                 sleep(1000);
@@ -395,157 +440,105 @@ public class OldMecanumLinearOpMode extends LinearOpMode{
                 disableDetector();
                 break;
             case 2:
-                x = 20;
-                //strafeDistance(0.5, 3, true);
                 sleep(1000);
                 driveDistance(-0.4, 9.5); //PUSH AND BACK UP
                 sleep(1000);
                 driveDistance(0.3, 5.5);
-                //   angleOff = getYaw(); //UPDATE ANGLE
                 disableDetector();
-                //rotate(0.2, 90 - angleOff, false, 5);   //ROTATE TOWARD WALL
                 break;
 
             case 3:
-                x = 27;
                 strafeDistance(0.5, 7, true);
-                rotate(0.3, 30, false, 4);
+                //rotate(0.3, 30, false, 4);
+                rotate(30,4);
                 sleep(1000);
                 driveDistance(-0.4, 9.5); //PUSH AND BACK UP
                 sleep(1000);
                 driveDistance(0.3, 5.5);
-                // angleOff = getYaw(); //UPDATE ANGLE
                 disableDetector();
                 break;
         }
         sleep(1000);
-        //IN ORDER TO FIX CHECKALIGN() ISSUE WITH DETECTOR NOT BEING DISABLED, TRY PUTTING A DEACTIVATE COMMAND HER
     }
 
-    public double pushGold(int goldpos, boolean crater) throws InterruptedException {
-       // double angleOff = 0;
-       // double power = 0.3;
+    public double pushGold(int goldpos, boolean crater, double offset) throws InterruptedException {
         double x = 0;
         resetTime();
         telemetry.addData("gold is ", goldpos);
         telemetry.update();
         switch (goldpos){
             case 1:
-                rotate(0.3, 35, true, 4); //WAS 27
-                x = 15;
+                rotate(offset+30,4);
+                x = 20; //WAS 15
                 sleep(1000);
-                driveDistance(-0.4, 9.5); //PUSH AND BACK UP
-                sleep(1000);
-                driveDistance(0.3, 5);
-                disableDetector();
-                if (crater)
-                    rotate(0.3, 120, false,5);   //ROTATE TOWARD WALL
-                else
-                    rotate(0.3, 55, true,5);   //ROTATE TOWARD WALL
+                driveDistance(0.4, 11); //PUSH AND BACK UP
                 break;
             case 2:
-                x = 20;
-                //strafeDistance(0.5, 3, true);
+                x = 25;
                 sleep(1000);
-                driveDistance(-0.4, 9.5); //PUSH AND BACK UP
-                sleep(1000);
-                driveDistance(0.3, 5.5);
-             //   angleOff = getYaw(); //UPDATE ANGLE
-                disableDetector();
-                //rotate(0.2, 90 - angleOff, false, 5);   //ROTATE TOWARD WALL
-                if (crater)
-                    rotate(0.3, 90, false,5);   //ROTATE TOWARD WALL
-                else
-                    rotate(0.3, 90, true, 5);   //ROTATE TOWARD WALL
+                strafeDistance(1, 5.5, true);
+                driveDistance(0.4, 9.5); //PUSH AND BACK UP
                 break;
-
             case 3:
-                x = 27;
+                x = 30;
                 strafeDistance(0.5, 7, true);
-                rotate(0.3, 35, false, 4);
+                rotate(offset-30,4);
                 sleep(1000);
-                driveDistance(-0.4, 9.5); //PUSH AND BACK UP
-                sleep(1000);
-                driveDistance(0.3, 5.5);
-               // angleOff = getYaw(); //UPDATE ANGLE
-                disableDetector();
-                //rotate(0.2, 90-angleOff, true, 5);   //ROTATE TOWARD WALL
-                //rotate(0.3, 180, false, 3);
-                if (crater)
-                    rotate(0.3, 55, false,5);   //ROTATE TOWARD WALL
-                else
-                    rotate(0.3, 125, true, 5);   //ROTATE TOWARD WALL
+                driveDistance(0.4, 9.5); //PUSH AND BACK UP
                 break;
         }
         sleep(1000);
-        //IN ORDER TO FIX CHECKALIGN() ISSUE WITH DETECTOR NOT BEING DISABLED, TRY PUTTING A DEACTIVATE COMMAND HERE
+        driveDistance(-0.3, 4);
+        disableDetector();
+        if (crater)
+            rotate(offset-90, 4);
+        else
+            rotate(offset+90, 4);
+        sleep(1000);
         return x;
     }
 
- /**   public boolean checkAlign(){
-        boolean aligned = false;
-        activateDetector();
-            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions(); //MAKE LIST OF OBJECTS DETECTED
-            if (updatedRecognitions != null) { //IF LIST IS NOT NULL
-                telemetry.addData("# of Objects Detected", updatedRecognitions.size()); //GET # OF OBJECTS DETECTED
-                if (updatedRecognitions.size() > 0) { //IF DETECT BOTH OBJECTS
-                    int goldMineralX = -1;
-                    int silverMineral1X = -1;
-                    int silverMineral2X = -1;
-                    for (Recognition recognition : updatedRecognitions) {
-                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) { //IF OBJECT DETECTED IS GOLD
-                            goldMineralX = (int) recognition.getLeft();
-                        } else if (silverMineral1X == -1) {
-                            silverMineral1X = (int) recognition.getLeft();
-                        } else {
-                            silverMineral2X = (int) recognition.getLeft();
-                        }
-                    }
-
-                    if (goldMineralX > 500 && goldMineralX < 700) {
-                        telemetry.addData("Gold", "Aligned");
-                        aligned = true;
-                    }else{
-                        telemetry.addData("Gold", "Not Aligned");
-                        aligned = false;
-                    }
-                    telemetry.addData("Gold x pos ", goldMineralX);
-                }
-                telemetry.update();
-
-        }
-
-        telemetry.update();
-        return aligned;
-    }**/
-//
     public void unlatch() throws InterruptedException {
-        //lift.setPower(0.5);    //LIFT PULLS ROBOT UP (releases tension for easy unlock)
-        lock.setPosition(1);    //UNLOCK LIFT
+
+        //lock.setPosition(1);    //UNLOCK LIFT
         sleep(1000);
-        lock.setPosition(0.51);
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); //LET GRAVITY TAKE THE ROBOT DOWN
-        sleep(1250);
+        //lock.setPosition(0.51); //Stop lock movement
+        //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT); //LET GRAVITY TAKE THE ROBOT DOWN
+        sleep(1250);        /** We can speed up the auto by powering down the whole time instead of wasting time letting gravity do it **/
         //lock.setPosition(0);    //Stop lock movement
         sleep(750);
-        int liftTarget = lift.getCurrentPosition()-250; //FIND HOW FAR THE LIFT NEEDS TO RETRACT : ORIGINALLY 4000
-        while (!isStopRequested() && lift.getCurrentPosition() > liftTarget){   //RETRACT LIFT
-            lift.setPower(-1);
-        }
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.setPower(0);
+        //int liftTarget = lift.getCurrentPosition()-280; //FIND HOW FAR THE LIFT NEEDS TO RETRACT : ORIGINALLY 4000
+        //while (!isStopRequested() && lift.getCurrentPosition() > liftTarget){   //RETRACT LIFT
+          //  lift.setPower(-1);
+        //}
+        //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //lift.setPower(0);
         sleep(250);
         //MOVE A BIT TO TRIGGER CAMERA VIEWING
-        strafeDistance(0.75, 4, false);
+        strafeDistance(0.75, 6, false); //CHANGE to 5 to FIX SAMPLING
+        //rotate(45,3);
         sleep(250);
     }
 
-    public void setHook() throws InterruptedException {
-        int liftTarget = lift.getCurrentPosition()-3500; //FIND HOW FAR THE LIFT NEEDS TO RETRACT
+    /*public void setHook() throws InterruptedException {
+        int liftTarget = lift.getCurrentPosition()-4000; //FIND HOW FAR THE LIFT NEEDS TO RETRACT
         while (!isStopRequested() && lift.getCurrentPosition() > liftTarget){   //RETRACT LIFT
             lift.setPower(-1);
         }
+    }*/
+
+    /*public void markerMove() throws InterruptedException{
+        resetTime();
+        while (range.getDistance(DistanceUnit.INCH) > 7 && runtime.seconds() < 5 && !isStopRequested() && opModeIsActive()){
+            setStrafePowers(1, true);
+            telemetry.addData("Inches left", range.getDistance(DistanceUnit.INCH));
+            telemetry.update();
+        }
     }
+
+    public double getRange(){
+        return range.getDistance(DistanceUnit.INCH);
+    }*/
 
     public void initVuforia() {
         /*

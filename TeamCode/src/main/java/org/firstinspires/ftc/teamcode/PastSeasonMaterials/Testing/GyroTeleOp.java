@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.SeasonMaterials.Testing;
+package org.firstinspires.ftc.teamcode.PastSeasonMaterials.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.SeasonMaterials.MecanumLinearOpMode;
+import org.firstinspires.ftc.teamcode.PastSeasonMaterials.MecanumLinearOpMode;
 
 @TeleOp(name="Gyro", group="sensor")
 @Disabled
