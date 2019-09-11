@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -32,7 +33,7 @@ public class MecanumLinearOpMode extends LinearOpMode{
     //public DcMotor spinner;
     public BNO055IMU imu;
     //public DcMotor lift;
-    //public Servo marker;
+    public Servo manip;
     //public Servo lock;
     //DistanceSensor range;
 
@@ -65,7 +66,7 @@ public class MecanumLinearOpMode extends LinearOpMode{
         //spinner = map.dcMotor.get("spinner");
         //intakeL  = map.dcMotor.get("intakeL");
         //intakeR  = map.dcMotor.get("intakeR");
-        //marker = map.servo.get("marker");
+        manip = map.servo.get("manip");
         //range     = map.get(DistanceSensor.class, "range");
         imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
 
