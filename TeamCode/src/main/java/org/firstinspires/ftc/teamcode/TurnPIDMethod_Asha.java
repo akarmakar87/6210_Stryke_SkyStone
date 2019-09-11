@@ -1,24 +1,36 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.SeasonMaterials.AutoLinearOpMode;
-import org.firstinspires.ftc.teamcode.SeasonMaterials.MecanumLinearOpMode;
+import org.firstinspires.ftc.teamcode.PastSeasonMaterials.MecanumLinearOpMode;
 
 @Autonomous(name="TurnPIDTestAsha", group="auto")
 
-public class TurnPIDMethod_Asha extends MecanumLinearOpMode {
+public class TurnPIDMethod_Asha extends SkystoneLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {}
 
+    /**
+     *
+     * @param tAngle
+     * @param kP (Depending on the situation, decide at what speed you want to start the turn,
+     *           then divide by the angle) = For example, kP = 0.6/90
+     * @param kI (Should be a very small number, big effect)
+     * @param kD (Increase as needed to minimize oscillations)
+     * @param timeOut
+     */
+
     public void turnPID(double tAngle, double kP, double kI, double kD, double timeOut){
+
         double power, prevError, error, dT, prevTime, currTime, P, I, D; //DECLARE ALL VARIABLES
+
         prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
+
         power = dT = prevTime = currTime = P = I = D = 0;
+
         ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
         resetTime();
         while (Math.abs(error) > 0.5 && currTime < timeOut){
