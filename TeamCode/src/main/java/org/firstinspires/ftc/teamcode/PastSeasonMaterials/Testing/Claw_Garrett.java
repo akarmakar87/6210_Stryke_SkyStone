@@ -15,9 +15,9 @@ public class Claw_Garrett extends MecanumLinearOpMode {
         init(hardwareMap, false);
 
         waitForStart();
-        manip.setPosition(0);
+        manip.setPosition(0.25);
         wait(1000);
-        manip.setPosition(0.5);
+        manip.setPosition(0.75);
 
     }
 }
