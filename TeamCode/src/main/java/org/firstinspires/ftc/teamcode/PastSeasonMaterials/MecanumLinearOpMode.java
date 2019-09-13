@@ -123,26 +123,40 @@ public class MecanumLinearOpMode extends LinearOpMode{
         RB.setPower(Range.clip(rightPower, -1, 1));
     }
 
-    public void setStrafePowers(double power, boolean right){
-        if (right){
-            LF.setPower(-Range.clip(power, -1, 1));
-            RF.setPower(Range.clip(power, -1, 1));
-            LB.setPower(Range.clip(power, -1, 1));
-            RB.setPower(-Range.clip(power, -1, 1));
-        }
-        else{
-            LF.setPower(Range.clip(power, -1, 1));
-            RF.setPower(-Range.clip(power, -1, 1));
-            LB.setPower(-Range.clip(power, -1, 1));
-            RB.setPower(Range.clip(power, -1, 1));
-        }
-        double preYaw = getYaw();
-        if (getYaw() > preYaw) {
+    public void setStrafePowers(double power, boolean right, double angle) {  // Garrett(9/13/19)
+            double tarYaw = angle;
+            double curYaw = getYaw();
+            double RFpower = power;
+            double RBpower = power;
+            if (right) {
+                if (curYaw >= tarYaw + 3) {
+                    RBpower =- 5 * (curYaw - tarYaw);
+                }
+                if (curYaw <= tarYaw - 3) {
+                    RFpower =- 5 * (tarYaw - curYaw);
+                }
+                LF.setPower(-Range.clip(power, -1, 1));
+                RF.setPower(Range.clip(RFpower, -1, 1));
+                LB.setPower(Range.clip(power, -1, 1));
+                RB.setPower(-Range.clip(RBpower, -1, 1));
+            }
+            else {
+                if (curYaw >= tarYaw + 3) {
+                    RFpower =- 5 * (curYaw - tarYaw);
+                }
+                if (curYaw <= tarYaw - 3) {
+                    RBpower =- 5 * (tarYaw - curYaw);
+                }
+                LF.setPower(Range.clip(power, -1, 1));
+                RF.setPower(-Range.clip(RFpower, -1, 1));
+                LB.setPower(-Range.clip(power, -1, 1));
+                RB.setPower(Range.clip(RBpower, -1, 1));
         }
     }
 
 
-
+/*  FOLLOWING COMMENTED BECAUSE:    It seems to stop the robot and make it go forward to keep it going 'straight',
+    but I believe I have a better method above and this method gives errors because of the changes to the one I edited.
     public void strafeAdjust(double power, double distance, boolean right, int timeout){
 
         double deltaHeading = 0;
@@ -159,7 +173,7 @@ public class MecanumLinearOpMode extends LinearOpMode{
            }
 
         }
-    }
+    }*/
 
     // TIME BASED MOVEMENT
     public void driveTime(double power, double seconds){

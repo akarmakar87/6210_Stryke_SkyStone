@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.PastSeasonMaterials.Testing;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.PastSeasonMaterials.MecanumLinearOpMode;
 
-@TeleOp (name = "ColorTutorial", group = "Sensor")
+@Autonomous(name = "ColorTutorial", group = "Sensor")
 //@Disabled
 public class Claw_Garrett extends MecanumLinearOpMode {
 
