@@ -181,7 +181,7 @@ public class ConceptI2cAddressChange extends LinearOpMode {
 
   }
 
-  private boolean foundExpectedBytes(int[] byteArray, Lock lock, byte[] cache) {
+  public boolean foundExpectedBytes(int[] byteArray, Lock lock, byte[] cache) {
     try {
       lock.lock();
       boolean allMatch = true;
@@ -201,7 +201,7 @@ public class ConceptI2cAddressChange extends LinearOpMode {
     }
   }
 
-  private void performAction(String actionName, int port, I2cAddr i2cAddress, int memAddress, int memLength) {
+  public void performAction(String actionName, int port, I2cAddr i2cAddress, int memAddress, int memLength) {
     if (actionName.equalsIgnoreCase("read")) dim.enableI2cReadMode(port, i2cAddress, memAddress, memLength);
     if (actionName.equalsIgnoreCase("write")) dim.enableI2cWriteMode(port, i2cAddress, memAddress, memLength);
 
@@ -210,7 +210,7 @@ public class ConceptI2cAddressChange extends LinearOpMode {
     dim.readI2cCacheFromController(port);
   }
 
-  private void writeNewAddress() {
+  public void writeNewAddress() {
     try {
       writeLock.lock();
       writeCache[4] = (byte) newAddress.get8Bit();

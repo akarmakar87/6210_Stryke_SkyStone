@@ -81,10 +81,10 @@ public class MainTeleOp extends MecanumLinearOpMode {
 */
             //Strafe Controls
             while (gamepad1.left_bumper){ //Strafe right - inverted
-                setStrafePowers(-1,true);
+                setStrafePowers(-1,true, 0);
             }
             while (gamepad1.right_bumper){ //Strafe left - inverted
-                setStrafePowers(-1,false);
+                setStrafePowers(-1,false, 0);
             }
 
             setMotorPowers(leftPower, rightPower);
