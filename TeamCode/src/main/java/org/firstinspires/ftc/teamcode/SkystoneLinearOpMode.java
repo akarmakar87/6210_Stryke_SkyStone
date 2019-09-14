@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -39,6 +40,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public DcMotor LB;
     public DcMotor RB;
     public BNO055IMU imu;
+    public DcMotor lift;
+    public Servo hook;
 
     //GYRO VARIABLES
     Orientation angles;
@@ -103,17 +106,20 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         LB  = map.dcMotor.get("LB");
         RB  = map.dcMotor.get("RB");
         imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
+        lift = map.dcMotor.get("lift");
+        hook = map.servo.get("hook");
 
         LF.setDirection(DcMotorSimple.Direction.FORWARD);
         RF.setDirection(DcMotorSimple.Direction.REVERSE);
         RB.setDirection(DcMotorSimple.Direction.REVERSE);
         LB.setDirection(DcMotorSimple.Direction.FORWARD);
-
+        lift.setDirection(DcMotorSimple.Direction.FORWARD);
 
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         resetEncoders();
 
         //SET UP GYRO
@@ -326,6 +332,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
      **/
+
+
 
     //TIME BASED MOVEMENT
     public void driveTime(double power, double seconds){
