@@ -24,6 +24,7 @@ public class TurnTest extends Original_TurnPIDMethod_Asha {
         telemetry.addData("Turn PD","Complete");
         turnPID(90, 0.6/90, 0.5, 0.1, 5);
         telemetry.addData("Turn PID","Complete");
+        telemetry.update();
 
 
     }
