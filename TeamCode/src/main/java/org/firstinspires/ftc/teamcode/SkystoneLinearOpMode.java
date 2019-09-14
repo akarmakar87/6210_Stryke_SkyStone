@@ -17,9 +17,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.PastSeasonMaterials.ConceptTensorFlowObjectDetection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -484,19 +481,39 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             power = Range.clip(0.4 * deltaHeading/origDiff, 0.2, 1); //PROPORTIONAL SPEED
             /** Why is dHeading/oDiff multiplied by 0.4? -Garrett **/
             if (deltaHeading < -180 || (deltaHeading > 0 && deltaHeading < 180) ) { //LEFT IS + , RIGHT IS -
-                LF.setPower(power);
-                LB.setPower(power);
-                RF.setPower(-power);
-                RB.setPower(-power);
+                setMotorPowers(power, -power);
             } else {
-                LF.setPower(-power);
-                LB.setPower(-power);
-                RF.setPower(power);
-                RB.setPower(power);
+                setMotorPowers(-power, power);
             }
         }
         stopMotors();
     }
+
+    public void turnP(double tAngle, double kP, double timeOut){
+        double power, prevError, error, dT, prevTime, currTime, P; //DECLARE ALL VARIABLES
+        prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
+        power = dT = prevTime = currTime = P = 0;
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        while (Math.abs(error) > 0.5 && currTime < timeOut){
+            prevError = error;
+            error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+            prevTime = currTime;
+            currTime = time.milliseconds();
+            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
+            P = error;
+            power = P * kP;
+            setMotorPowers(Range.clip(power, 0.2, 1), -Range.clip(power, 0.2, 1));
+
+            telemetry.addData("tAngle: ", tAngle)
+                    .addData("P:", P)
+                    .addData("power", power)
+                    .addData("error: ", error)
+                    .addData("currTime: ", currTime);
+        }
+    }
+
+
 
     public void resetTime(){
         runtime.reset();
@@ -506,7 +523,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         return runtime.seconds();
     }
 
-    public void updateRobotLocation(){
+    public void updateRobotPosition(){
         targetVisible = false;
         for (VuforiaTrackable trackable : allTrackables) {
             if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {

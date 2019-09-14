@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.PastSeasonMaterials.Testing;
+package org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.PastSeasonMaterials.AutoLinearOpMode;
+import org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.AutoLinearOpMode;
 
 @Autonomous(name = "GoldServoTest", group = "Sensor")
 @Disabled

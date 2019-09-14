@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.PastSeasonMaterials.TeleOp;
+package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.PastSeasonMaterials.MecanumLinearOpMode;
+import org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.MecanumLinearOpMode;
 
 @TeleOp(name="MainTeleOp", group="teleop")
 //@Disabled

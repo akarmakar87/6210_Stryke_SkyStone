@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.PastSeasonMaterials;
+package org.firstinspires.ftc.teamcode.X_PastSeasonMaterials;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -51,9 +51,9 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
+@TeleOp(name = "MyTensorFlow Object Detection", group = "Concept")
 @Disabled
-public class ConceptTensorFlowObjectDetection extends LinearOpMode {
+public class PersonalizedConceptTensorFlowObjectDetection extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
@@ -108,37 +108,40 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
             }
 
             while (opModeIsActive()) {
-                if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions(); //MAKE LIST OF OBJECTS DETECTED
-                    if (updatedRecognitions != null) { //IF LIST IS NOT NULL
-                      telemetry.addData("# of Objects Detected", updatedRecognitions.size()); //GET # OF OBJECTS DETECTED
-                      if (updatedRecognitions.size() == 3) { //IF DETECT ALL THREE OBJECTS
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions(); //MAKE LIST OF OBJECTS DETECTED
+                if (updatedRecognitions != null) { //IF LIST IS NOT NULL
+                    telemetry.addData("# of Objects Detected", updatedRecognitions.size()); //GET # OF OBJECTS DETECTED
+                    if (updatedRecognitions.size() > 0) { //IF DETECT BOTH OBJECTS
                         int goldMineralX = -1;
                         int silverMineral1X = -1;
                         int silverMineral2X = -1;
                         for (Recognition recognition : updatedRecognitions) {
-                          if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) { //IF OBJECT DETECTED IS GOLD
-                            goldMineralX = (int) recognition.getLeft();
-                          } else if (silverMineral1X == -1) {
-                            silverMineral1X = (int) recognition.getLeft();
-                          } else {
-                            silverMineral2X = (int) recognition.getLeft();
-                          }
+                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) { //IF OBJECT DETECTED IS GOLD
+                                goldMineralX = (int) recognition.getLeft();
+                            } else if (silverMineral1X == -1) {
+                                silverMineral1X = (int) recognition.getLeft();
+                            } else {
+                                silverMineral2X = (int) recognition.getLeft();
+                            }
                         }
-                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-                          if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                            telemetry.addData("Gold Mineral Position", "Left");
-                          } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                        if (goldMineralX != -1) {
+                            if (goldMineralX < silverMineral1X) {
+                                telemetry.addData("Gold Mineral Position", "Left");
+                            } else{
+                                telemetry.addData("Gold Mineral Position", "Center");
+                            }
+                        }else{
                             telemetry.addData("Gold Mineral Position", "Right");
-                          } else {
-                            telemetry.addData("Gold Mineral Position", "Center");
-                          }
                         }
-                      }
-                      telemetry.update();
+
+                        if (goldMineralX > 500 && goldMineralX < 700) {
+                            telemetry.addData("Gold", "Aligned");
+                        }else{
+                            telemetry.addData("Gold", "Not Aligned");
+                        }
+                        telemetry.addData("Gold x pos ", goldMineralX);
                     }
+                    telemetry.update();
                 }
             }
         }

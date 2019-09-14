@@ -1,18 +1,16 @@
-package org.firstinspires.ftc.teamcode.PastSeasonMaterials;
+package org.firstinspires.ftc.teamcode.X_PastSeasonMaterials;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@Autonomous(name="StrafePIDTestAsha", group="auto")
+@Autonomous(name="DrivePIDTestAsha", group="auto")
 
-public class StrafePIDMethod_Asha extends MecanumLinearOpMode {
+public class DrivePIDMethod_Asha extends MecanumLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {}
-
-    // FIGURE OUT HOW TO CONVERT STRAFE ENCODER VALUES TO INCHES
-
+//test
     public void drivePID(double tDist, double kP, double kI, double kD, double timeOut){
         tDist *= encoderToInches; //Convert to encoder values
         double power, prevError, error, dT, prevTime, currTime, P, I, D; //DECLARE ALL VARIABLES

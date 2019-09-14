@@ -1,10 +1,8 @@
-package org.firstinspires.ftc.teamcode.PastSeasonMaterials.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.teamcode.PastSeasonMaterials.MecanumLinearOpMode;
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Position 1", group = "auto")

@@ -1,17 +1,9 @@
-package org.firstinspires.ftc.teamcode.PastSeasonMaterials.Testing;
+package org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.Testing;
 
-import android.graphics.drawable.GradientDrawable;
-
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.PastSeasonMaterials.MecanumLinearOpMode;
+import org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.MecanumLinearOpMode;
 
 @Autonomous(name = "ColorTutorial", group = "Sensor")
 //@Disabled

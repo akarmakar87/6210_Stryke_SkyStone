@@ -4,8 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.PastSeasonMaterials.MecanumLinearOpMode;
-
 @Autonomous(name="TurnPIDTestAsha", group="auto")
 
 public class TurnPIDMethod_Asha extends SkystoneLinearOpMode {
