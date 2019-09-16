@@ -48,7 +48,7 @@ public class VuforiaDriveTest extends SkystoneLinearOpMode {
             trgtHeading = 0;
 
         turnPIDV(trgtHeading, 0.4, 0, 0, (trgtHeading-curHeading > 180));
-        drivePIDV(curX, curY, 0.5, 0, 0);
+        driveForward(trgtX, trgtY, power, trgtHeading);
     }
 
     public void turnPIDV(double tAngle, double kP, double kI, double kD, boolean flip){
@@ -93,38 +93,17 @@ public class VuforiaDriveTest extends SkystoneLinearOpMode {
         }
     }
 
-    public void drivePIDV(double x, double y, double kP, double kI, double kD){
-
-        double power, prevError, error, dT, prevTime, currTime, P, I, D; //DECLARE ALL VARIABLES
-
-        prevError = error = Math.sqrt(Math.pow(x,2) + Math.pow(y,2)); //INITIALIZE THESE VARIABLES
-
-        power = dT = prevTime = currTime = P = I = D = 0;
-
-        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
-        resetTime();
-        while (Math.abs(error) > 0.5){ //put timeout in later
-            updateRobotPosition();
-            prevError = error;
-            error = Math.sqrt(Math.pow(x,2) + Math.pow(y,2)); //GET distance REMAINING TO drive
-            prevTime = currTime;
-            currTime = time.milliseconds();
-            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
-            P = error;
-            I = error * dT;
-            D = (error - prevError)/dT;
-            power = P * kP + I * kI + D * kD;
-
-            setMotorPowers(Range.clip(power, 0.2, 1), Range.clip(power, 0.2, 1));
-
-            telemetry.addData("Target: ", x + " , " + y)
-                    .addData("P:", P)
-                    .addData("I:", I)
-                    .addData("D:", D)
-                    .addData("power", power)
-                    .addData("error: ", error)
-                    .addData("currTime: ", currTime);
-            telemetry.update();
+    public void driveForward(double x, double y, double power, double trgtHead){
+        while (getRobotX() != x && getRobotY() != y && opModeIsActive()) {
+            if (trgtHead - getRobotHeading() > 1)
+                setMotorPowers(power, power * 0.8);
+            else if (trgtHead - getRobotHeading() < 1)
+                setMotorPowers(power * 0.8, power);
+            else
+                setMotorPowers(power, power);
         }
+
+        telemetry.addData("Target: ", x + " , " + y);
+        telemetry.update();
     }
 }
