@@ -102,8 +102,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     //TensorFlow stuff
 
     public static final String TFOD_MODEL_ASSET = "Skystone.tflite";
-    public static final String LABEL_FIRST_ELEMENT = "Stone";
-    public static final String LABEL_SECOND_ELEMENT = "Skystone";
+    public static final String LABEL_STONE = "Stone";
+    public static final String LABEL_SKYSTONE = "Skystone";
 
     public TFObjectDetector tfod;
 
@@ -300,6 +300,21 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         telemetry.addData("Tracking: ", "Enabled");
         telemetry.update();
+
+        if (tfod != null) {
+            tfod.activate();
+        }
+
+        telemetry.addData(">", "Press Play to start op mode");
+        telemetry.update();
+    }
+
+    public void initTensorFlow(){
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+            initTfod();
+        } else {
+            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
+        }
     }
 
     public void initTfod() {
@@ -308,25 +323,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfodParameters.minimumConfidence = 0.8;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
-
-        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            initTfod();
-        } else {
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-        }
-
-        /**
-         * Activate TensorFlow Object Detection before we wait for the start command.
-         * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
-         **/
-        if (tfod != null) {
-            tfod.activate();
-        }
-
-        /** Wait for the game to begin */
-        telemetry.addData(">", "Press Play to start op mode");
-        telemetry.update();
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_STONE, LABEL_SKYSTONE);
     }
 
     //SET POWER TO DRIVE MOTORS
@@ -570,27 +567,62 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         return runtime.seconds();
     }
 
+    int pos = 0;
 
-    public void detectSkystone(){
-        if (tfod != null) {
-            // getUpdatedRecognitions() will return null if no new information is available since
-            // the last time that call was made.
+    public void detectSkystone(double timeLimit){
+        runtime.reset();
+        activateTfod();
+        while(runtime.seconds() < timeLimit && opModeIsActive() && tfod != null) {
+            // getUpdatedRecognitions() will return null if no new information is available since the last time that call was made.
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
+                if (updatedRecognitions.size() > 0) { //IF DETECT BOTH OBJECTS
 
-                // step through the list of recognitions and display boundary info.
-                int i = 0;
-                for (Recognition recognition : updatedRecognitions) {
-                    telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                    telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                            recognition.getLeft(), recognition.getTop());
-                    telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                            recognition.getRight(), recognition.getBottom());
+                    int skystoneX = -1, stone1X = -1, stone2X = -1;
+                    double skystoneConf = 0;
+
+                    for (Recognition recognition : updatedRecognitions) {
+                        if (recognition.getLabel().equals(LABEL_SKYSTONE)) { //IF OBJECT DETECTED IS GOLD
+                            skystoneX = (int) recognition.getLeft();
+                            skystoneConf = recognition.getConfidence();
+                        } else if (recognition.getLabel().equals(LABEL_STONE) && stone1X != -1) {
+                            stone1X = (int) recognition.getLeft();
+                        } else {
+                            stone2X = (int) recognition.getLeft();
+                        }
+                    }
+
+                    //Adjust based on if it can see 3 stones or 2 stones
+                    //Ask galligher how to get the y-value of the object, but could also use
+                    //ratio of block height to frame height
+
+                    //(*^*)\\ <-- A CHICK!
+
+                    if (skystoneX != -1 && skystoneConf > 0.2) { //adjust confidence level
+
+                        if (skystoneX < 600 || (skystoneX < stone1X && skystoneX < stone2X)) { //adjust threshold3
+                            telemetry.addData("Skystone Position", "Left");
+                            pos = 1;
+                        } else{
+                            telemetry.addData("Skystone Position", "Center");
+                            pos = 2;
+                        }
+                    }else{
+                        telemetry.addData("Skystone Position", "Right");
+                        pos = 3;
+                    }
+                    telemetry.addData("Gold x pos ", skystoneX);
+                    telemetry.addData("Gold conf ", skystoneConf);
+                    telemetry.addData("Runtime", getTime());
+                    telemetry.update();
                 }
-                telemetry.update();
             }
         }
+    }
+
+    public int getSkystonePos(){
+        return pos;
     }
 
 
@@ -645,6 +677,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         targetsSkyStone.deactivate();
         telemetry.addData("Tracking: ", "Disabled");
         telemetry.update();
+    }
+
+    public void activateTfod(){
+        if (tfod != null)
+            tfod.activate();
+    }
+
+    public void deactivateTfod(){
+        tfod.deactivate(); //is both deactivate and shutdown necessary?
+        tfod.shutdown();
     }
 
     @Override
