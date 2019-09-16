@@ -13,28 +13,19 @@ public class TeleOpTutorial extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        init(hardwareMap, true  );
+        init(hardwareMap, true);
 
         waitForStart();
 
-        while(opModeIsActive()){
+        while (opModeIsActive()) {
 
-        setMotorPowers(gamepad1.left_stick_y, gamepad1.right_stick_y);
+            setMotorPowers(gamepad1.left_stick_y, gamepad1.right_stick_y);
 
-        if(gamepad2.left_bumper){
-            lift.setPower(1.0);
-        }
-        else{
-            lift.setPower(0);
-        }
-
-        if(gamepad2.a){
-            hook.setPosition(1.0);
-        }
-        if(gamepad2.b){
-            hook.setPosition(0);
-        }
+            if (gamepad2.left_bumper) {
+                lift.setPower(1.0);
+            } else {
+                lift.setPower(0);
+            }
         }
     }
-
 }

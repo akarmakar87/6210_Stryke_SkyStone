@@ -43,7 +43,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public DcMotor RB;
     public BNO055IMU imu;
     public DcMotor lift;
-    public Servo hook;
+    public Servo claw;
+    private double clawStartPosition = 0.0;
+    private double clawEndPosition = 1.0;
+
 
     //GYRO VARIABLES
     Orientation angles;
@@ -117,13 +120,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RB  = map.dcMotor.get("RB");
         imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
         lift = map.dcMotor.get("lift");
-        hook = map.servo.get("hook");
+        claw = map.servo.get("claw");
 
         LF.setDirection(DcMotorSimple.Direction.FORWARD);
         RF.setDirection(DcMotorSimple.Direction.REVERSE);
         RB.setDirection(DcMotorSimple.Direction.REVERSE);
         LB.setDirection(DcMotorSimple.Direction.FORWARD);
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
+        setClawPosition(true);
 
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -369,6 +373,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
      **/
 
+
+    //CLAW SERVO
+    public void setClawPosition(boolean open){
+        if (open){
+            claw.setPosition(clawStartPosition);
+        }
+        else{
+            claw.setPosition(clawEndPosition);
+        }
+    }
 
 
     //TIME BASED MOVEMENT
