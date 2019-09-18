@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 import org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.MecanumLinearOpMode;
 
 @Autonomous(name = "ClawTest", group = "Sensor")
 //@Disabled
-public class Claw_Garrett extends MecanumLinearOpMode {
+public class Claw_Garrett extends SkystoneLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -14,9 +15,11 @@ public class Claw_Garrett extends MecanumLinearOpMode {
         init(hardwareMap, true);
 
         waitForStart();
-        manip.setPosition(0);
-        wait(3000);
-        manip.setPosition(1);
+        while (opModeIsActive() && !isStopRequested()){
+            claw.setPosition(0);
+            wait(3000);
+            claw.setPosition(1);
+        }
 
     }
 }
