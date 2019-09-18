@@ -13,7 +13,7 @@ public class VuforiaTFtest extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        init(hardwareMap, true);
+        //init(hardwareMap, true);
         initVuforia();
         initTensorFlow();
 

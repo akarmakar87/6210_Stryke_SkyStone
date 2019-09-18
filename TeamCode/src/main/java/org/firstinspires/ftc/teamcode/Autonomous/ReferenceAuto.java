@@ -15,7 +15,7 @@ public class ReferenceAuto extends OldMecanumLinearOpMode {
 
         double offset = 45;
 
-        init(hardwareMap, true);
+        //init(hardwareMap, true);
 
         // SET UP DETECTOR
 
