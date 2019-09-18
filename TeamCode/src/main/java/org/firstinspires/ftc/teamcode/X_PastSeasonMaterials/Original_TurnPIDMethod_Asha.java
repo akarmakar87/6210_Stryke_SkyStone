@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@Autonomous(name="TurnPIDTestAsha", group="auto")
+@Autonomous(name="Original_TurnPIDTestAsha", group="auto")
 
 public class Original_TurnPIDMethod_Asha extends MecanumLinearOpMode {
 

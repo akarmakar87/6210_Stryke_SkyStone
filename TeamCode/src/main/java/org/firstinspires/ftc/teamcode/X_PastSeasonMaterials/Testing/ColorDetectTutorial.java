@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.MecanumLinearOpMode;
 
-@TeleOp (name = "ColorTutorial", group = "Sensor")
+@TeleOp (name = "ColorDetectTutorial", group = "Sensor")
 @Disabled
 public class ColorDetectTutorial extends MecanumLinearOpMode{
 

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.OldMecanumLinearOpMode;
 
-@Autonomous(name="NewTFMecanumAutoCrater", group = "auto")
+@Autonomous(name="ReferenceAuto", group = "auto")
 //@Disabled
 public class ReferenceAuto extends OldMecanumLinearOpMode {
 

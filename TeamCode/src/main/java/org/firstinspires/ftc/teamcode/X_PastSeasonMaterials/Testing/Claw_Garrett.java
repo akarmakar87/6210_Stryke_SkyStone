@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.MecanumLinearOpMode;
 
-@Autonomous(name = "ColorTutorial", group = "Sensor")
+@Autonomous(name = "ClawTest", group = "Sensor")
 //@Disabled
 public class Claw_Garrett extends MecanumLinearOpMode {
 
