@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.MecanumLinearOpMode;
 
-@Autonomous(name="NewTFMecanumAutoCrater", group = "auto")
+@Autonomous(name="VuforiaDriveTest", group = "auto")
 //@Disabled
 public class VuforiaDriveTest extends SkystoneLinearOpMode {
 
@@ -94,7 +94,11 @@ public class VuforiaDriveTest extends SkystoneLinearOpMode {
     }
 
     public void driveForward(double x, double y, double power, double trgtHead){
-        while (getRobotX() != x && getRobotY() != y && opModeIsActive()) {
+        // Angle adjustment while driving to a specific point
+        // Error calculated to decrease power more if robot angle is larger
+
+        while ((Math.abs(x - getRobotX()) > 0) && (Math.abs(y - getRobotY()) > 0))  {
+
             if (trgtHead - getRobotHeading() > 1)
                 setMotorPowers(power, power * 0.8);
             else if (trgtHead - getRobotHeading() < 1)

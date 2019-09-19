@@ -97,7 +97,7 @@ public class VuforiaNavigation extends LinearOpMode {
     @Override public void runOpMode() {
 
 
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        //webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
@@ -108,7 +108,7 @@ public class VuforiaNavigation extends LinearOpMode {
         /**
          * We also indicate which camera on the RC we wish to use.
          */
-        parameters.cameraName = webcamName;
+        //parameters.cameraName = webcamName;
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
