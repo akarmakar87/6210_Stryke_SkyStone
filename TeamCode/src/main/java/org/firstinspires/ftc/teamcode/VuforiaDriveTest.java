@@ -95,16 +95,19 @@ public class VuforiaDriveTest extends SkystoneLinearOpMode {
 
     public void driveForward(double x, double y, double power, double trgtHead){
         // Angle adjustment while driving to a specific point
-        // Error calculated to decrease power more if robot angle is larger
+        // TO DO: calculate proportional error to decrease power more if robot angle is larger
 
         while ((Math.abs(x - getRobotX()) > 0) && (Math.abs(y - getRobotY()) > 0))  {
 
             if (trgtHead - getRobotHeading() > 1)
-                setMotorPowers(power, power * 0.8);
-            else if (trgtHead - getRobotHeading() < 1)
+                setMotorPowers(power, power * 0.8); // default error is 0.8
+            else if (trgtHead - getRobotHeading() < -1)
                 setMotorPowers(power * 0.8, power);
             else
                 setMotorPowers(power, power);
+
+            //if (Math.abs(trgtHead - getRobotHeading()) > 30) // stops robot if robot is turned too off course
+            //   break;
         }
 
         telemetry.addData("Target: ", x + " , " + y);

@@ -26,6 +26,14 @@ public class Position1 extends SkystoneLinearOpMode {
 
         waitForStart();
 
+        // scan for skystones
+        // driveForward to skystone farthest from the wall ----- are we strafing or are we turning and driving straight to the skystone
+        // pick up skystone
+        // turn and drive toward a spot just past the middle of the field
+        // drop skystone
+        // drive back towards other skystone and pick it up
+        // turn and drive toward a spot just past the middle of the field
+
 
 
     }
