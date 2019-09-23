@@ -338,17 +338,34 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RB.setPower(Range.clip(rightPower, -1, 1));
     }
 
-    public void setStrafePowers(double power, boolean right){
-        if (right){
+    public void setStrafePowers(double power, boolean right, double angle) {  // Garrett(9/13/19)
+        double tarYaw = angle;
+        double curYaw = getYaw();
+        double RFpower = power;
+        double RBpower = power;
+        if (right) {
+            if (curYaw >= tarYaw + 3) {
+                RBpower -= 5 * (curYaw - tarYaw);
+            }
+            if (curYaw <= tarYaw - 3) {
+                RFpower -= 5 * (tarYaw - curYaw);
+            }
             LF.setPower(-Range.clip(power, -1, 1));
-            RF.setPower(Range.clip(power, -1, 1));
+            RF.setPower(Range.clip(RFpower, -1, 1));
             LB.setPower(Range.clip(power, -1, 1));
-            RB.setPower(-Range.clip(power, -1, 1));
-        }else{
+            RB.setPower(-Range.clip(RBpower, -1, 1));
+        }
+        else {
+            if (curYaw >= tarYaw + 3) {
+                RFpower -= 5 * (curYaw - tarYaw);
+            }
+            if (curYaw <= tarYaw - 3) {
+                RBpower -= 5 * (tarYaw - curYaw);
+            }
             LF.setPower(Range.clip(power, -1, 1));
-            RF.setPower(-Range.clip(power, -1, 1));
+            RF.setPower(-Range.clip(RFpower, -1, 1));
             LB.setPower(-Range.clip(power, -1, 1));
-            RB.setPower(Range.clip(power, -1, 1));
+            RB.setPower(Range.clip(RBpower, -1, 1));
         }
 
     }

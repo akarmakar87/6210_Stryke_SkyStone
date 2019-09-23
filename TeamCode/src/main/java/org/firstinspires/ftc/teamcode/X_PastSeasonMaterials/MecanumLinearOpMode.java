@@ -130,10 +130,10 @@ public class MecanumLinearOpMode extends LinearOpMode{
             double RBpower = power;
             if (right) {
                 if (curYaw >= tarYaw + 3) {
-                    RBpower =- 5 * (curYaw - tarYaw);
+                    RBpower -= 5 * (curYaw - tarYaw);
                 }
                 if (curYaw <= tarYaw - 3) {
-                    RFpower =- 5 * (tarYaw - curYaw);
+                    RFpower -= 5 * (tarYaw - curYaw);
                 }
                 LF.setPower(-Range.clip(power, -1, 1));
                 RF.setPower(Range.clip(RFpower, -1, 1));
@@ -142,10 +142,10 @@ public class MecanumLinearOpMode extends LinearOpMode{
             }
             else {
                 if (curYaw >= tarYaw + 3) {
-                    RFpower =- 5 * (curYaw - tarYaw);
+                    RFpower -= 5 * (curYaw - tarYaw);
                 }
                 if (curYaw <= tarYaw - 3) {
-                    RBpower =- 5 * (tarYaw - curYaw);
+                    RBpower -= 5 * (tarYaw - curYaw);
                 }
                 LF.setPower(Range.clip(power, -1, 1));
                 RF.setPower(-Range.clip(RFpower, -1, 1));
