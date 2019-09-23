@@ -25,15 +25,15 @@ public class MainTeleOp extends MecanumLinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
 
             //RIGHT (ACTUALLY LEFT) MOTOR
-            if(Math.abs(gamepad1.left_stick_y) > 0.05){
+            if (Math.abs(gamepad1.left_stick_y) > 0.05) {
                 rightPower = gamepad1.left_stick_y;
-            }else{
+            } else {
                 rightPower = 0;
             }
             //LEFT (ACTUALLY RIGHT) MOTOR
-            if(Math.abs(gamepad1.right_stick_y) > 0.05){
+            if (Math.abs(gamepad1.right_stick_y) > 0.05) {
                 leftPower = gamepad1.right_stick_y;
-            }else{
+            } else {
                 leftPower = 0;
             }
 
@@ -42,7 +42,7 @@ public class MainTeleOp extends MecanumLinearOpMode {
                 halfSpeed = true;
                 leftPower = leftPower / 2;
                 rightPower = rightPower / 2;
-            }else{
+            } else {
                 halfSpeed = false;
             }
 /*
@@ -80,18 +80,18 @@ public class MainTeleOp extends MecanumLinearOpMode {
             }
 */
             //Strafe Controls
-            while (gamepad1.left_bumper){ //Strafe right - inverted
-                setStrafePowers(-1,true, 0);
+            while (gamepad1.left_bumper) { //Strafe right - inverted
+                setStrafePowers(-1, true, 0);
             }
-            while (gamepad1.right_bumper){ //Strafe left - inverted
-                setStrafePowers(-1,false, 0);
+            while (gamepad1.right_bumper) { //Strafe left - inverted
+                setStrafePowers(-1, false, 0);
             }
 
             setMotorPowers(leftPower, rightPower);
 
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower)
                     .addData("Half Speed", halfSpeed);
-                   // .addData("Lift pos", lift.getCurrentPosition());
+            // .addData("Lift pos", lift.getCurrentPosition());
             telemetry.update();
         }
     }
