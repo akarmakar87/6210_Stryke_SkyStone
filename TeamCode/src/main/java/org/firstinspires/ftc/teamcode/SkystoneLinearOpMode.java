@@ -338,37 +338,71 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RB.setPower(Range.clip(rightPower, -1, 1));
     }
 
-    public void setStrafePowers(double power, boolean right, double angle) {  // Garrett(9/13/19)
-        double tarYaw = angle;
-        double curYaw = getYaw();
+    public void StrafetoPosition(double power, double tarX, double tarY, double tarheading) {  // Garrett(9/13/19)
+        //Declare variables
+        double curX = getRobotX();
+        double tarHead = tarheading;
+        double curHead = getRobotHeading();
         double RFpower = power;
         double RBpower = power;
-        if (right) {
-            if (curYaw >= tarYaw + 3) {
-                RBpower -= 5 * (curYaw - tarYaw);
+        turnPIDV(tarHead, 0.4, 0, 0, false);    //turn towards the correct heading
+        while ((Math.abs(tarX - getRobotX()) > 0) || (Math.abs(tarY - getRobotY()) > 0)) {  //Move until at target position
+            if (curX < tarX) {  //If curX < tarX strafe right
+                if (curHead >= tarHead + 0.5) { //If robot turning too far left
+                    RBpower -= .05 * (curHead - tarHead);
+                }
+                if (curHead <= tarHead - 0.5) { //If robot turning too right left
+                    RFpower -= .05 * (tarHead - curHead);
+                }
+                LF.setPower(-Range.clip(power, -1, 1));
+                RF.setPower(Range.clip(-RFpower, -1, 1));
+                LB.setPower(Range.clip(-power, -1, 1));
+                RB.setPower(-Range.clip(RBpower, -1, 1));
+            } else {    //If curX > tarX strafe left
+                if (curHead >= tarHead + 0.5) { //If robot turning too far left
+                    RFpower -= .05 * (curHead - tarHead);
+                }
+                if (curHead <= tarHead - 0.5) { //If robot turning too far left
+                    RBpower -= .05 * (tarHead - curHead);
+                }
+                LF.setPower(Range.clip(-power, -1, 1));
+                RF.setPower(-Range.clip(RFpower, -1, 1));
+                LB.setPower(-Range.clip(power, -1, 1));
+                RB.setPower(Range.clip(-RBpower, -1, 1));
             }
-            if (curYaw <= tarYaw - 3) {
-                RFpower -= 5 * (tarYaw - curYaw);
-            }
-            LF.setPower(-Range.clip(power, -1, 1));
-            RF.setPower(Range.clip(RFpower, -1, 1));
-            LB.setPower(Range.clip(power, -1, 1));
-            RB.setPower(-Range.clip(RBpower, -1, 1));
         }
-        else {
-            if (curYaw >= tarYaw + 3) {
-                RFpower -= 5 * (curYaw - tarYaw);
-            }
-            if (curYaw <= tarYaw - 3) {
-                RBpower -= 5 * (tarYaw - curYaw);
-            }
-            LF.setPower(Range.clip(power, -1, 1));
-            RF.setPower(-Range.clip(RFpower, -1, 1));
-            LB.setPower(-Range.clip(power, -1, 1));
-            RB.setPower(Range.clip(RBpower, -1, 1));
-        }
-
     }
+
+    public void StrafePowers(double power, boolean right, double angle) {  // Garrett(9/13/19)
+        //Declare variables
+        double tarHead = angle;
+        double curHead = getRobotHeading();
+        double RFpower = power;
+        double RBpower = power;
+            if (right) {  //If strafing right
+                if (curHead >= tarHead + 0.5) {
+                    RBpower -= .05 * (curHead - tarHead);
+                }
+                if (curHead <= tarHead - 0.5) {
+                    RFpower -= .05 * (tarHead - curHead);
+                }
+                LF.setPower(-Range.clip(power, -1, 1));
+                RF.setPower(Range.clip(RFpower, -1, 1));
+                LB.setPower(Range.clip(power, -1, 1));
+                RB.setPower(-Range.clip(RBpower, -1, 1));
+            } else {    //If strafing left
+                if (curHead >= tarHead + 0.5) {
+                    RFpower -= .05 * (curHead - tarHead);
+                }
+                if (curHead <= tarHead - 0.5) {
+                    RBpower -= .05 * (tarHead - curHead);
+                }
+                LF.setPower(Range.clip(power, -1, 1));
+                RF.setPower(-Range.clip(RFpower, -1, 1));
+                LB.setPower(-Range.clip(power, -1, 1));
+                RB.setPower(Range.clip(RBpower, -1, 1));
+            }
+        }
 
     /**
     public void strafeAdjust(double power, double distance, boolean right, int timeout){

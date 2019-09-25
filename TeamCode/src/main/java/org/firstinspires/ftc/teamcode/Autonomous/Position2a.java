@@ -27,10 +27,10 @@ public class Position2a extends SkystoneLinearOpMode {
         waitForStart();
 
         driveToPoint(0.8,50, 50); // drives up to foundation
-        // grabs foundation
+        setClawPosition(false);// grabs foundation (Don't know how Pranav has robot designed so I will adjust once I know how robot will work)
         driveToPoint(0.8, 50, 50); // drives backwards? pulling foundation to depot
-        // lets go of depot
-        setStrafePowers(0.8, false, 0); // strafes to park NEAR WALL
+        setClawPosition(true);// lets go of foundation (Don't know how Pranav has robot designed so I will adjust once I know how robot will work)
+        StrafetoPosition(1, 50, 50, getRobotHeading()); // strafes to park NEAR WALL
 
         telemetry.addData("donut", "fried");
         telemetry.addData("there's a hole", "in your code");

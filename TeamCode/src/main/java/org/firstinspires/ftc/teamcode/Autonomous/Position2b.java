@@ -30,9 +30,9 @@ public class Position2b extends SkystoneLinearOpMode {
         // grabs foundation
         driveToPoint(0.8, 50, 50); // drives backwards? pulling foundation to depot
         // lets go of depot
-        setStrafePowers(0.8, false, 0); // strafes out from foundation
+        StrafetoPosition(1, 50, 50, getRobotHeading()); // strafes out from foundation
         driveToPoint(0.8, 50, 50); // drives forward to align with away park position
-        setStrafePowers(0.8,false, 50); // strafes to park AWAY FORM WALL
+        StrafetoPosition(1, 50, 50, getRobotHeading()); // strafes to park AWAY FORM WALL
 
         telemetry.addData("crossaint", "mille-feuille");
         telemetry.addData("asha gets", "crushed");

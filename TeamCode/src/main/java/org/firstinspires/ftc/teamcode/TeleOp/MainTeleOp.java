@@ -46,11 +46,10 @@ public class MainTeleOp extends SkystoneLinearOpMode {
             if(Math.abs(gamepad1.right_stick_y) > 0.05){
                 leftPower = gamepad1.right_stick_y;
                 sidePower = true;
-            }else{
+            }else {
                 leftPower = 0;
                 sidePower = false;
             }
-
             //HALFSPEED
             if (gamepad1.right_bumper == true) {
                 halfSpeed = true;
@@ -63,13 +62,16 @@ public class MainTeleOp extends SkystoneLinearOpMode {
             }
 
             //LIFT CONTROLS
-            if (gamepad2.right_bumper) {
-                lift.setPower(1); //LIFT DOWN
-            }else if(gamepad2.left_bumper){
-                lift.setPower(-1); //LIFT UP
+            if (gamepad2.right_trigger > 0.05) {
+                lift.setPower(gamepad2.right_trigger); //LIFT DOWN
+            }else if(gamepad2.left_trigger > 0.05){
+                lift.setPower(-gamepad2.left_trigger); //LIFT UP
             }else{
                 lift.setPower(0);
             }
+
+            //if (gamepad1.dpad_up) -------------------To Do
+            //    lift.set
 
             //Claw Movement
             if (gamepad2.b){
@@ -88,10 +90,10 @@ public class MainTeleOp extends SkystoneLinearOpMode {
                 reset = true;
             }
             while (gamepad1.left_bumper){ //Strafe left
-                setStrafePowers(1, false, angle);
+                StrafePowers(1, false, angle);
             }
             while (gamepad1.right_bumper){ //Strafe right
-                setStrafePowers(-1,true, angle);
+                StrafePowers(-1,true, angle);
             }
 
             if (sidePower == false) {
