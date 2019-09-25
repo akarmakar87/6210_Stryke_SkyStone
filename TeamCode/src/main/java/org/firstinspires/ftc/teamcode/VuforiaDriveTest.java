@@ -105,7 +105,6 @@ public class VuforiaDriveTest extends SkystoneLinearOpMode {
             error = getRobotHeading() - getRobotHeading();
         }
 
-
         while ((Math.abs(x - getRobotX()) > 5) || (Math.abs(y - getRobotY()) > 5))  {
             if (trgtHead - getRobotHeading() > 1)
                 setMotorPowers(power, power * Math.abs((trgtHead - getRobotHeading())/error)); // default error is 0.8
