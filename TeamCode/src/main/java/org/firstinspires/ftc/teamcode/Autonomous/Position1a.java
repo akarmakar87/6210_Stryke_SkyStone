@@ -45,9 +45,7 @@ public class Position1a extends SkystoneLinearOpMode {
         setClawPosition(true);// drop skystone --------------------(Don't know how Pranav has robot designed so I will adjust once I know how robot will work)
         driveToPoint(0.5, 0, 0);        // parks on tape AWAY FROM WALL
 
-        telemetry.addData("bread", "kneaded");
-        telemetry.addData("mindy likes", "bread");
-        telemetry.addData(":D", "!");
+        telemetry.addData("asha", "no");
         telemetry.update();
     }
 }

@@ -34,9 +34,7 @@ public class Position2b extends SkystoneLinearOpMode {
         driveToPoint(0.8, 50, 50); // drives forward to align with away park position
         StrafetoPosition(1, 50, 50, getRobotHeading()); // strafes to park AWAY FORM WALL
 
-        telemetry.addData("crossaint", "mille-feuille");
-        telemetry.addData("asha gets", "crushed");
-        telemetry.addData("in the", "layers");
+        telemetry.addData("jerry", "yes");
         telemetry.update();
     }
 }

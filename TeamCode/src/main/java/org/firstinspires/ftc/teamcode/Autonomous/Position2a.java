@@ -32,9 +32,7 @@ public class Position2a extends SkystoneLinearOpMode {
         setClawPosition(true);// lets go of foundation (Don't know how Pranav has robot designed so I will adjust once I know how robot will work)
         StrafetoPosition(1, 50, 50, getRobotHeading()); // strafes to park NEAR WALL
 
-        telemetry.addData("donut", "fried");
-        telemetry.addData("there's a hole", "in your code");
-        telemetry.addData("O", "<< look hole");
+        telemetry.addData("garrett", "yes");
         telemetry.update();
     }
 }
