@@ -24,6 +24,8 @@ public class MainTeleOp extends SkystoneLinearOpMode {
 
         boolean sidePower = false;
 
+        //Lift increments
+
         telemetry.addData("Mode: ", "Waiting for start");
         telemetry.update();
 
@@ -50,15 +52,15 @@ public class MainTeleOp extends SkystoneLinearOpMode {
                 leftPower = 0;
                 sidePower = false;
             }
-            //HALFSPEED
-            if (gamepad1.right_bumper == true) {
-                halfSpeed = true;
-                leftPower = leftPower / 2;
-                rightPower = rightPower / 2;
-                sidePower = true;
-            }else{
-                halfSpeed = false;
-                sidePower = false;
+
+            //HALFSPEED (toggle)
+            if (gamepad1.x == true) {
+                if (halfSpeed == false) {
+                    halfSpeed = true;
+                }
+                if (halfSpeed == true){
+                    halfSpeed = false;
+                }
             }
 
             //LIFT CONTROLS
@@ -70,10 +72,22 @@ public class MainTeleOp extends SkystoneLinearOpMode {
                 lift.setPower(0);
             }
 
+            //LIFT CONTROLS (incremental)
+            if (gamepad2.dpad_up) {
+                double currPos = lift.getCurrentPosition();//get current position 960/pi
+                int tarPos = ((int)currPos/10) + 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
+                lift.setTargetPosition(tarPos * 10); //Make lift go to position
+            }
+            if (gamepad2.dpad_down) {
+                double currPos = lift.getCurrentPosition();//get current position
+                int tarPos = ((int)currPos/10) - 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
+                lift.setTargetPosition(tarPos * 10); //Make lift go to position
+            }
+
             //if (gamepad1.dpad_up) -------------------To Do
             //    lift.set
 
-            //Claw Movement
+            //CLAW MOVEMENT
             if (gamepad2.b){
                 setClawPosition(true);
             }
@@ -81,7 +95,7 @@ public class MainTeleOp extends SkystoneLinearOpMode {
                 setClawPosition(false);
             }
 
-            //Strafe Controls
+            //STRAFE CONTROLS
             if (gamepad1.left_bumper && reset == true){
                 angle = getYaw();
                 reset = false;
@@ -96,8 +110,14 @@ public class MainTeleOp extends SkystoneLinearOpMode {
                 StrafePowers(-1,true, angle);
             }
 
-            if (sidePower == false) {
-                setMotorPowers(leftPower, rightPower);
+            //MOTOR POWERS (if not strafing)
+            if (sidePower == true) {
+                if (halfSpeed == true){
+                    setMotorPowers(leftPower/2, rightPower/2);
+                }
+                else{
+                    setMotorPowers(leftPower, rightPower);
+                }
             }
 
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower)

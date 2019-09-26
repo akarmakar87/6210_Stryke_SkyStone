@@ -51,9 +51,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     //GYRO VARIABLES
     Orientation angles;
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // REV Motor Encoder (1120 for 20:1)
-    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    //ticks per inch = (Motor revolutions * gear up ratio) / (wheel diameter * pie)
+    //Motor revolutions = COUNTS_PER_MOTOR_REV
+    //gear up ratio = 2:1
+    //wheel diameter = WHEEL_DIAMETER_INCHES
+    static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // REV Motor Encoder (1120 for 40:1) (560 for 20:1)
+    static final double     DRIVE_GEAR_REDUCTION    = 0.5 ;   // This is < 1.0 if geared UP   (ratio is 2:1)
+    static final double     WHEEL_DIAMETER_INCHES   = 2 * (3 + (15 / 16)) ;     // For figuring circumference
 
     public double encoderToInches = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)/(WHEEL_DIAMETER_INCHES * Math.PI); //Multiply desired distance (inches)
 
@@ -338,8 +342,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RB.setPower(Range.clip(rightPower, -1, 1));
     }
 
-    public void StrafetoPosition(double power, double tarX, double tarY, double tarheading) {  // Garrett(9/13/19)
+    public void StrafetoPosition(double power, double tarX, double tarY, double tarheading) {  // Garrett(9/13/19) edited
         //Declare variables
+        double min = 0.3;
         double curX = getRobotX();
         double tarHead = tarheading;
         double curHead = getRobotHeading();
@@ -351,13 +356,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 if (curHead >= tarHead + 0.5) { //If robot turning too far left
                     RBpower -= .05 * (curHead - tarHead);
                 }
-                if (curHead <= tarHead - 0.5) { //If robot turning too right left
+                else if (curHead <= tarHead - 0.5) { //If robot turning too right left
                     RFpower -= .05 * (tarHead - curHead);
                 }
-                LF.setPower(-Range.clip(power, -1, 1));
-                RF.setPower(Range.clip(-RFpower, -1, 1));
-                LB.setPower(Range.clip(-power, -1, 1));
-                RB.setPower(-Range.clip(RBpower, -1, 1));
+                LF.setPower(-Range.clip(power, min, 1));
+                RF.setPower(Range.clip(-RFpower, min, 1));
+                LB.setPower(Range.clip(-power, min, 1));
+                RB.setPower(-Range.clip(RBpower, min, 1));
             } else {    //If curX > tarX strafe left
                 if (curHead >= tarHead + 0.5) { //If robot turning too far left
                     RFpower -= .05 * (curHead - tarHead);
@@ -365,10 +370,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 if (curHead <= tarHead - 0.5) { //If robot turning too far left
                     RBpower -= .05 * (tarHead - curHead);
                 }
-                LF.setPower(Range.clip(-power, -1, 1));
-                RF.setPower(-Range.clip(RFpower, -1, 1));
-                LB.setPower(-Range.clip(power, -1, 1));
-                RB.setPower(Range.clip(-RBpower, -1, 1));
+                LF.setPower(Range.clip(-power, min, 1));
+                RF.setPower(-Range.clip(RFpower, min, 1));
+                LB.setPower(-Range.clip(power, min, 1));
+                RB.setPower(Range.clip(-RBpower, min, 1));
             }
         }
     }
@@ -844,6 +849,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             if (Math.abs(trgtHead - getRobotHeading()) > 30) // stops robot if robot is turned too off course
                 break;
         }
+
 
         /*
 
