@@ -867,6 +867,26 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         telemetry.update();
     }
 
+    public boolean isRed() {
+
+        for (VuforiaTrackable trackable : allTrackables) {
+            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                telemetry.addData("Visible Target", trackable.getName());
+
+                switch (trackable.getName()){
+                    default:
+                        telemetry.addData("No Trackable", "Detected");
+                    case "Red Perimeter 2":
+                        return true;
+                    case "Red Perimeter 1":
+                        return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public void runOpMode() throws InterruptedException {
 

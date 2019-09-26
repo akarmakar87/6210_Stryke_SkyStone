@@ -24,21 +24,27 @@ public class Position1b extends SkystoneLinearOpMode {
         telemetry.addData("detector", "enabled");
         telemetry.update();
 
+        boolean red = isRed(); // outputs whether we are on red or blue side
+
         waitForStart();
 
-        // scan for skystones
-        StrafetoPosition(1, 50, 50, getRobotHeading());     // strafe to align with skystone
-        driveToPoint(0.8, 50, 50);      // drive toward skystone
-        setClawPosition(false);// pick up skystone (Don't know how Pranav has robot designed so I will adjust once I know how robot will work)
-        driveToPoint(0.8, 50, 50);      // turns and drives toward other side of field
-        setClawPosition(true);// drop skystone (Don't know how Pranav has robot designed so I will adjust once I know how robot will work)
-        driveToPoint(0.8, 50, 50);      // turns? back around and drives to other skystone
-        // or drive backwards to other skystone
-        turnPIDV(0, 0, 0, 0, false);   // turns to face other skystone
-        setClawPosition(false);// pick up skystone (Don't know how Pranav has robot designed so I will adjust once I know how robot will work)
-        driveToPoint(0.8, 50, 50);      // turns and drives toward other side of field
-        setClawPosition(true);// drop skystone (Don't know how Pranav has robot designed so I will adjust once I know how robot will work)
-        driveToPoint(0.5, 0, 0);        // parks on tape NEAR WALL
+        if (red) {
+            // scan for skystones
+            StrafetoPosition(1, 50, 50, getRobotHeading());     // strafe to align with skystone
+            driveToPoint(0.8, 50, 50);      // drive toward skystone
+            setClawPosition(false);// pick up skystone (Don't know how Pranav has robot designed so I will adjust once I know how robot will work)
+            driveToPoint(0.8, 50, 50);      // turns and drives toward other side of field
+            setClawPosition(true);// drop skystone (Don't know how Pranav has robot designed so I will adjust once I know how robot will work)
+            driveToPoint(0.8, 50, 50);      // turns? back around and drives to other skystone
+            // or drive backwards to other skystone
+            turnPIDV(0, 0, 0, 0, false);   // turns to face other skystone
+            setClawPosition(false);// pick up skystone (Don't know how Pranav has robot designed so I will adjust once I know how robot will work)
+            driveToPoint(0.8, 50, 50);      // turns and drives toward other side of field
+            setClawPosition(true);// drop skystone (Don't know how Pranav has robot designed so I will adjust once I know how robot will work)
+            driveToPoint(0.5, 0, 0);        // parks on tape NEAR WALL
+        }  else {
+            // blue code
+        }
 
         telemetry.addData("mindy", "yes");
         telemetry.update();
