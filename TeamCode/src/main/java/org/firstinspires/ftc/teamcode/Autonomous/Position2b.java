@@ -24,19 +24,23 @@ public class Position2b extends SkystoneLinearOpMode {
         telemetry.addData("detector", "enabled");
         telemetry.update();
 
+        boolean red = isRed(); // outputs whether we are on red or blue side
+
         waitForStart();
 
-        driveToPoint(0.8,50, 50); // drives up to foundation
-        // grabs foundation
-        driveToPoint(0.8, 50, 50); // drives backwards? pulling foundation to depot
-        // lets go of depot
-        StrafetoPosition(1, 50, 50, getRobotHeading()); // strafes out from foundation
-        driveToPoint(0.8, 50, 50); // drives forward to align with away park position
-        StrafetoPosition(1, 50, 50, getRobotHeading()); // strafes to park AWAY FORM WALL
+        if (red) {
+            driveToPoint(0.8, 50, 50); // drives up to foundation
+            // grabs foundation
+            driveToPoint(0.8, 50, 50); // drives backwards? pulling foundation to depot
+            // lets go of depot
+            StrafetoPosition(1, 50, 50, getRobotHeading()); // strafes out from foundation
+            driveToPoint(0.8, 50, 50); // drives forward to align with away park position
+            StrafetoPosition(1, 50, 50, getRobotHeading()); // strafes to park AWAY FORM WALL
+        } else {
+            // blue code
+        }
 
-        telemetry.addData("crossaint", "mille-feuille");
-        telemetry.addData("asha gets", "crushed");
-        telemetry.addData("in the", "layers");
+        telemetry.addData("jerry", "yes");
         telemetry.update();
     }
 }
