@@ -14,17 +14,20 @@ public class MainTeleOp extends SkystoneLinearOpMode {
 
         init(hardwareMap, true);
 
+        //For tank drive
         double leftPower = 0, rightPower = 0;
 
+        //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
 
+        //So we get the target angle when strafing only once
         boolean reset = true;
 
+        //Used for strafing
         double angle = 0.0;
 
+        //Whether we are using tank drive or strafing
         boolean sidePower = false;
-
-        //Lift increments
 
         telemetry.addData("Mode: ", "Waiting for start");
         telemetry.update();
@@ -36,7 +39,7 @@ public class MainTeleOp extends SkystoneLinearOpMode {
             //Resetting sidePower
             sidePower = false;
 
-            //RIGHT (ACTUALLY LEFT) MOTOR
+            //LEFT SIDE MOTOR POWERS
             if(Math.abs(gamepad1.left_stick_y) > 0.05){
                 rightPower = gamepad1.left_stick_y;
                 sidePower = true;
@@ -44,7 +47,7 @@ public class MainTeleOp extends SkystoneLinearOpMode {
                 rightPower = 0;
                 sidePower = false;
             }
-            //LEFT (ACTUALLY RIGHT) MOTOR
+            //RIGHT SIDE MOTOR POWERS
             if(Math.abs(gamepad1.right_stick_y) > 0.05){
                 leftPower = gamepad1.right_stick_y;
                 sidePower = true;
@@ -74,7 +77,7 @@ public class MainTeleOp extends SkystoneLinearOpMode {
 
             //LIFT CONTROLS (incremental)
             if (gamepad2.dpad_up) {
-                double currPos = lift.getCurrentPosition();//get current position 960/pi
+                double currPos = lift.getCurrentPosition();//get current position
                 int tarPos = ((int)currPos/10) + 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
                 lift.setTargetPosition(tarPos * 10); //Make lift go to position
             }
@@ -84,19 +87,16 @@ public class MainTeleOp extends SkystoneLinearOpMode {
                 lift.setTargetPosition(tarPos * 10); //Make lift go to position
             }
 
-            //if (gamepad1.dpad_up) -------------------To Do
-            //    lift.set
-
             //CLAW MOVEMENT
             if (gamepad2.b){
-                setClawPosition(true);
+                setClawPosition(true); //OPEN CLAW
             }
             if (gamepad2.a){
-                setClawPosition(false);
+                setClawPosition(false); //CLOSE CLAW
             }
 
             //STRAFE CONTROLS
-            if (gamepad1.left_bumper && reset == true){
+            if (gamepad1.left_bumper && reset == true){ //So we only get the facing angle once while strafing (to avoid the target angle from changing if the robot goes off course)
                 angle = getYaw();
                 reset = false;
             }
@@ -104,10 +104,20 @@ public class MainTeleOp extends SkystoneLinearOpMode {
                 reset = true;
             }
             while (gamepad1.left_bumper){ //Strafe left
-                StrafePowers(1, false, angle);
+                if (halfSpeed == true) {
+                    StrafePowers(1, false, angle);
+                }
+                else {
+                    StrafePowers(1/2, false, angle);
+                }
             }
             while (gamepad1.right_bumper){ //Strafe right
-                StrafePowers(-1,true, angle);
+                if (halfSpeed == true) {
+                    StrafePowers(1, true, angle);
+                }
+                else {
+                    StrafePowers(1/2, true, angle);
+                }
             }
 
             //MOTOR POWERS (if not strafing)

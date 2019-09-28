@@ -53,7 +53,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     //ticks per inch = (Motor revolutions * gear up ratio) / (wheel diameter * pie)
     //Motor revolutions = COUNTS_PER_MOTOR_REV
-    //gear up ratio = 2:1
+    //gear up ratio = 2:1   (ratio beyond motor)
     //wheel diameter = WHEEL_DIAMETER_INCHES
     static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // REV Motor Encoder (1120 for 40:1) (560 for 20:1)
     static final double     DRIVE_GEAR_REDUCTION    = 0.5 ;   // This is < 1.0 if geared UP   (ratio is 2:1)
@@ -380,6 +380,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void StrafePowers(double power, boolean right, double angle) {  // Garrett(9/13/19)
         //Declare variables
+        double min = 0.3;
         double tarHead = angle;
         double curHead = getRobotHeading();
         double RFpower = power;
@@ -391,10 +392,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 if (curHead <= tarHead - 0.5) {
                     RFpower -= .05 * (tarHead - curHead);
                 }
-                LF.setPower(-Range.clip(power, -1, 1));
-                RF.setPower(Range.clip(RFpower, -1, 1));
-                LB.setPower(Range.clip(power, -1, 1));
-                RB.setPower(-Range.clip(RBpower, -1, 1));
+                LF.setPower(-Range.clip(power, min, 1));
+                RF.setPower(Range.clip(-RFpower, min, 1));
+                LB.setPower(Range.clip(-power, min, 1));
+                RB.setPower(-Range.clip(RBpower, min, 1));
             } else {    //If strafing left
                 if (curHead >= tarHead + 0.5) {
                     RFpower -= .05 * (curHead - tarHead);
@@ -402,10 +403,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 if (curHead <= tarHead - 0.5) {
                     RBpower -= .05 * (tarHead - curHead);
                 }
-                LF.setPower(Range.clip(power, -1, 1));
-                RF.setPower(-Range.clip(RFpower, -1, 1));
-                LB.setPower(-Range.clip(power, -1, 1));
-                RB.setPower(Range.clip(RBpower, -1, 1));
+                LF.setPower(Range.clip(-power, min, 1));
+                RF.setPower(-Range.clip(RFpower, min, 1));
+                LB.setPower(-Range.clip(power, min, 1));
+                RB.setPower(Range.clip(-RBpower, min, 1));
             }
         }
 
