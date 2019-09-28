@@ -20,11 +20,11 @@ public class Position2a extends SkystoneLinearOpMode {
 
         telemetry.addData("Mode", "setting up detector...");
         telemetry.update();
-
         telemetry.addData("detector", "enabled");
         telemetry.update();
 
         boolean red = isRed(); // outputs whether we are on red or blue side
+        position();
 
         waitForStart();
 
