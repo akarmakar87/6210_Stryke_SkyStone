@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.vuforia.CameraDevice;
 
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
@@ -18,18 +19,17 @@ public class Position1a extends SkystoneLinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         init(hardwareMap, true);
-
         // SET UP DETECTOR
 
         initVuforia();
 
         telemetry.addData("Mode", "setting up detector...");
         telemetry.update();
-
         telemetry.addData("detector", "enabled");
         telemetry.update();
 
         boolean red = isRed(); // outputs whether we are on red or blue side
+        position();
 
         waitForStart();
 
@@ -51,7 +51,7 @@ public class Position1a extends SkystoneLinearOpMode {
         } else {
             // blue code
         }
-        telemetry.addData("asha", "no");
+        telemetry.addData("asha ", "no");
         telemetry.update();
     }
 }

@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.vuforia.CameraDevice;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -171,7 +173,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public void initVuforia(){
-        webcamName = hardwareMap.get(WebcamName.class, "Logitech C920");
+        //webcamName = hardwareMap.get(WebcamName.class, "Logitech C920");
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
@@ -875,24 +877,50 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public boolean isRed() {
+        CameraDevice camera = CameraDevice.getInstance();
+        camera.setFlashTorchMode(true);
+        boolean detected = false;
+        while (opModeIsActive() && !isStopRequested() && (detected = false)) {
 
-        for (VuforiaTrackable trackable : allTrackables) {
-            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                telemetry.addData("Visible Target", trackable.getName());
+            for (VuforiaTrackable trackable : allTrackables) {
+                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                    telemetry.addData("Visible Target", trackable.getName());
+                    camera.setFlashTorchMode(false);
+                    detected = true;
 
-                switch (trackable.getName()){
-                    default:
-                        telemetry.addData("No Trackable", "Detected");
-                    case "Red Perimeter 2":
-                        return true;
-                    case "Red Perimeter 1":
-                        return true;
+                    switch (trackable.getName()) {
+                        default:
+                            telemetry.addData("No Trackable", "Detected");
+                        case "Red Perimeter 2":
+                            return true;
+                        case "Red Perimeter 1":
+                            return true;
+                    }
                 }
             }
         }
-
         return false;
     }
+
+    public void position(){ //constantly gives X and Y position of robot
+        while(opModeIsActive() && !isStopRequested()){
+            telemetry.addData("X -", getRobotX());
+            telemetry.addData("Y -", getRobotY());
+            telemetry.update();
+        }
+    }
+
+    /*public void flash() { //check to see if the phone can detect anything
+        CameraDevice camera = CameraDevice.getInstance();
+        for (VuforiaTrackable trackable : allTrackables){
+            if (!(((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible())) {
+                camera.setFlashTorchMode(true);
+            }
+            else if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()){
+                camera.setFlashTorchMode(false);
+            }
+            }
+        }*/
 
     @Override
     public void runOpMode() throws InterruptedException {
