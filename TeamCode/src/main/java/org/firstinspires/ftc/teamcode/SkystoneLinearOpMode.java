@@ -880,17 +880,19 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         CameraDevice camera = CameraDevice.getInstance();
         camera.setFlashTorchMode(true);
         boolean detected = false;
-        while (opModeIsActive() && !isStopRequested() && (detected = false)) {
+        while (opModeIsActive() && !isStopRequested() && (!detected)) {
 
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
                     camera.setFlashTorchMode(false);
                     detected = true;
+                    telemetry.update();
 
                     switch (trackable.getName()) {
                         default:
                             telemetry.addData("No Trackable", "Detected");
+                            telemetry.update();
                         case "Red Perimeter 2":
                             return true;
                         case "Red Perimeter 1":
