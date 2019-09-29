@@ -1,9 +1,10 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 import org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.MecanumLinearOpMode;
 
 @Autonomous(name="VuforiaDriveTest", group = "auto")
@@ -51,7 +52,7 @@ public class VuforiaDriveTest extends SkystoneLinearOpMode {
         driveForward(trgtX, trgtY, power, trgtHeading);
     }
 
-    public void turnPIDV(double tAngle, double kP, double kI, double kD, boolean flip){
+   /* public void turnPIDV(double tAngle, double kP, double kI, double kD, boolean flip){
 
         double power, prevError, error, dT, prevTime, currTime, P, I, D; //DECLARE ALL VARIABLES
 
@@ -119,5 +120,5 @@ public class VuforiaDriveTest extends SkystoneLinearOpMode {
 
         telemetry.addData("Target: ", x + " , " + y);
         telemetry.update();
-    }
+    }*/
 }

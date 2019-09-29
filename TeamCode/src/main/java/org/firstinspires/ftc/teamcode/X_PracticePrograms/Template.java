@@ -1,8 +1,6 @@
-package org.firstinspires.ftc.teamcode.PracticePrograms;
+package org.firstinspires.ftc.teamcode.X_PracticePrograms;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 

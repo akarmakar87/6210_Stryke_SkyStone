@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,7 +15,7 @@ public class VuforiaTFtest extends SkystoneLinearOpMode {
 
         //init(hardwareMap, true);
         initVuforia();
-        initTensorFlow();
+        //initTensorFlow();
 
         // ^ SET UP DETECTOR
 
