@@ -30,7 +30,7 @@ public class Position1a extends SkystoneLinearOpMode {
 
         wait(1000);
         boolean red = isRed(); // outputs whether we are on red or blue side
-        position();
+        //position();
 
         waitForStart();
 

@@ -6,13 +6,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.configuration.WebcamConfiguration;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -20,10 +18,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -100,7 +96,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public VuforiaLocalizer vuforia = null;
 
     WebcamName LogitechC310 = null;
-    CameraName phoneCamera = null;
 
     public boolean targetVisible = false;
     public float phoneXRotate    = 0;
@@ -120,7 +115,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public static final String LABEL_STONE = "Stone";
     public static final String LABEL_SKYSTONE = "Skystone";
 
-    //public TFObjectDetector tfod;
+    public TFObjectDetector tfod;
+    //private BlockingQueue<VuforiaLocalizer.CloseableFrame> frame;
+
 
     // INITIALIZE
     public void init(HardwareMap map, boolean auto){
@@ -183,7 +180,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void initVuforia(){
         //LogitechC310 = hardwareMap.get(WebcamName.class, "LogitechC310");
-
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -328,21 +324,51 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         telemetry.update();
     }
 
-   /** public void initTensorFlow(){
+    public void initTensorFlow(){
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             initTfod();
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
-    }**/
+    }
 
-   /** public void initTfod() {
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minimumConfidence = 0.8;
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_STONE, LABEL_SKYSTONE);
+    //CREATION OF TFOD MONITOR VIEW IN ADDITION TO VUFORIA CAMERA MONITOR VIEW IS PROBABLY CAUSING TWO VIEWS
+    // HOW TO FIX? SHOULD I GET RID OF ONE? OR DOES IT NOT MATTER IF THERE ARE TWO?
+    public void initTfod() {
+       int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+               "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+       TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+       tfodParameters.minimumConfidence = 0.8;
+       tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+       tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_STONE, LABEL_SKYSTONE);
+   }
+
+    //IDK anymore
+    /**public Bitmap convertToBitmap() throws InterruptedException{
+        Image rgb = null;
+        com.vuforiaPC.Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
+        Bitmap imageBitmap;
+        vuforiaPC.setFrameQueueCapacity(1);
+        vuforiaPC.enableConvertFrameToBitmap();
+        VuforiaLocalizer.CloseableFrame picture;
+
+        frame = vuforiaPC.getFrameQueue();
+        picture = frame.take();
+
+        long imgCount = picture.getNumImages(); //GET NUMBER OF FORMATS FOR FRAME
+
+        for (int i = 0; i < imgCount; i++){
+            if(picture.getImage(i).getFormat() == PIXEL_FORMAT.RGB565){
+                rgb = picture.getImage(i);
+                break;
+            }
+        }
+
+        imageBitmap = Bitmap.createBitmap(rgb.getWidth(), rgb.getHeight(), Bitmap.Config.RGB_565 );
+        imageBitmap.copyPixelsFromBuffer(rgb.getPixels());
+
+        picture.close();
+        return imageBitmap;
     }**/
 
     //SET POWER TO DRIVE MOTORS
@@ -421,8 +447,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
         }
 
-    /**
-    public void strafeAdjust(double power, double distance, boolean right, int timeout){
+    /**public void strafeAdjust(double power, double distance, boolean right, int timeout){
 
         double deltaHeading = 0;
 
@@ -438,9 +463,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
            }
 
         }
-    }
-     **/
-
+    }**/
 
     //CLAW SERVO
     public void setClawPosition(boolean open){
@@ -451,7 +474,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             claw.setPosition(clawEndPosition);
         }
     }
-
 
     //TIME BASED MOVEMENT
     public void driveTime(double power, double seconds){
@@ -639,8 +661,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
-
-
     public void resetTime(){
         runtime.reset();
     }
@@ -703,42 +723,44 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }**/
 
-    public void detectSkystone(double timeLimit){
-        targetVisible = false;
-        for (VuforiaTrackable trackable : allTrackables) {
-            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                telemetry.addData("Visible Target", trackable.getName());
-                targetVisible = true;
+    //USE VUFORIA TRACKABLE COORDINATE TO DETERMINE SKYSTONE POSITION
+    //GO GET COORDINATES OF THE TARGET IN EACH POSITION
+    public int detectSkystone(double timeLimit){
+        OpenGLMatrix skystonePos = null;
+        VectorF skystoneCoords = null;
+        runtime.reset();
+        int pos = 0;
+        while(opModeIsActive() && runtime.milliseconds() < timeLimit) {
+            for (VuforiaTrackable trackable : allTrackables) {
+                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+                    telemetry.addData("Visible Target", trackable.getName());
 
-                /*if(targetVisible && trackable.getName()){
+                    if (trackable.getName() == "Stone Target") {
+                        skystonePos = trackable.getLocation();
+                        skystoneCoords = skystonePos.getTranslation();
 
-                }*/
-
-                break;
+                        if (skystoneCoords.get(0) / mmPerInch < 0 && skystoneCoords.get(0) / mmPerInch > 0) {
+                            pos = -1;
+                        } else if (skystoneCoords.get(0) / mmPerInch < 0 && skystoneCoords.get(0) / mmPerInch > 0) {
+                            pos = 0;
+                        } else if (skystoneCoords.get(0) / mmPerInch < 0 && skystoneCoords.get(0) / mmPerInch > 0) {
+                            pos = 1;
+                        } else {
+                            pos = 0;
+                        }
+                    }
+                    break;
+                }
             }
         }
-
-        if (targetVisible) {
-            // express position (translation) of robot in inches.
-            translation = lastLocation.getTranslation();
-            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-
-            // express the rotation of the robot in degrees.
-            rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-        }
-        else {
-            telemetry.addData("Visible Target", "none");
-        }
+        telemetry.addData("Skystone Pos:", pos);
         telemetry.update();
-    }
-
-
-    public int getSkystonePos(){
         return pos;
     }
 
+   /** public int getSkystonePos(){
+        return pos;
+    }**/
 
     public void updateRobotPosition(){
         targetVisible = false;
@@ -871,7 +893,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             //For example, if robot is at 359 and target angle is 5 degrees, move 6 deg clockwise instead
             //of 354 deg counter clockwise
 
-            setMotorPowers(Range.clip(power, 0.2, 1), -Range.clip(power, 0.2, 1));
+            if(power < 0.2){
+                power = 0.2;
+            }else if(power > -0.2){
+                power = -0.2;
+            }
+
+            setMotorPowers(power, -power);
 
             telemetry.addData("tAngle: ", tAngle)
                     .addData("P:", P)
