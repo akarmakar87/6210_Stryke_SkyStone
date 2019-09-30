@@ -389,7 +389,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         double RFpower = power;
         double RBpower = power;
         turnPIDV(tarHead, 0.4, 0, 0, false);    //turn towards the correct heading
-        while ((Math.abs(tarX - getRobotX()) > 0) || (Math.abs(tarY - getRobotY()) > 0)) {  //Move until at target position
+        while (opModeIsActive() && (Math.abs(tarX - getRobotX()) > 0) || (Math.abs(tarY - getRobotY()) > 0)) {  //Move until at target position
             if (curX < tarX) {  //If curX < tarX strafe right
                 if (curHead >= tarHead + 0.5) { //If robot turning too far left
                     RBpower -= .05 * (curHead - tarHead);
@@ -644,7 +644,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         power = dT = prevTime = currTime = P = 0;
         ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
         resetTime();
-        while (Math.abs(error) > 0.5 && currTime < timeOut){
+        while (opModeIsActive() && Math.abs(error) > 0.5 && currTime < timeOut){
             prevError = error;
             error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
             prevTime = currTime;
@@ -871,7 +871,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
         resetTime();
-        while (Math.abs(error) > 0.5){ //put timeout in later
+        while (opModeIsActive() && Math.abs(error) > 0.5){ //put timeout in later
             updateRobotPosition();
             prevError = error;
             error = tAngle - getRobotHeading(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
@@ -913,7 +913,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         // Angle adjustment while driving to a specific point
         // TO DO: calculate proportional error to decrease power more if robot angle is larger
 
-        while ((Math.abs(x - getRobotX()) > 0) || (Math.abs(y - getRobotY()) > 0))  {
+        while (opModeIsActive() && (Math.abs(x - getRobotX()) > 4) || (Math.abs(y - getRobotY()) > 4))  {
 
             if (trgtHead - getRobotHeading() > 1)
                 setMotorPowers(power, power * 0.8); // default error is 0.8
@@ -949,16 +949,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         telemetry.update();
     }
 
-    public boolean isRed() {
+    public boolean isRed(long timeout) { // in milliseconds
+        runtime.reset();
         CameraDevice camera = CameraDevice.getInstance();
         camera.setFlashTorchMode(true);
-        boolean detected = false;
-        while (opModeIsActive() && !isStopRequested() && (!detected)) {
+
+        while (!isStopRequested() && runtime.milliseconds() < timeout) {
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
-                    camera.setFlashTorchMode(false);;
-                    detected = true;
+                    camera.setFlashTorchMode(false);
                     switch (trackable.getName()) {
                         default:
                             telemetry.addData("No Trackable", "Detected");
@@ -969,7 +969,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     }
 
                 }
-                else detected = false;
             }
         }
             return false;

@@ -1,12 +1,15 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class RobotCoordinates {
 
+    // if headings don't work switch to imu and gyro << implies changing how we initialize
+
     // -+-+-+-+-+-+-+-+- UNLESS STATED OTHERWISE POSITION FOR BLUE ALLIANCE
-    // -+-+-+-+-+-+-+-+- FOR RED FLIP SIGN OF Y POSITION AND OF HEADING IF THERE'S A 90 IN IT
+    // -+-+-+-+-+-+-+-+- FOR RED FLIP SIGN OF Y POSITION AND OF HEADING
+    // -+-+-+-+-+-+-+-+- heading change doesn't work for 0 to +-180 headings or vice versa but that shouldn't matter
 
     // -----------------starting positions
     public static final ArrayList<Integer> start_1blue = new ArrayList<>(Arrays.asList(-32, 75, -90));
