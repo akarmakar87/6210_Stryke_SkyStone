@@ -766,7 +766,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public boolean updateRobotPosition(){
         targetVisible = false;
         for (VuforiaTrackable trackable : allTrackables) {
-            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() != "Stone Target") {
                 telemetry.addData("Visible Target", trackable.getName());
                 targetVisible = true;
 
@@ -795,13 +795,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             telemetry.update();
             return false;
         }
-    }
-
-    public HashMap<String, Double> getRobotPosition(ArrayList<WebcamName> cameras){
-        HashMap<String, Double> coordinates = new HashMap<>();
-
-        coordinates.put("X", getRobotX());
-        return coordinates;
     }
 
     public double getRobotX() {
