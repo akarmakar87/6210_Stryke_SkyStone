@@ -965,6 +965,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
+                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                    if (robotLocationTransform != null) {
+                        lastLocation = robotLocationTransform;
+                        translation = lastLocation.getTranslation();
+                    }
                     camera.setFlashTorchMode(false);
                     switch (trackable.getName()) {
                         default:
@@ -982,7 +987,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public void position(){ //constantly gives X and Y position of robot
-        while(opModeIsActive() && !isStopRequested()){
+        while(!isStopRequested()){
             telemetry.addData("X -", getRobotX());
             telemetry.addData("Y -", getRobotY());
             telemetry.update();
