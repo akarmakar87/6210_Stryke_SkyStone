@@ -127,7 +127,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RF  = map.dcMotor.get("RF");
         LB  = map.dcMotor.get("LB");
         RB  = map.dcMotor.get("RB");
-        intake  = map.dcMotor.get("intake");
+       // intake  = map.dcMotor.get("intake");
         imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
         lift = map.dcMotor.get("lift");
         claw = map.servo.get("claw");
@@ -136,7 +136,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RF.setDirection(DcMotorSimple.Direction.REVERSE);
         RB.setDirection(DcMotorSimple.Direction.REVERSE);
         LB.setDirection(DcMotorSimple.Direction.FORWARD);
-        intake.setDirection(DcMotorSimple.Direction.FORWARD);
+        //intake.setDirection(DcMotorSimple.Direction.FORWARD);
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
         setClawPosition(true);
 
@@ -144,7 +144,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         resetEncoders();
 
@@ -194,7 +194,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         /**
          * We also indicate which camera on the RC we wish to use.
          */
-        parameters.cameraName = LogitechC310;
+        //parameters.cameraName = LogitechC310;
 
         targetsSkyStone = this.vuforia.loadTrackablesFromAsset("Skystone");
 
@@ -671,7 +671,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     int pos = 0;
 
-    /**public void detectSkystone(double timeLimit){
+  /**  public void detectSkystone(double timeLimit){
         runtime.reset();
         activateTfod();
         while(runtime.seconds() < timeLimit && opModeIsActive() && tfod != null) {
@@ -721,8 +721,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 }
             }
         }
-    }**/
-
+    }
+**/
     //USE VUFORIA TRACKABLE COORDINATE TO DETERMINE SKYSTONE POSITION
     //GO GET COORDINATES OF THE TARGET IN EACH POSITION
     public int detectSkystone(double timeLimit){
@@ -762,7 +762,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         return pos;
     }**/
 
-    public void updateRobotPosition(){
+    public boolean updateRobotPosition(){
         targetVisible = false;
         for (VuforiaTrackable trackable : allTrackables) {
             if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
@@ -786,11 +786,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             // express the rotation of the robot in degrees.
             rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
             telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+            telemetry.update();
+            return true;
         }
         else {
             telemetry.addData("Visible Target", "none");
+            telemetry.update();
+            return false;
         }
-        telemetry.update();
     }
 
     public HashMap<String, Double> getRobotPosition(ArrayList<WebcamName> cameras){

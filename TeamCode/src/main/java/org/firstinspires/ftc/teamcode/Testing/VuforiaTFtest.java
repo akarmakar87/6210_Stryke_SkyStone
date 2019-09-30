@@ -25,12 +25,13 @@ public class VuforiaTFtest extends SkystoneLinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()){
-            telemetry.addData("Robot X-Pos:" , getRobotX());
-            telemetry.addData("Robot Y-Pos:" , getRobotY());
-            telemetry.addData("Robot Angle:" , getRobotHeading());
+            if(updateRobotPosition()){
+                telemetry.addData("Robot X-Pos:" , getRobotX());
+                telemetry.addData("Robot Y-Pos:" , getRobotY());
+                telemetry.addData("Robot Angle:" , getRobotHeading());
+            }
 
-
-            telemetry.addData("Skystone Position (1 to 3)", detectSkystone(1000));
+          //  telemetry.addData("Skystone Position (1 to 3)", detectSkystone(1000));
             telemetry.update();
         }
     }

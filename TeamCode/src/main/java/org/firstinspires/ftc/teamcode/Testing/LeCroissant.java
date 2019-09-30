@@ -4,14 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Le Croissant", group = "auto")  // PARKS AWAY FORM WALL
+@Autonomous(name="Le Croissant:", group = "auto")  // PARKS AWAY FORM WALL
 
 // -------------------NOTE: DIFF VALUES AND DIRECTIONS FOR BLUE AND RED SIDE SO MAKE AN IF ELSE STATEMENT
 // THAT WILL RUN DIFFERENT CODE DEPENDING ON WHICH VUFORIA MARK IS IDENTIFIED ON THE WALL RIGHT NEXT TO ROBOT
 // ------------ ASK MINDY FOR CLARIFICATION
 
 //@Disabled
-public class SkystoneDetectTest extends SkystoneLinearOpMode {
+public class LeCroissant extends SkystoneLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {

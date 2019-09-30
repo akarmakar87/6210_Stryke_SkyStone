@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Testing;
 
 import android.graphics.Bitmap;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.vuforia.Frame;
@@ -20,8 +21,8 @@ import static android.graphics.Color.blue;
 import static android.graphics.Color.green;
 import static android.graphics.Color.red;
 
-@TeleOp(name="VuforiaTFtest", group = "auto")
-//@Disabled
+@TeleOp(name="Bitmap", group = "auto")
+@Disabled
 public class BitmapTest extends SkystoneLinearOpMode {
 
     private LinearOpMode opMode;

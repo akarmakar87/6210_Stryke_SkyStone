@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.X_PracticePrograms;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @TeleOp(name = "TeleOp Tutorial", group = "teleop")
-//@Disabled
+@Disabled
 public class TeleOpTutorial extends SkystoneLinearOpMode {
 
     @Override
