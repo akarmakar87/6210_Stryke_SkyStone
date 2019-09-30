@@ -956,16 +956,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         telemetry.update();
     }
 
-    public boolean isRed() {
+    public boolean isRed(long timeout) { // in milliseconds
+        runtime.reset();
         CameraDevice camera = CameraDevice.getInstance();
         camera.setFlashTorchMode(true);
-        boolean detected = false;
-        while (opModeIsActive() && !isStopRequested() && (!detected)) {
+
+        while (!isStopRequested() && runtime.milliseconds() < timeout) {
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
-                    camera.setFlashTorchMode(false);;
-                    detected = true;
+                    camera.setFlashTorchMode(false);
                     switch (trackable.getName()) {
                         default:
                             telemetry.addData("No Trackable", "Detected");
@@ -976,7 +976,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     }
 
                 }
-                else detected = false;
             }
         }
             return false;
