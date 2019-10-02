@@ -139,7 +139,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         LB.setDirection(DcMotorSimple.Direction.FORWARD);
         //intake.setDirection(DcMotorSimple.Direction.FORWARD);
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
-        setClawPosition(true);
+        setClawPosition(false);
 
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

@@ -25,16 +25,16 @@ public class Position2b extends SkystoneLinearOpMode {
         telemetry.update();
 
         boolean red = isRed(1000); // outputs whether we are on red or blue side
-        //position();
+        position();
 
         waitForStart();
 
         if (red) {
             driveToPoint(0.8, RobotCoordinates.one_2.get(0), -RobotCoordinates.one_2.get(1)); // drive forward to catch target
             driveToPoint(0.8, RobotCoordinates.two_2.get(0), -RobotCoordinates.two_2.get(1)); // drive to foundation
-            // grab foundation
+            setClawPosition(true);
             driveForward(RobotCoordinates.three_2.get(0), -RobotCoordinates.three_2.get(1), -0.8, -RobotCoordinates.three_2.get(2)); // back up dragging foundation
-            // let go of foundation
+            setClawPosition(false);
             driveForward(RobotCoordinates.four_2.get(0), -RobotCoordinates.four_2.get(1), -0.5, -RobotCoordinates.four_2.get(2)); // back up from foundation
             driveToPoint(0.5, RobotCoordinates.five_2b.get(0), -RobotCoordinates.five_2b.get(1)); // drive forward
             StrafetoPosition(0.5, RobotCoordinates.six_2b.get(0), -RobotCoordinates.six_2b.get(1), -RobotCoordinates.six_2b.get(2)); // strafe to park Y pos
@@ -52,9 +52,9 @@ public class Position2b extends SkystoneLinearOpMode {
             // blue code
             driveToPoint(0.8, RobotCoordinates.one_2.get(0), RobotCoordinates.one_2.get(1)); // drive forward to catch target
             driveToPoint(0.8, RobotCoordinates.two_2.get(0), RobotCoordinates.two_2.get(1)); // drive to foundation
-            // grab foundation
+            setClawPosition(true);
             driveForward(RobotCoordinates.three_2.get(0), RobotCoordinates.three_2.get(1), -0.8, RobotCoordinates.three_2.get(2)); // back up dragging foundation
-            // let go of foundation
+            setClawPosition(false);
             driveForward(RobotCoordinates.four_2.get(0), RobotCoordinates.four_2.get(1), -0.5, RobotCoordinates.four_2.get(2)); // back up from foundation
             driveToPoint(0.5, RobotCoordinates.five_2b.get(0), RobotCoordinates.five_2b.get(1)); // drive forward
             StrafetoPosition(0.5, RobotCoordinates.six_2b.get(0), RobotCoordinates.six_2b.get(1), RobotCoordinates.six_2b.get(2)); // strafe to park Y pos
