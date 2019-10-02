@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@TeleOp(name="VuforiaTFtest", group = "auto")
+@TeleOp(name="VuforiaTFtest(sampling)", group = "auto")
 //@Disabled
 public class SamplingTest extends SkystoneLinearOpMode {
 

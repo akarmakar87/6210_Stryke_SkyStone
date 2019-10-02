@@ -21,7 +21,7 @@ public class Flash_Garrett extends SkystoneLinearOpMode {
         telemetry.addData("Ready", "true");
         telemetry.update();
 
-        boolean placeholder = isRed();
+        boolean placeholder = isRed(3000);
 
         telemetry.addData("Done", "true");
         telemetry.update();
