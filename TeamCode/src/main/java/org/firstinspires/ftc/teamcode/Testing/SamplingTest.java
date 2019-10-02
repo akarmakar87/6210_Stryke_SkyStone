@@ -23,7 +23,7 @@ public class SamplingTest extends SkystoneLinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()){
-            telemetry.addData("Skystone Position (1 to 3)", detectSkystone(1000));
+            telemetry.addData("Skystone Position (1 to 3)", detectSkystone(3000));
             telemetry.update();
         }
     }

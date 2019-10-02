@@ -949,7 +949,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         telemetry.update();
     }
 
-    public boolean isRed(long timeout) { // in milliseconds
+    public boolean isRed(int timeout) { // in milliseconds
         runtime.reset();
         CameraDevice camera = CameraDevice.getInstance();
         camera.setFlashTorchMode(true);
