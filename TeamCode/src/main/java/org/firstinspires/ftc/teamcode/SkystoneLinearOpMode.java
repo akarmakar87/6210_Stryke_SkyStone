@@ -801,6 +801,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         HashMap<String, Double> coordinates = new HashMap<>();
 
         coordinates.put("X", getRobotX());
+        coordinates.put("Y", getRobotY());
         return coordinates;
     }
 
