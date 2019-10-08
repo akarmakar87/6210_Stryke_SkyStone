@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Testing;
 
 import android.graphics.Bitmap;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -20,9 +21,8 @@ import java.util.ArrayList;
 import static android.graphics.Color.blue;
 import static android.graphics.Color.green;
 import static android.graphics.Color.red;
-
-@TeleOp(name="Bitmap", group = "auto")
-@Disabled
+@Autonomous(name="Bitmap", group = "auto")
+//@Disabled
 public class BitmapTest extends SkystoneLinearOpMode {
 
     private LinearOpMode opMode;
@@ -39,15 +39,18 @@ public class BitmapTest extends SkystoneLinearOpMode {
     private final int BLUE_THRESHOLD = 60;
 
     // constructor turns on webcam imaging and sets capacity and format for frame
-    public BitmapTest() {
+    public BitmapTest() throws InterruptedException {
         initVuforia();
+        while (opModeIsActive() && !isStopRequested()){
+            telemetry.addData("pos", sample());
+            telemetry.update();
+        }
 
         // set RGB format to 565
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
 
         // allowing the frame to only be 4 images at a time
         vuforia.setFrameQueueCapacity(4);
-
     }
 
     public Bitmap getBitmap() throws InterruptedException{
@@ -145,7 +148,7 @@ public class BitmapTest extends SkystoneLinearOpMode {
             skystone = "right";
 
         }
-        opMode.telemetry.addData("Cube Position", skystone);
+        opMode.telemetry.addData("SkyStone Position", skystone);
         opMode.telemetry.update();
 
         return skystone;

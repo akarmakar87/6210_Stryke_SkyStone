@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.Testing;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -52,7 +53,7 @@ import java.util.List;
  * is explained below.
  */
 @TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-@Disabled
+//@Disabled
 public class ConceptTensorFlowObjectDetection extends LinearOpMode {
     public static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     public static final String LABEL_FIRST_ELEMENT = "Stone";
@@ -114,23 +115,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                      telemetry.addData("# Object Detected", updatedRecognitions.size());
-
-                      // step through the list of recognitions and display boundary info.
-                      int i = 0;
-                      for (Recognition recognition : updatedRecognitions) {
-                        telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                        telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                          recognition.getLeft(), recognition.getTop());
-                        telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                recognition.getRight(), recognition.getBottom());
-                      }
-                      telemetry.update();
-                    }
+                    detectSkystone();
                 }
             }
         }
@@ -168,5 +153,58 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
         tfodParameters.minimumConfidence = 0.8;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+    }
+
+    public void detectSkystone(){
+        ElapsedTime runtime = new ElapsedTime();
+        runtime.reset();
+        int pos = 0;
+        while(opModeIsActive() && tfod != null) {
+            // getUpdatedRecognitions() will return null if no new information is available since the last time that call was made.
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                if (updatedRecognitions.size() > 0) { //IF DETECT BOTH OBJECTS
+
+                    int skystoneX = -1, stone1X = -1, stone2X = -1;
+                    double skystoneConf = 0;
+
+                    for (Recognition recognition : updatedRecognitions) {
+                        if (recognition.getLabel().equals(LABEL_SECOND_ELEMENT)) { //IF OBJECT DETECTED IS GOLD
+                            skystoneX = (int) recognition.getLeft();
+                            skystoneConf = recognition.getConfidence();
+                        } else if (recognition.getLabel().equals(LABEL_FIRST_ELEMENT) && stone1X != -1) {
+                            stone1X = (int) recognition.getLeft();
+                        } else {
+                            stone2X = (int) recognition.getLeft();
+                        }
+                    }
+
+                    //Adjust based on if it can see 3 stones or 2 stones
+                    //Ask galligher how to get the y-value of the object, but could also use
+                    //ratio of block height to frame height
+
+                    //(*^*)\\ <-- A CHICK!
+
+                    if (skystoneX != -1 && skystoneConf > 0.2) { //adjust confidence level
+
+                        if (skystoneX < 600 || (skystoneX < stone1X && skystoneX < stone2X)) { //adjust threshold3
+                            telemetry.addData("Skystone Position", "Left");
+                            pos = 1;
+                        } else{
+                            telemetry.addData("Skystone Position", "Center");
+                            pos = 2;
+                        }
+                    }else{
+                        telemetry.addData("Skystone Position", "Right");
+                        pos = 3;
+                    }
+                    telemetry.addData("Gold x pos ", skystoneX);
+                    telemetry.addData("Gold conf ", skystoneConf);
+                    telemetry.addData("Runtime", runtime.milliseconds());
+                    telemetry.update();
+                }
+            }
+        }
     }
 }
