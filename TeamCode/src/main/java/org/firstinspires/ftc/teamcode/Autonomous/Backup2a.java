@@ -30,7 +30,7 @@ public class Backup2a extends SkystoneLinearOpMode{
             driveDistance(0.8, -15); //Drive back to building zone
             setClawPosition(false);
             driveDistance(0.5, 5); //Drive back from foundation
-            turnPID(90, 0.4, 0, 0, 5);
+            turnPIDV(90, 0, 0, 0, false);
             driveDistance(0.8, 25); //Drive to park
         }
         else {
@@ -39,7 +39,7 @@ public class Backup2a extends SkystoneLinearOpMode{
             driveDistance(0.8, -15); //Drive back to building zone
             setClawPosition(false);
             driveDistance(0.5, 5); //Drive back from foundation
-            turnPID(-90, 0.4, 0, 0, 5);
+            turnPIDV(-90, 0, 0, 0, false);
             driveDistance(0.8, 25); //Drive to park
         }
 
