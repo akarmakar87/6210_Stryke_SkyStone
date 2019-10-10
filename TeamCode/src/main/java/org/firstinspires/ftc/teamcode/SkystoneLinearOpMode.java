@@ -44,8 +44,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public DcMotor RB;
     public DcMotor intake;
     public BNO055IMU imu;
-    public DcMotor lift;
-    public Servo claw;
+    //public DcMotor lift;
+    //public Servo claw;
 
 
     private double clawStartPosition = 0.0;
@@ -130,15 +130,15 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RB  = map.dcMotor.get("RB");
        // intake  = map.dcMotor.get("intake");
         imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
-        lift = map.dcMotor.get("lift");
-        claw = map.servo.get("claw");
+        //lift = map.dcMotor.get("lift");
+        //claw = map.servo.get("claw");
 
         LF.setDirection(DcMotorSimple.Direction.FORWARD);
         RF.setDirection(DcMotorSimple.Direction.REVERSE);
         RB.setDirection(DcMotorSimple.Direction.REVERSE);
         LB.setDirection(DcMotorSimple.Direction.FORWARD);
         //intake.setDirection(DcMotorSimple.Direction.FORWARD);
-        lift.setDirection(DcMotorSimple.Direction.FORWARD);
+        //lift.setDirection(DcMotorSimple.Direction.FORWARD);
         setClawPosition(false);
 
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -146,7 +146,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         resetEncoders();
 
         //SET UP GYRO
@@ -469,10 +469,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     //CLAW SERVO
     public void setClawPosition(boolean open){
         if (open){
-            claw.setPosition(clawStartPosition);
+            //claw.setPosition(clawStartPosition);
         }
         else{
-            claw.setPosition(clawEndPosition);
+            //claw.setPosition(clawEndPosition);
         }
     }
 

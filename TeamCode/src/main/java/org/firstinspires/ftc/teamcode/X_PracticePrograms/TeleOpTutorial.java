@@ -21,9 +21,9 @@ public class TeleOpTutorial extends SkystoneLinearOpMode {
             setMotorPowers(gamepad1.left_stick_y, gamepad1.right_stick_y);
 
             if (gamepad2.left_bumper) {
-                lift.setPower(1.0);
+                //lift.setPower(1.0);
             } else {
-                lift.setPower(0);
+                //lift.setPower(0);
             }
         }
     }
