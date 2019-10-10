@@ -28,7 +28,7 @@ public class LeCroissant extends SkystoneLinearOpMode {
         telemetry.addData("detector", "enabled");
         telemetry.update();
 
-        boolean red = isRed(); // outputs whether we are on red or blue side
+        boolean red = isRed(3000); // outputs whether we are on red or blue side
 
         waitForStart();
 

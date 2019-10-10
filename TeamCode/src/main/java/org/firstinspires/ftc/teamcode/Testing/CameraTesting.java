@@ -92,8 +92,6 @@ public class CameraTesting extends LinearOpMode {
         targetsWC = this.vuforiaWC.loadTrackablesFromAsset("Skystone");
 
         //LIST OF ALL  for PC
-        VuforiaTrackable stoneTarget = targetsPC.get(0);
-        stoneTarget.setName("Stone Target");
         VuforiaTrackable blueRearBridge = targetsPC.get(1);
         blueRearBridge.setName("Blue Rear Bridge");
         VuforiaTrackable redRearBridge = targetsPC.get(2);
@@ -126,9 +124,6 @@ public class CameraTesting extends LinearOpMode {
         trackablesPC = new ArrayList<VuforiaTrackable>();
         trackablesPC.addAll(targetsPC);
 
-        stoneTarget.setLocation(OpenGLMatrix
-                .translation(0, 0, stoneZ)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
         //Set the position of the bridge support targets with relation to origin (center of field)
         blueFrontBridge.setLocation(OpenGLMatrix
@@ -181,9 +176,6 @@ public class CameraTesting extends LinearOpMode {
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
         ////////////
-
-        VuforiaTrackable stoneTarget_2 = targetsPC.get(0);
-        stoneTarget.setName("Stone Target");
         VuforiaTrackable blueRearBridge_2 = targetsPC.get(1);
         blueRearBridge.setName("Blue Rear Bridge");
         VuforiaTrackable redRearBridge_2 = targetsPC.get(2);
@@ -215,10 +207,6 @@ public class CameraTesting extends LinearOpMode {
 
         trackablesWC = new ArrayList<VuforiaTrackable>();
         trackablesWC.addAll(targetsPC);
-
-        stoneTarget_2.setLocation(OpenGLMatrix
-                .translation(0, 0, stoneZ)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
         //Set the position of the bridge support targets with relation to origin (center of field)
         blueFrontBridge_2.setLocation(OpenGLMatrix

@@ -139,7 +139,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         LB.setDirection(DcMotorSimple.Direction.FORWARD);
         //intake.setDirection(DcMotorSimple.Direction.FORWARD);
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
-        setClawPosition(true);
+        setClawPosition(false);
 
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -766,7 +766,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public boolean updateRobotPosition(){
         targetVisible = false;
         for (VuforiaTrackable trackable : allTrackables) {
-            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() != "Stone Target") {
                 telemetry.addData("Visible Target", trackable.getName());
                 targetVisible = true;
 
@@ -795,14 +795,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             telemetry.update();
             return false;
         }
-    }
-
-    public HashMap<String, Double> getRobotPosition(ArrayList<WebcamName> cameras){
-        HashMap<String, Double> coordinates = new HashMap<>();
-
-        coordinates.put("X", getRobotX());
-        coordinates.put("Y", getRobotY());
-        return coordinates;
     }
 
     public double getRobotX() {
@@ -957,7 +949,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         telemetry.update();
     }
 
-    public boolean isRed(long timeout) { // in milliseconds
+    public boolean isRed(int timeout) { // in milliseconds
         runtime.reset();
         CameraDevice camera = CameraDevice.getInstance();
         camera.setFlashTorchMode(true);
@@ -966,6 +958,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
+                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                    if (robotLocationTransform != null) {
+                        lastLocation = robotLocationTransform;
+                        translation = lastLocation.getTranslation();
+                    }
                     camera.setFlashTorchMode(false);
                     switch (trackable.getName()) {
                         default:
@@ -983,7 +980,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public void position(){ //constantly gives X and Y position of robot
-        while(opModeIsActive() && !isStopRequested()){
+        while(!isStopRequested()){
             telemetry.addData("X -", getRobotX());
             telemetry.addData("Y -", getRobotY());
             telemetry.update();
