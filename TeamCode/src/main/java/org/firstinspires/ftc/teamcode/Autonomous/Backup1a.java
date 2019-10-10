@@ -25,7 +25,7 @@ public class Backup1a extends SkystoneLinearOpMode{
         waitForStart();
 
         if (red){
-
+        driveDistance(0.8, 15);
         }
         else {
 

@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -24,7 +27,6 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
@@ -46,8 +48,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public BNO055IMU imu;
     public DcMotor lift;
     public Servo claw;
+    public RevColorSensorV3 sensorColor;
 
+    //COLOR SENSOR VARIABLES
+    final float hsvValues[] = {0f, 0f, 0f};
+    public int colorPark = 1;
 
+    //CLAW VARIABLES
     private double clawStartPosition = 0.0;
     private double clawEndPosition = 1.0;
 
@@ -148,6 +155,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         //intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         resetEncoders();
+
+        //Color Sensor
+        sensorColor = map.get(RevColorSensorV3.class, "Color Sensor");
+
 
         //SET UP GYRO
         angles = new Orientation();
@@ -466,6 +477,34 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }**/
 
+    //COLOR SENSOR
+    public void colorStop(boolean red){
+        Color.RGBToHSV(sensorColor.red() * 8, sensorColor.green() * 8, sensorColor.blue() * 8, hsvValues);
+        telemetry.addData("Red ", sensorColor.red());
+        telemetry.addData("Green ", sensorColor.green());
+        telemetry.addData("Blue ", sensorColor.blue());
+        telemetry.update();
+        if (red){
+            if (sensorColor.red() >=2 && colorPark == 1 ){
+                setMotorPowers(1, 1);
+            }
+            else{
+                setMotorPowers(0, 0);
+                colorPark = 2;
+            }
+
+        }
+        else{
+            if(sensorColor.blue() >=2 && colorPark == 1){
+                setMotorPowers(1, 1);
+            }
+            else{
+                setMotorPowers(0, 0);
+                colorPark = 2;
+            }
+        }
+    }
+
     //CLAW SERVO
     public void setClawPosition(boolean open){
         if (open){
@@ -582,7 +621,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         return angles.firstAngle;
     }
 
-    /**
+
     public void turnPID(double tAngle, double kP, double kI, double kD, double timeOut){
         double power, prevError, error, dT, prevTime, currTime, P, I, D; //DECLARE ALL VARIABLES
         prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
@@ -610,7 +649,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     .addData("currTime: ", currTime);
         }
     }
-    **/
+
 
     //ROTATE USING GYRO
     public void rotate(double targetAngleChange, int timeout) {
@@ -672,7 +711,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     int pos = 0;
 
-  /**  public void detectSkystone(double timeLimit){
+    public void detectSkystone(double timeLimit){
         runtime.reset();
         activateTfod();
         while(runtime.seconds() < timeLimit && opModeIsActive() && tfod != null) {
