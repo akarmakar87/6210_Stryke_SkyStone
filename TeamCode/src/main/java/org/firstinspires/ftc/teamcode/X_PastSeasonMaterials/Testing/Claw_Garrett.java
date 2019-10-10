@@ -15,9 +15,9 @@ public class Claw_Garrett extends SkystoneLinearOpMode {
         init(hardwareMap, true);
 
         waitForStart();
-        claw.setPosition(0);
+        //claw.setPosition(0);
         Thread.sleep(3000);
-        claw.setPosition(1);
+        //claw.setPosition(1);
         Thread.sleep(3000);
     }
 }

@@ -723,12 +723,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
         }
     }
-**/
+   **/
+/**
     //USE VUFORIA TRACKABLE COORDINATE TO DETERMINE SKYSTONE POSITION
     //GO GET COORDINATES OF THE TARGET IN EACH POSITION
     public int detectSkystone(double timeLimit){
         OpenGLMatrix skystonePos = null;
         VectorF skystoneCoords = null;
+        ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
         int pos = 0;
         while(opModeIsActive() && runtime.milliseconds() < timeLimit) {

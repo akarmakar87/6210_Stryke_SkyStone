@@ -66,6 +66,8 @@ public class MainTeleOp extends SkystoneLinearOpMode {
                 }
             }
 
+            /**
+
             //LIFT CONTROLS
             if (gamepad2.right_trigger > 0.05) {
                 lift.setPower(gamepad2.right_trigger); //LIFT DOWN
@@ -129,6 +131,10 @@ public class MainTeleOp extends SkystoneLinearOpMode {
                     setMotorPowers(leftPower, rightPower);
                 }
             }
+
+             **/
+
+            setMotorPowers(leftPower, rightPower);
 
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower)
                     .addData("Half Speed", halfSpeed);
