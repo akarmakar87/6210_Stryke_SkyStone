@@ -25,10 +25,24 @@ public class Backup2b extends SkystoneLinearOpMode{
         waitForStart();
 
         if (red){
-
+            strafeDistance(0.8, 15, true); //Strafe to middle of foundation
+            driveDistance(0.8, 30); //Drive forward to foundation
+            setClawPosition(true); //Pick up foundation
+            driveDistance(0.8, -25); //Drive back to building zone
+            setClawPosition(false); //Drop off foundation
+            driveDistance(0.5, 5); //Drive back from foundation
+            strafeDistance(0.8, 50, false); //Strafe to park
+            driveDistance(0.8, 25);
         }
         else {
-
+            strafeDistance(0.8, 15, false); //Strafe to middle of foundation
+            driveDistance(0.8, 30); //Drive forward to foundation
+            setClawPosition(true); //Pick up foundation
+            driveDistance(0.8, -25); //Drive back to building zone
+            setClawPosition(false); //Drop off foundation
+            driveDistance(0.5, 5); //Drive back from foundation
+            strafeDistance(0.8, 50, true); //Strafe to park
+            driveDistance(0.8, 15);
         }
 
     }

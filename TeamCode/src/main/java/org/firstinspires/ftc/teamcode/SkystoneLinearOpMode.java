@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.vuforia.CameraDevice;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -46,8 +49,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public BNO055IMU imu;
     public DcMotor lift;
     public Servo claw;
+    public RevColorSensorV3 sensorColor;
 
+    /**COLOR SENSOR VARIABLES
+    float hsvValues[] = {0f, 0f, 0f};
+    float values[] = hsvValues;
+    **/
 
+    //ClAW VARIABLES
     private double clawStartPosition = 0.0;
     private double clawEndPosition = 1.0;
 
@@ -132,6 +141,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
         //lift = map.dcMotor.get("lift");
         //claw = map.servo.get("claw");
+        //sensorColor = map.get(RevColorSensorV3.class, "color");
 
         LF.setDirection(DcMotorSimple.Direction.FORWARD);
         RF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -465,6 +475,15 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         }
     }**/
+
+    /**COLOR SENSOR
+    public void colorPark(boolean red){
+        Color.RGBToHSV(sensorColor.red() * 8, sensorColor.green() * 8, sensorColor.blue() * 8, hsvValues);
+        if(red){
+
+            }
+        }
+    **/
 
     //CLAW SERVO
     public void setClawPosition(boolean open){
