@@ -65,8 +65,7 @@ public class CameraTesting extends LinearOpMode {
     VuforiaLocalizer vuforiaWC = null;
     VuforiaTrackables targetsPC = null;
     VuforiaTrackables targetsWC = null;
-    List<VuforiaTrackable> trackablesPC = null;
-    List<VuforiaTrackable> trackablesWC = null;
+    List<VuforiaTrackable> allTrackables = null;
 
     VectorF translation;
     Orientation rotation;
@@ -92,6 +91,7 @@ public class CameraTesting extends LinearOpMode {
         targetsWC = this.vuforiaWC.loadTrackablesFromAsset("Skystone");
 
         //LIST OF ALL  for PC
+        // know that indexes 1-12
         VuforiaTrackable blueRearBridge = targetsPC.get(1);
         blueRearBridge.setName("Blue Rear Bridge");
         VuforiaTrackable redRearBridge = targetsPC.get(2);
@@ -120,10 +120,6 @@ public class CameraTesting extends LinearOpMode {
         // For convenience, gather together all the trackable objects in one easily-iterable collection */
 
         //MAY HAVE TO DO TWO SETS OF TRACKABLES FOR BOTH CAMERAS
-
-        trackablesPC = new ArrayList<VuforiaTrackable>();
-        trackablesPC.addAll(targetsPC);
-
 
         //Set the position of the bridge support targets with relation to origin (center of field)
         blueFrontBridge.setLocation(OpenGLMatrix
@@ -176,37 +172,40 @@ public class CameraTesting extends LinearOpMode {
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
         ////////////
-        VuforiaTrackable blueRearBridge_2 = targetsPC.get(1);
+        // indexes 13-24 wc
+        VuforiaTrackable blueRearBridge_2 = targetsWC.get(1);
         blueRearBridge.setName("Blue Rear Bridge");
-        VuforiaTrackable redRearBridge_2 = targetsPC.get(2);
+        VuforiaTrackable redRearBridge_2 = targetsWC.get(2);
         redRearBridge.setName("Red Rear Bridge");
-        VuforiaTrackable redFrontBridge_2 = targetsPC.get(3);
+        VuforiaTrackable redFrontBridge_2 = targetsWC.get(3);
         redFrontBridge.setName("Red Front Bridge");
-        VuforiaTrackable blueFrontBridge_2 = targetsPC.get(4);
+        VuforiaTrackable blueFrontBridge_2 = targetsWC.get(4);
         blueFrontBridge.setName("Blue Front Bridge");
-        VuforiaTrackable red1_2 = targetsPC.get(5);
+        VuforiaTrackable red1_2 = targetsWC.get(5);
         red1.setName("Red Perimeter 1");
-        VuforiaTrackable red2_2 = targetsPC.get(6);
+        VuforiaTrackable red2_2 = targetsWC.get(6);
         red2.setName("Red Perimeter 2");
-        VuforiaTrackable front1_2 = targetsPC.get(7);
+        VuforiaTrackable front1_2 = targetsWC.get(7);
         front1.setName("Front Perimeter 1");
-        VuforiaTrackable front2_2 = targetsPC.get(8);
+        VuforiaTrackable front2_2 = targetsWC.get(8);
         front2.setName("Front Perimeter 2");
-        VuforiaTrackable blue1_2 = targetsPC.get(9);
+        VuforiaTrackable blue1_2 = targetsWC.get(9);
         blue1.setName("Blue Perimeter 1");
-        VuforiaTrackable blue2_2 = targetsPC.get(10);
+        VuforiaTrackable blue2_2 = targetsWC.get(10);
         blue2.setName("Blue Perimeter 2");
-        VuforiaTrackable rear1_2 = targetsPC.get(11);
+        VuforiaTrackable rear1_2 = targetsWC.get(11);
         rear1.setName("Rear Perimeter 1");
-        VuforiaTrackable rear2_2= targetsPC.get(12);
+        VuforiaTrackable rear2_2= targetsWC.get(12);
         rear2.setName("Rear Perimeter 2");
 
         // For convenience, gather together all the trackable objects in one easily-iterable collection */
 
         //MAY HAVE TO DO TWO SETS OF TRACKABLES FOR BOTH CAMERAS
 
-        trackablesWC = new ArrayList<VuforiaTrackable>();
-        trackablesWC.addAll(targetsPC);
+        allTrackables = new ArrayList<VuforiaTrackable>();
+        allTrackables.addAll(targetsPC);
+        allTrackables.addAll(targetsWC);
+
 
         //Set the position of the bridge support targets with relation to origin (center of field)
         blueFrontBridge_2.setLocation(OpenGLMatrix
@@ -270,12 +269,12 @@ public class CameraTesting extends LinearOpMode {
 
         // Next, translate the camera lens to where it is on the robot.
         // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
-        final float PC_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
-        final float PC_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
+        final float PC_FORWARD_DISPLACEMENT  = 0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float PC_VERTICAL_DISPLACEMENT = 0f * mmPerInch;   // eg: Camera is 8 Inches above ground
         final float PC_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
 
-        final float WC_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
-        final float WC_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
+        final float WC_FORWARD_DISPLACEMENT  = 0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot-center
+        final float WC_VERTICAL_DISPLACEMENT = 0f * mmPerInch;   // eg: Camera is 8 Inches above ground
         final float WC_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
 
         OpenGLMatrix robotFromPC = OpenGLMatrix
@@ -287,13 +286,19 @@ public class CameraTesting extends LinearOpMode {
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES, phoneYRotate, phoneZRotate, phoneXRotate));
 
         /**  Let all the trackable listeners know where the phone is.  */
-        for (VuforiaTrackable trackable : trackablesPC) {
-            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromPC, paramPC.cameraDirection);
-        }
+        for (int i = 0; i < allTrackables.size(); i++) {
 
-        /**  Let all the trackable listeners know where the webcam is.  */
-        for (VuforiaTrackable trackable : trackablesWC) {
-            ((VuforiaTrackableDefaultListener) trackable.getListener()).setPhoneInformation(robotFromWC, paramWC.cameraDirection);
+            if (((VuforiaTrackableDefaultListener) allTrackables.get(i).getListener()).isVisible()) {
+
+                if(i < 13){
+                    ((VuforiaTrackableDefaultListener) allTrackables.get(i).getListener()).setPhoneInformation(robotFromPC, paramPC.cameraDirection);
+                }else{
+                    ((VuforiaTrackableDefaultListener) allTrackables.get(i).getListener()).setPhoneInformation(robotFromWC, paramWC.cameraDirection);
+                }
+
+
+            }
+
         }
 
         waitForStart();
@@ -336,7 +341,7 @@ public class CameraTesting extends LinearOpMode {
 
     public VectorF roboPosFromPC(){
         targetVisible = false;
-        for (VuforiaTrackable trackable : trackablesPC) {
+        for (VuforiaTrackable trackable : allTrackables) {
             if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                 telemetry.addData("PC Visible Target", trackable.getName());
                 targetVisible = true;
@@ -355,32 +360,6 @@ public class CameraTesting extends LinearOpMode {
         }
         else {
             telemetry.addData("PC Visible Target", "none");
-            telemetry.update();
-            return null;
-        }
-    }
-
-    public VectorF roboPosFromWC(){
-        targetVisible = false;
-        for (VuforiaTrackable trackable : trackablesWC) {
-            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                telemetry.addData("WC Visible Target", trackable.getName());
-                targetVisible = true;
-
-                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                if (robotLocationTransform != null) {
-                    lastLocWC = robotLocationTransform;
-                }
-                break;
-            }
-        }
-
-        if (targetVisible) {
-            telemetry.update();
-            return lastLocWC.getTranslation();
-        }
-        else {
-            telemetry.addData("WC Visible Target", "none");
             telemetry.update();
             return null;
         }

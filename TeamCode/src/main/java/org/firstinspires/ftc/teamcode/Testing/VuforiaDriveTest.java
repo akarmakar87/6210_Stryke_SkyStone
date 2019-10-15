@@ -33,18 +33,18 @@ public class VuforiaDriveTest extends SkystoneLinearOpMode {
         double diffY = trgtY-curY;
 
         double curHeading = getRobotHeading(); //Assuming 0-360
-        double diffHeading = Math.abs(Math.toDegrees(Math.atan(diffX/diffY))); //CALCULATE ANGLE FROM CURRENT COORD TO TARGET COORD
+        double relativeHeading = Math.abs(Math.toDegrees(Math.atan(diffX/diffY))); //CALCULATE ANGLE FROM CURRENT COORD TO TARGET COORD
         double trgtHeading;
 
         //ACCOUNT FOR ANGLES IN ALL FOUR QUADRANTS
         if(diffX > 0 && diffY > 0)
-            trgtHeading = diffHeading;
+            trgtHeading = relativeHeading;
         else if(diffX < 0 && diffY > 0)
-            trgtHeading = 360-diffHeading;
+            trgtHeading = 360-relativeHeading;
         else if(diffX < 0 && diffY < 0)
-            trgtHeading = 180 + diffHeading;
+            trgtHeading = 180 + relativeHeading;
         else if(diffX > 0 && diffY < 0)
-            trgtHeading = 180 - diffHeading;
+            trgtHeading = 180 - relativeHeading;
         else
             trgtHeading = 0;
 

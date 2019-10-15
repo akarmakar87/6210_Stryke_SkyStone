@@ -935,7 +935,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         // TO DO: calculate proportional error to decrease power more if robot angle is larger
 
         while (opModeIsActive() && (Math.abs(x - getRobotX()) > 4) || (Math.abs(y - getRobotY()) > 4))  {
-
+            updateRobotPosition();
             if (trgtHead - getRobotHeading() > 1)
                 setMotorPowers(power, power * 0.8); // default error is 0.8
             else if (trgtHead - getRobotHeading() < -1)
