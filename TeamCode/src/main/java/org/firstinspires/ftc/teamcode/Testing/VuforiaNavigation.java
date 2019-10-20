@@ -150,7 +150,11 @@ public class VuforiaNavigation extends LinearOpMode {
 
 
         stoneTarget.setLocation(OpenGLMatrix
-                .translation(0, 0, stoneZ)
+                .translation(-25, 0, stoneZ)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
+
+        stoneTarget.setLocation(OpenGLMatrix
+                .translation(-25, -22, stoneZ)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90)));
 
         //Set the position of the bridge support targets with relation to origin (center of field)
@@ -240,6 +244,11 @@ public class VuforiaNavigation extends LinearOpMode {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
                     targetVisible = true;
+
+                    if(trackable.getName() == "Stone Target"){
+                        telemetry.addData("Stone coords: ", "x: " + trackable.getLocation().getTranslation().get(0) + " y: " + trackable.getLocation().getTranslation().get(1));
+                        //telemetry.update();
+                    }
 
                     OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
                     if (robotLocationTransform != null) {

@@ -390,6 +390,20 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RB.setPower(Range.clip(rightPower, -1, 1));
     }
 
+    public void setStrafePowers(double power, boolean right){
+        if (right){
+            LF.setPower(-power);
+            RF.setPower(power);
+            LB.setPower(power);
+            RB.setPower(-power);
+        }else {
+            LF.setPower(power);
+            RF.setPower(-power);
+            LB.setPower(-power);
+            RB.setPower(power);
+        }
+    }
+
     public void StrafetoPosition(double power, double tarX, double tarY, double tarheading) {  // Garrett(9/13/19) edited
         //Declare variables
         double min = 0.3;
@@ -743,16 +757,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
    **/
-/**
+
     //USE VUFORIA TRACKABLE COORDINATE TO DETERMINE SKYSTONE POSITION
     //GO GET COORDINATES OF THE TARGET IN EACH POSITION
-    public int detectSkystone(double timeLimit){
+    public int detectSkystone(){
         OpenGLMatrix skystonePos = null;
         VectorF skystoneCoords = null;
         ElapsedTime runtime = new ElapsedTime();
         runtime.reset();
         int pos = 0;
-        while(opModeIsActive() && runtime.milliseconds() < timeLimit) {
+        while(opModeIsActive()) {
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
@@ -780,9 +794,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         return pos;
     }
 
-   /** public int getSkystonePos(){
+    public int getSkystonePos(){
         return pos;
-    }**/
+    }
 
     public boolean updateRobotPosition(){
         targetVisible = false;
@@ -946,7 +960,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             if (Math.abs(trgtHead - getRobotHeading()) > 30) // stops robot if robot is turned too off course
                 break;
         }
-
 
         /*
 
