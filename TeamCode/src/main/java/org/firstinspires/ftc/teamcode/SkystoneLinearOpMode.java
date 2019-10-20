@@ -493,9 +493,21 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     /**COLOR SENSOR
     public void colorPark(boolean red){
         Color.RGBToHSV(sensorColor.red() * 8, sensorColor.green() * 8, sensorColor.blue() * 8, hsvValues);
-        if(red){
+        float hue = hsvValues[0];
+        boolean redPark = hue < 60 || hue > 320; //red hues
+        boolean bluePark = hue > 120 && hue < 260; /blue hues
 
+        if(red){
+            while(!redPark && !isStopRequested()){
+            setMotorPowers(0.5, 0.5);
             }
+        stopMotors();
+        }
+        else{
+            while(!bluePark && !isStopRequested()){
+            setMotorPowers(0.5, 0.5);
+            }
+        stopMotors();
         }
     **/
 
