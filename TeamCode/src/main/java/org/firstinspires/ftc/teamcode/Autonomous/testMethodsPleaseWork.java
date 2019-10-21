@@ -18,7 +18,7 @@ public class testMethodsPleaseWork extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        turnPID(90, 0, 0, 0, 10000);
+        turnPID(90, .3, 0, 0, 3000);
         telemetry.addData("turn", "done");
         telemetry.update();
 
