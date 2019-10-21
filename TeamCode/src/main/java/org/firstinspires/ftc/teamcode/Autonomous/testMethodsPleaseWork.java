@@ -18,7 +18,9 @@ public class testMethodsPleaseWork extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        //turnPID(90, 0, 0, 0, 10000);
+        turnPID(90, 0, 0, 0, 10000);
+        telemetry.addData("turn", "done");
+        telemetry.update();
 
         //sleep(1000);
 
@@ -34,11 +36,11 @@ public class testMethodsPleaseWork extends SkystoneLinearOpMode {
         //telemetry.addData("strafe right", "done");
         //telemetry.update();
 
-        //driveForward(-32,30,0.5, -90); // test vuforia PID and drive forward
 
-        driveForward(-32, 50, -0.5, -90); // test drive backwards
 
-        telemetry.addData("strafe right", "done");
-        telemetry.update();
+        //driveForward(-32, 50, -0.5, -90); // test drive backwards
+
+        //telemetry.addData("drive forward", "done");
+        //telemetry.update();
     }
 }
