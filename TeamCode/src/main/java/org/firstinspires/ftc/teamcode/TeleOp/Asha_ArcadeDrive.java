@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@TeleOp(name="ArcadeTeleOp", group="teleop")
+@TeleOp(name="crossaint-ArcadeTeleOp", group="teleop")
 //@Disabled
 public class Asha_ArcadeDrive extends SkystoneLinearOpMode {
 
