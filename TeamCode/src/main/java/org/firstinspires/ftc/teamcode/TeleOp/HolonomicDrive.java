@@ -15,7 +15,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
         init(hardwareMap, false);
 
         double xAxis = 0, yAxis = 0, zAxis = 0;
-        double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0;
+        double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0;
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
@@ -46,15 +46,24 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 zAxis = 0;
             }
 
-            lfPower = yAxis+xAxis-zAxis;
-            rfPower = yAxis-xAxis+zAxis;
-            lbPower = yAxis-xAxis-zAxis;
-            rbPower = yAxis+xAxis+zAxis;
 
-            LF.setPower(Range.clip(lfPower, -1, 1));
-            RF.setPower(Range.clip(rfPower, -1, 1));
-            LB.setPower(Range.clip(lbPower, -1, 1));
-            RB.setPower(Range.clip(rbPower, -1, 1));
+            if (gamepad1.left_trigger > 0.05){
+                strafePower = gamepad1.left_trigger * 0.75;
+                setStrafePowers(strafePower,false);
+            }else if (gamepad1.right_trigger > 0.05){
+                strafePower = gamepad1.right_trigger * 0.75;
+                setStrafePowers(strafePower,true);
+            }else{
+                lfPower = yAxis+xAxis-zAxis;
+                rfPower = yAxis-xAxis+zAxis;
+                lbPower = yAxis-xAxis-zAxis;
+                rbPower = yAxis+xAxis+zAxis;
+
+                LF.setPower(Range.clip(lfPower, -1, 1));
+                RF.setPower(Range.clip(rfPower, -1, 1));
+                LB.setPower(Range.clip(lbPower, -1, 1));
+                RB.setPower(Range.clip(rbPower, -1, 1));
+            }
 
             telemetry.addData("Y Axis", yAxis);
             telemetry.addData("X Axis", xAxis);
