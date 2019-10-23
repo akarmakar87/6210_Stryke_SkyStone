@@ -444,14 +444,20 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
         }
     }
-/*
+
     public void strafeDistance(double power, boolean right, double dist) {  // Garrett(10/22/19)
         //Declare variables
         double min = 0.3;   //adjustable minimum power for strafing
         double powerG = power * 0.4;   //PowerGiven = Starts out with a lower power so the robot doesn't drift as much
-        setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);    //resets motor encoders
         dist *= -1 * encoderToInches;   //sets distance (will change after testing to see how short it is of target distance)
-        setMode(DcMotor.RunMode.RUN_USING_ENCODER); //set the mode of the motors
+        LF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);    //resets motor encoders
+        RF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        LF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); //set the mode of the motors
+        RF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        LB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         if (right) {  //If strafing right
             //Sets the target position for the motors to move to
@@ -460,7 +466,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             RF.setTargetPosition(RF.getCurrentPosition() - (int)dist);
             RB.setTargetPosition(RB.getCurrentPosition() + (int)dist);
             //tells motors to move to positions set
-            setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            LF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            RF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            LB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            RB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             //sets motor powers
             LF.setPower(-Range.clip(powerG, min, 1));
             RF.setPower(Range.clip(-powerG, min, 1));
@@ -474,7 +483,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             RF.setTargetPosition(RF.getCurrentPosition() + (int)dist);
             RB.setTargetPosition(RB.getCurrentPosition() - (int)dist);
             //tells motors to move to positions set
-            setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            LF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            RF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            LB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            RB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             //sets motor powers
             LF.setPower(Range.clip(-powerG, min, 1));
             RF.setPower(-Range.clip(powerG, min, 1));
@@ -491,19 +503,19 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 LB.setPower(Range.clip(-powerG, min, 1));
                 RB.setPower(-Range.clip(powerG, min, 1));
             }
-            if(left) {
+            if(right == false) {
                 LF.setPower(-Range.clip(powerG, min, 1));
                 RF.setPower(Range.clip(-powerG, min, 1));
                 LB.setPower(Range.clip(-powerG, min, 1));
                 RB.setPower(-Range.clip(powerG, min, 1));
             }
             //If statement makes sure that powerG stops increasing once it is equal with power
-            if (powerG = power) {
-                powerG += powerG * 0.1
+            if (powerG == power) {
+                powerG += powerG * 0.1;
             }
         }
         stopMotors();
-    }*/
+    }
 
     /**public void strafeAdjust(double power, double distance, boolean right, int timeout){
 
@@ -636,7 +648,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stopMotors();
     }
 
-    public void strafeDistance(double power, double distance, boolean right) throws InterruptedException{
+    /*public void strafeDistance(double power, double distance, boolean right) throws InterruptedException{
         resetEncoders();
         while (getEncoderAvg() < distance * 55 && !isStopRequested()){
             if (right){
@@ -652,7 +664,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
         }
         stopMotors();
-    }
+    }*/
 
     //GET ANGLE
     public double getYaw() {
@@ -910,32 +922,37 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }**/
 
     // PID IMU GYRO BASED TURNING
-    public void turnPID(double tAngle, double kP, double kI, double kD, double timeOut){
+    public void turnPID(double tAngle, double P, double I, double D, double timeOut){
 
-        double power, prevError, error, dT, prevTime, currTime, P, I, D; //DECLARE ALL VARIABLES
+        double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
+
+        double kP = P / 80;
+        double kI = I;
+        double kD = D;
 
         prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
 
-        power = dT = prevTime = currTime = P = I = D = 0;
+        power = dT = prevTime = currTime = 0;
 
         ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
         resetTime();
-        while (Math.abs(error) > 0.5 && currTime < timeOut){
+        while (Math.abs(error) > 0.5 && currTime < timeOut && opModeIsActive()){
             prevError = error;
             error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
             prevTime = currTime;
             currTime = time.milliseconds();
             dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
-            P = error;
-            I = error * dT;
-            D = (error - prevError)/dT;
-            power = P * kP + I * kI + D * kD;
-            setMotorPowers(Range.clip(power, 0.2, 1), -Range.clip(power, 0.2, 1));
+            power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
+
+            if (power < 0)
+                setMotorPowers(Range.clip(power, 0, 0.8), -Range.clip(power, 0, 0.8));
+            else
+                setMotorPowers(-Range.clip(power, 0, 0.8), Range.clip(power, 0, 0.8));
 
             telemetry.addData("tAngle: ", tAngle)
-                    .addData("P:", P)
-                    .addData("I:", I)
-                    .addData("D:", D)
+                    .addData("kP:", error * kP)
+                    .addData("kI:", error * dT * kI)
+                    .addData("kD:", (error - prevError)/dT * kD)
                     .addData("power", power)
                     .addData("error: ", error)
                     .addData("currTime: ", currTime);

@@ -91,13 +91,8 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }
 
             //HALFSPEED (toggle)
-            if (gamepad1.x == true) {
-                if (halfSpeed == false) {
-                    halfSpeed = true;
-                }
-                if (halfSpeed == true){
-                    halfSpeed = false;
-                }
+            if (gamepad1.x) {
+                halfSpeed = !halfSpeed;
             }
 
 
@@ -107,7 +102,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }else if (gamepad1.right_trigger > 0.05) {
                 strafePower = gamepad1.right_trigger * 0.75;
                 setStrafePowers(strafePower, true);
-            }else if (halfSpeed == true){
+            }else if (halfSpeed){
                 lfPower = ((yAxis+xAxis-zAxis)/2);
                 rfPower = ((yAxis-xAxis+zAxis)/2);
                 lbPower = ((yAxis-xAxis-zAxis)/2);

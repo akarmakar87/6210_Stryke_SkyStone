@@ -18,13 +18,20 @@ public class testMethodsPleaseWork extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        turnPID(90, .3, 0, 0, 3000);
+        turnPID(90, .01, 0, 0, 3000);
         telemetry.addData("turn", "done");
         telemetry.update();
 
         sleep(2000);
 
-        strafeDistance(1, true, 15);
+        telemetry.addData("end yaw: ", getYaw());
+        telemetry.update();
+
+        sleep(5000);
+
+        strafeDistance(1,true, 10);
+
+        //strafeDistance(1, true, 15);
 
         //driveDistance(0.5, 10);
 
