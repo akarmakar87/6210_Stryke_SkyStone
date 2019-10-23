@@ -98,7 +98,7 @@ public class MainTeleOp extends SkystoneLinearOpMode {
                 setClawPosition(false); //CLOSE CLAW
             }
 **/
-            //STRAFE CONTROLS
+            /**STRAFE CONTROLS
             if (gamepad1.left_bumper && reset == true){ //So we only get the facing angle once while strafing (to avoid the target angle from changing if the robot goes off course)
                 angle = getYaw();
                 reset = false;
@@ -122,6 +122,7 @@ public class MainTeleOp extends SkystoneLinearOpMode {
                     StrafePowers(1/2, true, angle);
                 }
             }
+            **/
 
             //MOTOR POWERS (if not strafing)
             if (sidePower == true) {

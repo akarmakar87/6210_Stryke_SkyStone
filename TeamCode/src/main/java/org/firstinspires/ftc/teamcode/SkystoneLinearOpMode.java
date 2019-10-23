@@ -48,8 +48,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public DcMotor intake;
     public BNO055IMU imu;
     public DcMotor lift;
+    public DcMotor arm;
     public Servo claw;
     public RevColorSensorV3 sensorColor;
+    public Servo rotate;
 
     /**COLOR SENSOR VARIABLES
     float hsvValues[] = {0f, 0f, 0f};
@@ -139,8 +141,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RB  = map.dcMotor.get("RB");
        // intake  = map.dcMotor.get("intake");
         imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
+        //arm = map.dcMotor.get("arm");
         //lift = map.dcMotor.get("lift");
         //claw = map.servo.get("claw");
+        //rotate = map.servo.get("rotate");
         //sensorColor = map.get(RevColorSensorV3.class, "color");
 
         LF.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -440,11 +444,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
         }
     }
-
+/*
     public void strafeDistance(double power, boolean right, double dist) {  // Garrett(10/22/19)
         //Declare variables
         double min = 0.3;   //adjustable minimum power for strafing
-        powerG *= 0.4    //PowerGiven = Starts out with a lower power so the robot doesn't drift as much
+        double powerG = power * 0.4;   //PowerGiven = Starts out with a lower power so the robot doesn't drift as much
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);    //resets motor encoders
         dist *= -1 * encoderToInches;   //sets distance (will change after testing to see how short it is of target distance)
         setMode(DcMotor.RunMode.RUN_USING_ENCODER); //set the mode of the motors
@@ -499,7 +503,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
         }
         stopMotors();
-    }
+    }*/
 
     /**public void strafeAdjust(double power, double distance, boolean right, int timeout){
 
