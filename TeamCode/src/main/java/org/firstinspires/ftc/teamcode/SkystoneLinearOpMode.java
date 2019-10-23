@@ -926,7 +926,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
 
-        double kP = P / 80;
+        double kP = P / 90;
         double kI = I;
         double kD = D;
 
