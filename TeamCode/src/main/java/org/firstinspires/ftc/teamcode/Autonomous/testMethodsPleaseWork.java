@@ -22,7 +22,9 @@ public class testMethodsPleaseWork extends SkystoneLinearOpMode {
         telemetry.addData("turn", "done");
         telemetry.update();
 
-        //sleep(1000);
+        sleep(2000);
+
+        strafeDistance(1, true, 15);
 
         //driveDistance(0.5, 10);
 

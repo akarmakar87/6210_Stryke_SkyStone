@@ -441,37 +441,65 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
-    public void StrafePowers(double power, boolean right, double angle) {  // Garrett(9/13/19)
+    public void strafeDistance(double power, boolean right, double dist) {  // Garrett(10/22/19)
         //Declare variables
-        double min = 0.3;
-        double tarHead = angle;
-        double curHead = getRobotHeading();
-        double RFpower = power;
-        double RBpower = power;
-            if (right) {  //If strafing right
-                if (curHead >= tarHead + 0.5) {
-                    RBpower -= .05 * (curHead - tarHead);
-                }
-                if (curHead <= tarHead - 0.5) {
-                    RFpower -= .05 * (tarHead - curHead);
-                }
-                LF.setPower(-Range.clip(power, min, 1));
-                RF.setPower(Range.clip(-RFpower, min, 1));
-                LB.setPower(Range.clip(-power, min, 1));
-                RB.setPower(-Range.clip(RBpower, min, 1));
-            } else {    //If strafing left
-                if (curHead >= tarHead + 0.5) {
-                    RFpower -= .05 * (curHead - tarHead);
-                }
-                if (curHead <= tarHead - 0.5) {
-                    RBpower -= .05 * (tarHead - curHead);
-                }
-                LF.setPower(Range.clip(-power, min, 1));
-                RF.setPower(-Range.clip(RFpower, min, 1));
-                LB.setPower(-Range.clip(power, min, 1));
-                RB.setPower(Range.clip(-RBpower, min, 1));
+        double min = 0.3;   //adjustable minimum power for strafing
+        powerG *= 0.4    //PowerGiven = Starts out with a lower power so the robot doesn't drift as much
+        setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);    //resets motor encoders
+        dist *= -1 * encoderToInches;   //sets distance (will change after testing to see how short it is of target distance)
+        setMode(DcMotor.RunMode.RUN_USING_ENCODER); //set the mode of the motors
+
+        if (right) {  //If strafing right
+            //Sets the target position for the motors to move to
+            LF.setTargetPosition(LF.getCurrentPosition() + (int)dist);
+            LB.setTargetPosition(LB.getCurrentPosition() - (int)dist);
+            RF.setTargetPosition(RF.getCurrentPosition() - (int)dist);
+            RB.setTargetPosition(RB.getCurrentPosition() + (int)dist);
+            //tells motors to move to positions set
+            setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //sets motor powers
+            LF.setPower(-Range.clip(powerG, min, 1));
+            RF.setPower(Range.clip(-powerG, min, 1));
+            LB.setPower(Range.clip(-powerG, min, 1));
+            RB.setPower(-Range.clip(powerG, min, 1));
+        }
+        else {    //If strafing left
+            //Sets the target position for the motors to move to
+            LF.setTargetPosition(LF.getCurrentPosition() - (int)dist);
+            LB.setTargetPosition(LB.getCurrentPosition() + (int)dist);
+            RF.setTargetPosition(RF.getCurrentPosition() + (int)dist);
+            RB.setTargetPosition(RB.getCurrentPosition() - (int)dist);
+            //tells motors to move to positions set
+            setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //sets motor powers
+            LF.setPower(Range.clip(-powerG, min, 1));
+            RF.setPower(-Range.clip(powerG, min, 1));
+            LB.setPower(-Range.clip(powerG, min, 1));
+            RB.setPower(Range.clip(-powerG, min, 1));
+        }
+
+        //Waits until all the motors reach their target position then stops them.
+        //Also incrementally increases speed of the robot to full desired power
+        while (LF.isBusy() && RF.isBusy() && LB.isBusy() && RB.isBusy() && opModeIsActive() && !isStopRequested()){
+            if(right) {
+                LF.setPower(-Range.clip(powerG, min, 1));
+                RF.setPower(Range.clip(-powerG, min, 1));
+                LB.setPower(Range.clip(-powerG, min, 1));
+                RB.setPower(-Range.clip(powerG, min, 1));
+            }
+            if(left) {
+                LF.setPower(-Range.clip(powerG, min, 1));
+                RF.setPower(Range.clip(-powerG, min, 1));
+                LB.setPower(Range.clip(-powerG, min, 1));
+                RB.setPower(-Range.clip(powerG, min, 1));
+            }
+            //If statement makes sure that powerG stops increasing once it is equal with power
+            if (powerG = power) {
+                powerG += powerG * 0.1
             }
         }
+        stopMotors();
+    }
 
     /**public void strafeAdjust(double power, double distance, boolean right, int timeout){
 
