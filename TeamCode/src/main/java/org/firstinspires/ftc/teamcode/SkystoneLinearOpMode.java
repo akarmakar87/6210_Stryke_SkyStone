@@ -932,7 +932,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
 
-        power = dT = prevTime = currTime = 0;
+        power = dT = prevTime = currTime = 0.0;
 
         ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
         resetTime();
