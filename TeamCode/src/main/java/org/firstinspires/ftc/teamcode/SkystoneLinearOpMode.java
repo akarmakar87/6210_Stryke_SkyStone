@@ -930,7 +930,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         double kI = I;
         double kD = D;
 
-        prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
+        prevError = error = Math.abs(tAngle - getYaw()); //INITIALIZE THESE VARIABLES
 
         power = dT = prevTime = currTime = 0.0;
 
@@ -938,16 +938,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         resetTime();
         while (Math.abs(error) > 0.5 && currTime < timeOut && opModeIsActive()){
             prevError = error;
-            error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+            error = Math.abs(tAngle - getYaw()); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
             prevTime = currTime;
             currTime = time.milliseconds();
             dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
             power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
 
-            if (power < 0)
-                setMotorPowers(Range.clip(power, 0, 0.8), -Range.clip(power, 0, 0.8));
+            if (power > 0)
+                setMotorPowers(Range.clip(power, 0.2, 0.6), -Range.clip(power, 0.2, 0.6));
             else
-                setMotorPowers(-Range.clip(power, 0, 0.8), Range.clip(power, 0, 0.8));
+                setMotorPowers(-Range.clip(power, 0.2, 0.6), Range.clip(power, 0.2, 0.6));
 
             telemetry.addData("tAngle: ", tAngle)
                     .addData("kP:", error * kP)
@@ -956,7 +956,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     .addData("power", power)
                     .addData("error: ", error)
                     .addData("currTime: ", currTime);
+            telemetry.update();
         }
+        stopMotors();
     }
 
     // VUFORIA BASED MOVEMENT
