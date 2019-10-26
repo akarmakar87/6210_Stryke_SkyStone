@@ -412,13 +412,17 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public void StrafetoPosition(double power, double tarX, double tarY, double tarheading) {  // Garrett(9/13/19) edited
         //Declare variables
         double min = 0.3;
-        double curX = getRobotX();
+        double curX;
         double tarHead = tarheading;
-        double curHead = getRobotHeading();
+        double curHead;
         double RFpower = power;
         double RBpower = power;
         turnPIDV(tarHead, 0.4, 0, 0, false);    //turn towards the correct heading
         while (opModeIsActive() && (Math.abs(tarX - getRobotX()) > 0) || (Math.abs(tarY - getRobotY()) > 0)) {  //Move until at target position
+
+            curHead = getRobotHeading();
+            curX = getRobotX();
+
             if (curX < tarX) {  //If curX < tarX strafe right
                 if (curHead >= tarHead + 0.5) { //If robot turning too far left
                     RBpower -= .05 * (curHead - tarHead);
@@ -443,6 +447,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 RB.setPower(Range.clip(-RBpower, min, 1));
             }
         }
+        stopMotors();
     }
 
     public void strafeDistance(double power, boolean right, double dist) {  // Garrett(10/22/19)
@@ -510,7 +515,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 RB.setPower(-Range.clip(powerG, min, 1));
             }
             //If statement makes sure that powerG stops increasing once it is equal with power
-            if (powerG == power) {
+            if (powerG < power) {
                 powerG += powerG * 0.1;
             }
         }
@@ -571,6 +576,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         setMotorPowers(power, power);
         long time = (long)(seconds) * 1000;
         sleep(time);
+        stopMotors();
     }
 
     //TIME BASED TURNING
@@ -581,6 +587,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             setMotorPowers(-power, power);
 
         sleep(seconds);
+        stopMotors();
     }
 
     //SET RUNMODE TO DRIVE MOTORS
@@ -750,6 +757,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     .addData("error: ", error)
                     .addData("currTime: ", currTime);
         }
+        stopMotors();
     }
 
     public void resetTime(){
@@ -1039,6 +1047,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     .addData("currTime: ", currTime);
             telemetry.update();
         }
+        stopMotors();
     }
 
     public void driveForward(double x, double y, double power, double trgtHead){
@@ -1076,6 +1085,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
          */
 
+        stopMotors();
         telemetry.addData("Target: ", x + " , " + y);
         telemetry.update();
     }

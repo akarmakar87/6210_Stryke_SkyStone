@@ -72,7 +72,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
             //HOLONOMIC DRIVE
             if (Math.abs(gamepad1.left_stick_y) > 0.05) {
-               yAxis = gamepad1.left_stick_y;
+                yAxis = gamepad1.left_stick_y;
             }
             else{
                 yAxis = 0;

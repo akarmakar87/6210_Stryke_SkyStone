@@ -52,7 +52,7 @@ public class VuforiaDriveTest extends SkystoneLinearOpMode {
         driveForward(trgtX, trgtY, power, trgtHeading);
     }
 
-   /* public void turnPIDV(double tAngle, double kP, double kI, double kD, boolean flip){
+    public void turnPIDV(double tAngle, double kP, double kI, double kD, boolean flip){
 
         double power, prevError, error, dT, prevTime, currTime, P, I, D; //DECLARE ALL VARIABLES
 
@@ -94,7 +94,7 @@ public class VuforiaDriveTest extends SkystoneLinearOpMode {
         }
     }
 
-    public void driveForward(double x, double y, double power, double trgtHead){
+     /*public void driveForward(double x, double y, double power, double trgtHead){
         // Angle adjustment while driving to a specific point
         // TO DO: calculate proportional error to decrease power more if robot angle is larger
 
