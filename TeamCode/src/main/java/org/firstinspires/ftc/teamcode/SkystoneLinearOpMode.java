@@ -450,7 +450,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stopMotors();
     }
 
-    public void strafeDistance(double power, boolean right, double dist) {  // Garrett(10/22/19)
+    /*public void strafeDistance(double power, boolean right, double dist) {  // Garrett(10/22/19)
         //Declare variables
         double min = 0.3;   //adjustable minimum power for strafing
         double powerG = power * 0.4;   //PowerGiven = Starts out with a lower power so the robot doesn't drift as much
@@ -520,7 +520,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
         }
         stopMotors();
-    }
+    }*/
 
     /**public void strafeAdjust(double power, double distance, boolean right, int timeout){
 
@@ -655,23 +655,29 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stopMotors();
     }
 
-    /*public void strafeDistance(double power, double distance, boolean right) throws InterruptedException{
+    public void strafeDistance(double power, double distance, boolean right) throws InterruptedException{
         resetEncoders();
+        double minP = 0.3;
+        double actualP = minP;
         while (getEncoderAvg() < distance * 55 && !isStopRequested()){
             if (right){
-                LF.setPower(power);
-                RF.setPower(-power);
-                LB.setPower(-power);
-                RB.setPower(power);
+                LF.setPower(actualP);
+                RF.setPower(-actualP);
+                LB.setPower(-actualP);
+                RB.setPower(actualP);
             }else {
-                LF.setPower(-power);
-                RF.setPower(power);
-                LB.setPower(power);
-                RB.setPower(-power);
+                LF.setPower(-actualP);
+                RF.setPower(actualP);
+                LB.setPower(actualP);
+                RB.setPower(-actualP);
+            }
+            if(actualP < power){
+                actualP += power * .1;
+                sleep(10);
             }
         }
         stopMotors();
-    }*/
+    }
 
     //GET ANGLE
     public double getYaw() {
