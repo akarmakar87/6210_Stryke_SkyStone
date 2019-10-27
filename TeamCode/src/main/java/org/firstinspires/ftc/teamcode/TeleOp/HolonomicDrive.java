@@ -57,7 +57,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }
 
             //ARM MOVEMENT
-            if (gamepad2.right_stick_y > 0.05){
+            if (Math.abs(gamepad2.right_stick_y) > 0.05){
                 arm.setPower(gamepad2.right_stick_y);
             }else{
                 arm.setPower(0);

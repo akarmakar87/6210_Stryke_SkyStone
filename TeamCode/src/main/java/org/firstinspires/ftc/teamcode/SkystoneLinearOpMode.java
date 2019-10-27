@@ -141,9 +141,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RB  = map.dcMotor.get("RB");
        // intake  = map.dcMotor.get("intake");
         imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
-        //arm = map.dcMotor.get("arm");
+        arm = map.dcMotor.get("arm");
         //lift = map.dcMotor.get("lift");
-        //claw = map.servo.get("claw");
+        claw = map.servo.get("claw");
         //rotate = map.servo.get("rotate");
         //sensorColor = map.get(RevColorSensorV3.class, "color");
 
@@ -152,7 +152,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RB.setDirection(DcMotorSimple.Direction.REVERSE);
         LB.setDirection(DcMotorSimple.Direction.FORWARD);
         //intake.setDirection(DcMotorSimple.Direction.FORWARD);
-        //lift.setDirection(DcMotorSimple.Direction.FORWARD);
+        lift.setDirection(DcMotorSimple.Direction.FORWARD);
         //setClawPosition(false);
 
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -564,10 +564,20 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     //CLAW SERVO
     public void setClawPosition(boolean open){
         if (open){
-            //claw.setPosition(clawStartPosition);
+            claw.setPosition(clawStartPosition);
         }
         else{
-            //claw.setPosition(clawEndPosition);
+            claw.setPosition(clawEndPosition);
+        }
+    }
+
+    //ARM MOTOR
+    public void setArmPosition(boolean deployed){
+        if (deployed){
+            arm.setTargetPosition(500); //Place holding values
+        }
+        else{
+            arm.setTargetPosition(1000);
         }
     }
 
