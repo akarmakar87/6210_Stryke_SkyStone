@@ -56,7 +56,7 @@ public class Backup1b extends SkystoneLinearOpMode{
         }
 
         // +-+-+- first skystone
-        strafeDistance(0.5, true, stonePos);       // strafe to in front of skystone
+        strafeDistance(0.5, 6, true);       // strafe to in front of skystone
         driveDistance(0.8, 15);                 // drive to skystone
         // intake
         driveDistance(-0.5, 5);                 // back up
@@ -78,6 +78,6 @@ public class Backup1b extends SkystoneLinearOpMode{
 
         // park
         driveDistance(-0.5, 10);
-        strafeDistance(0.8, parkRight, 25);
+        strafeDistance(0.8,25, parkRight);
     }
 }
