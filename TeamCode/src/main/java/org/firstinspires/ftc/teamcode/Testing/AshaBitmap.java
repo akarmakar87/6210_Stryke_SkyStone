@@ -28,6 +28,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
+
 @TeleOp(name="AshaBitmap", group = "auto")
 //@Disabled
 public class AshaBitmap extends LinearOpMode {
@@ -92,6 +93,7 @@ public class AshaBitmap extends LinearOpMode {
         VuforiaLocalizer.Parameters paramWC = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         paramWC.vuforiaLicenseKey = VUFORIA_KEY;
         paramWC.cameraName = LogitechC310;
+        vuforiaWC = ClassFactory.getInstance().createVuforia(paramWC);
         targetsWC = this.vuforiaWC.loadTrackablesFromAsset("Skystone");
 
         //LIST OF ALL  for PC
@@ -299,25 +301,18 @@ public class AshaBitmap extends LinearOpMode {
                 }else{
                     ((VuforiaTrackableDefaultListener) allTrackables.get(i).getListener()).setPhoneInformation(robotFromWC, paramWC.cameraDirection);
                 }
-
-
             }
-
         }
 
         waitForStart();
 
         while (opModeIsActive()){
-
+            //content here
         }
 
     }
 
-    public void configFrame()
-    {
-        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
-        vuforiaWC.setFrameQueueCapacity(4); //How much queue capacity;
-    }
+
 
 }
 
