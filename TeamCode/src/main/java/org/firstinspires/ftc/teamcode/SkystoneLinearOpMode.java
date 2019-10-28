@@ -142,10 +142,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
        // intake  = map.dcMotor.get("intake");
         imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
         arm = map.dcMotor.get("arm");
-        //lift = map.dcMotor.get("lift");
+        lift = map.dcMotor.get("lift");
         claw = map.servo.get("claw");
-        //rotate = map.servo.get("rotate");
-        //sensorColor = map.get(RevColorSensorV3.class, "color");
+        rotate = map.servo.get("rotate");
+        sensorColor = map.get(RevColorSensorV3.class, "color");
 
         LF.setDirection(DcMotorSimple.Direction.FORWARD);
         RF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -160,7 +160,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         resetEncoders();
 
         //SET UP GYRO

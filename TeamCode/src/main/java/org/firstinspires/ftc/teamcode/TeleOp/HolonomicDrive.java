@@ -48,19 +48,19 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 lift.setTargetPosition(tarPos * 10); //Make lift go to position
             }
 
+            //ARM MOVEMENT
+            if (Math.abs(gamepad2.right_stick_y) > 0.05){
+                arm.setPower(Range.clip(gamepad2.right_stick_y, -0.3, 0.3));
+            }else{
+                arm.setPower(0);
+            }
+
             //CLAW MOVEMENT
             if (gamepad2.b){
                 setClawPosition(true); //OPEN CLAW
             }
             if (gamepad2.a){
                 setClawPosition(false); //CLOSE CLAW
-            }
-
-            //ARM MOVEMENT
-            if (Math.abs(gamepad2.right_stick_y) > 0.05){
-                arm.setPower(gamepad2.right_stick_y);
-            }else{
-                arm.setPower(0);
             }
 
             //CLAW ROTATE
