@@ -19,6 +19,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
+        resetEncoders();
 
         telemetry.addData("Mode: ", "Waiting for start");
         telemetry.update();

@@ -633,6 +633,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         idle();
         LB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         idle();
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        idle();
 
         RF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         idle();
@@ -641,6 +643,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         LF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         idle();
         LB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        idle();
+        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         idle();
     }
 
