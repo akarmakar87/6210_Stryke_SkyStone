@@ -24,7 +24,7 @@ import static android.graphics.Color.red;
 
 @TeleOp(name="skystone bm", group = "auto")
 //@Disabled
-public class BitmapTutorial extends LinearOpMode {
+public class SkystoneBitmap extends LinearOpMode {
 
     public VuforiaLocalizer vuforiaWC = null;
 
@@ -64,7 +64,9 @@ public class BitmapTutorial extends LinearOpMode {
         vuforiaWC.setFrameQueueCapacity(1); //tells VuforiaLocalizer to only store one frame at a time
     }
 
-    public Bitmap getBitmap(){
+    public Bitmap getBitmap() throws InterruptedException {
+
+        frame = vuforiaWC.getFrameQueue().take();
         long num = frame.getNumImages();
 
         for(int i = 0; i < num; i++){
@@ -74,6 +76,10 @@ public class BitmapTutorial extends LinearOpMode {
         }
 
         Bitmap bm = Bitmap.createBitmap(rgb.getWidth(), rgb.getHeight(), Bitmap.Config.RGB_565);
+        bm.copyPixelsFromBuffer(rgb.getPixels());
+
+        frame.close();
+
         return bm;
     }
 
@@ -83,16 +89,16 @@ public class BitmapTutorial extends LinearOpMode {
             //set threshold for yellow or not yellow?
             int stonepos = 0;
 
-            int redLim = 0;
-            int greenLim = 0;
-            int blueLim = 0;
+            int redLim = 250;
+            int greenLim = 220;
+            int blueLim = 2;
 
             ArrayList<Integer> colorPix = new ArrayList<Integer>();
 
             for (int c = 0; c < bm.getWidth(); c++){
                 for(int r = 0; r < bm.getHeight(); r++){
 
-                    if(red(bm.getPixel(c, r)) > redLim && green(bm.getPixel(c, r)) > greenLim && blue(bm.getPixel(c, r)) > blueLim){
+                    if(red(bm.getPixel(c, r)) >= redLim && green(bm.getPixel(c, r)) >= greenLim && blue(bm.getPixel(c, r)) >= blueLim){
                         colorPix.add(c);
                     }
                 }

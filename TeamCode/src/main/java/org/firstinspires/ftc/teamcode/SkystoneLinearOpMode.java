@@ -1066,16 +1066,80 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stopMotors();
     }
 
+    public void driveAdjust(double power, double distance) throws InterruptedException{
+        double setHeading = getYaw();
+        double error = 0;
+        double correction = 0;
+        double leftPower = 0, rightPower = 0;
+        resetEncoders();
+
+        while (!isStopRequested() && getEncoderAvg() < distance * encoderToInches){
+            error = getYaw() - setHeading;
+            //Right now, getYaw() returns -180 to +180
+            if(Math.abs(error) > 2){
+                correction = error * 0.1;
+                leftPower -= correction;
+                rightPower += correction;
+            }else{
+                leftPower = power;
+                rightPower = power;
+            }
+            setMotorPowers(leftPower, rightPower);
+        }
+        stopMotors();
+    }
+
+    public void strafeAdjust(double power, double distance, boolean right) throws InterruptedException{
+        double setHeading = getYaw();
+        double error = 0;
+        double correction = 0;
+        double fwdPower = 0, backPower = 0;
+        resetEncoders();
+
+        while (!isStopRequested() && getEncoderAvg() < distance * encoderToInches){
+            error = getYaw() - setHeading;
+            //Right now, getYaw() returns -180 to +180
+            if(Math.abs(error) > 1){
+                correction = error * 0.1;
+                fwdPower -= correction;
+                backPower += correction;
+            }else{
+                fwdPower = power;
+                backPower = power;
+            }
+
+            if (right){
+                LF.setPower(-backPower);
+                RF.setPower(fwdPower);
+                LB.setPower(fwdPower);
+                RB.setPower(-backPower);
+            }else {
+                LF.setPower(fwdPower);
+                RF.setPower(-backPower);
+                LB.setPower(-backPower);
+                RB.setPower(fwdPower);
+            }
+        }
+        stopMotors();
+    }
+
     public void driveForward(double x, double y, double power, double trgtHead){
         // Angle adjustment while driving to a specific point
         // TO DO: calculate proportional error to decrease power more if robot angle is larger
 
+        double origError, error, errorAdjust = 1;
+
+        updateRobotPosition();
+        origError = trgtHead - getRobotHeading();
+
         while (opModeIsActive() && (Math.abs(x - getRobotX()) > 5) || (Math.abs(y - getRobotY()) > 5))  {
             updateRobotPosition();
+            error = trgtHead - getRobotHeading();
+            errorAdjust = error/origError;
             if (trgtHead - getRobotHeading() > 1)
-                setMotorPowers(power, power * 0.8); // default error is 0.8
+                setMotorPowers(power, power * errorAdjust); // default error is 0.8
             else if (trgtHead - getRobotHeading() < -1)
-                setMotorPowers(power * 0.8, power);
+                setMotorPowers(power * errorAdjust, power);
             else
                 setMotorPowers(power, power);
 
