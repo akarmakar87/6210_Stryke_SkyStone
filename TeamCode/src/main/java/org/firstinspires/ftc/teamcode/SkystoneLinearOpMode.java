@@ -658,7 +658,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public void driveDistance(double power, double distance) throws InterruptedException{
         resetEncoders();
 
-        while (!isStopRequested() && getEncoderAvg() < distance * encoderToInches){
+        while (opModeIsActive()&& !isStopRequested() && getEncoderAvg() < distance * encoderToInches){
             setMotorPowers(power, power);
         }
 
@@ -669,7 +669,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         resetEncoders();
         double minP = 0.3;
         double actualP = minP;
-        while (getEncoderAvg() < distance * 55 && !isStopRequested()){
+        while (opModeIsActive() && getEncoderAvg() < distance * 55 && !isStopRequested()){
             if (right){
                 LF.setPower(actualP);
                 RF.setPower(-actualP);
@@ -734,7 +734,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         double origDiff = getYaw() - targetAngleChange;
         double deltaHeading = 0;
 
-        while ((Math.abs(getYaw()-targetAngleChange) > 1) && opModeIsActive() && (runtime.seconds() < timeout)) {
+        while (opModeIsActive() && (Math.abs(getYaw()-targetAngleChange) > 1) && (runtime.seconds() < timeout)) {
 
             telemetry.addData("Turning:", "From " + getYaw() + " to " + targetAngleChange);
             telemetry.update();
@@ -880,6 +880,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public boolean updateRobotPosition(){
+
+        if (!opModeIsActive()) return false;
+
         targetVisible = false;
         for (VuforiaTrackable trackable : allTrackables) {
             if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() != "Stone Target") {
@@ -960,7 +963,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
         resetTime();
-        while (Math.abs(error) > 0.5 && currTime < timeOut && opModeIsActive()){
+        while (opModeIsActive() && Math.abs(error) > 0.5 && currTime < timeOut){
             prevError = error;
             error = Math.abs(tAngle - getYaw()); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
             prevTime = currTime;
@@ -1015,6 +1018,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         turnPIDV(trgtHeading, 0.4, 0, 0, (trgtHeading - curHeading > 180));
         driveForward(trgtX, trgtY, power, trgtHeading);
+        stopMotors();
     }
 
     public void turnPIDV(double tAngle, double kP, double kI, double kD, boolean flip){
@@ -1073,7 +1077,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         double leftPower = 0, rightPower = 0;
         resetEncoders();
 
-        while (!isStopRequested() && getEncoderAvg() < distance * encoderToInches){
+        while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < distance * encoderToInches){
             error = getYaw() - setHeading;
             //Right now, getYaw() returns -180 to +180
             if(Math.abs(error) > 2){
@@ -1096,7 +1100,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         double fwdPower = 0, backPower = 0;
         resetEncoders();
 
-        while (!isStopRequested() && getEncoderAvg() < distance * encoderToInches){
+        while (opModeIsActive()&& !isStopRequested() && getEncoderAvg() < distance * encoderToInches){
             error = getYaw() - setHeading;
             //Right now, getYaw() returns -180 to +180
             if(Math.abs(error) > 1){
@@ -1151,7 +1155,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         original foundational method - mindy
 
-        while ((Math.abs(x - getRobotX()) > 0) || (Math.abs(y - getRobotY()) > 0))  {
+        while (opModeIsActive() && (Math.abs(x - getRobotX()) > 0) || (Math.abs(y - getRobotY()) > 0))  {
 
             if (trgtHead - getRobotHeading() > 1)
                 setMotorPowers(power, power * 0.8); // default error is 0.8
@@ -1175,7 +1179,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         CameraDevice camera = CameraDevice.getInstance();
         camera.setFlashTorchMode(true);
 
-        while (!isStopRequested() && runtime.milliseconds() < timeout) {
+        while (opModeIsActive() && !isStopRequested() && runtime.milliseconds() < timeout) {
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());

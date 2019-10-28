@@ -33,7 +33,7 @@ public class Backup1a extends SkystoneLinearOpMode{
         //      - distance needed to move to be in front of skystone
         //      - distance to get to other side of field
         // no need to set a variable for distance traveled to skystone 2 because skystones are paired up
-        // and thus a set distance apart
+        // and thus a set distance apart << measured
         // will be different for red and blue side so set inside if else loop
         int stonePos = 0;
         int seeyouontheotherside = 0;
@@ -50,7 +50,7 @@ public class Backup1a extends SkystoneLinearOpMode{
             seeyouontheotherside = 0;
         }
         else {
-            heading = 270;
+            heading = -90;
 
             // if stone is on left
             stonePos = 0;
@@ -58,6 +58,9 @@ public class Backup1a extends SkystoneLinearOpMode{
         }
 
         // +-+-+- first skystone
+        //strafeAdjust(0.5, stonePos, true);
+        //driveAdjust(0.5, 10);
+
         strafeDistance(0.5, 6, true);       // strafe to in front of skystone
         driveDistance(0.8, 15);                 // drive to skystone
         // intake

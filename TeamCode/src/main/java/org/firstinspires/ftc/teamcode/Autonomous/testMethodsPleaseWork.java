@@ -23,13 +23,25 @@ public class testMethodsPleaseWork extends SkystoneLinearOpMode {
 
         sleep(2000);
 
-        turnPID(90, .6, 0, 2, 5000); // ------ 90 turn
+        turnPID(90, .6, 0, 2, 4000); // ------ 90 turn
         telemetry.addData("turn", "done");
         telemetry.update();
 
         sleep(2000);
 
-        telemetry.addData("end yaw: ", getYaw());
+        turnPID(45, .6, 0, 2, 4000); // ------ 45 turn
+        telemetry.addData("turn", "done");
+        telemetry.update();
+
+        sleep(2000);
+
+        driveAdjust(0.5, 10);
+
+        sleep(500);
+
+        strafeAdjust(0.5, 10, true);
+
+        /*telemetry.addData("end yaw: ", getYaw());
         telemetry.update();
 
         sleep(5000);
@@ -56,6 +68,7 @@ public class testMethodsPleaseWork extends SkystoneLinearOpMode {
 
         sleep(5000);
 
+        */
         //strafeDistance(1,true, 10);
 
         //strafeDistance(1, true, 15);
