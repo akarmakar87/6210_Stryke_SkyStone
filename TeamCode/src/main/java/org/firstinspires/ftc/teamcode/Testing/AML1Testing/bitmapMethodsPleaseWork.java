@@ -22,7 +22,7 @@ import static android.graphics.Color.green;
 import static android.graphics.Color.red;
 
 
-@TeleOp(name="pray to all the vuforia gods", group = "auto")
+@TeleOp (name="pray to all the vuforia gods", group = "teleop")
 //@Disabled
 public class bitmapMethodsPleaseWork extends LinearOpMode {
 
@@ -50,7 +50,7 @@ public class bitmapMethodsPleaseWork extends LinearOpMode {
     public void initVuforia(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
-        LogitechC310 = hardwareMap.get(WebcamName.class, "LogitechC310");
+        LogitechC310 = hardwareMap.get(WebcamName.class, "Logitech C310");
 
         //localizer for webcam
         VuforiaLocalizer.Parameters paramWC = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -99,10 +99,6 @@ public class bitmapMethodsPleaseWork extends LinearOpMode {
 
             ArrayList<Integer> colorPix = new ArrayList<Integer>();
 
-            telemetry.addData("Bitmap width:", bm.getWidth());
-            telemetry.addData("Bitmap height:", bm.getHeight());
-            telemetry.update();
-
             for (int c = 0; c < bm.getWidth(); c++){
                 for(int r = 0; r < bm.getHeight(); r++){
 
@@ -117,6 +113,7 @@ public class bitmapMethodsPleaseWork extends LinearOpMode {
                 sum += x;
 
             int avgX = sum/colorPix.size();
+            int maxX = color
 
             if(avgX < 0){
                 stonepos = -1;

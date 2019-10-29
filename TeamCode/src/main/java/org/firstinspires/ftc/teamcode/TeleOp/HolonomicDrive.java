@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@TeleOp(name="HolonomicDrive", group="teleop")
+@TeleOp(name="HolonomicDriveNew", group="teleop")
 //@Disabled
 public class HolonomicDrive extends SkystoneLinearOpMode {
 
@@ -132,6 +132,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             telemetry.addData("RF Power", rfPower);
             telemetry.addData("LB Power", lbPower);
             telemetry.addData("RB Power", rbPower);
+            telemetry.addData("arm encoder", arm.getTargetPosition());
             telemetry.update();
         }
     }
