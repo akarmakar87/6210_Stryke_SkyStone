@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Testing.AML1Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.vuforia.CameraDevice;
@@ -6,10 +6,10 @@ import com.vuforia.CameraDevice;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="pray to all the gods", group = "auto")
+@Autonomous(name="pray to all the pid gods", group = "auto")
 
 //@Disabled
-public class testMethodsPleaseWork extends SkystoneLinearOpMode {
+public class pidMethodsPleaseWork extends SkystoneLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -34,12 +34,6 @@ public class testMethodsPleaseWork extends SkystoneLinearOpMode {
         telemetry.update();
 
         sleep(2000);
-
-        driveAdjust(0.5, 10);
-
-        sleep(500);
-
-        strafeAdjust(0.5, 10, true);
 
         /*telemetry.addData("end yaw: ", getYaw());
         telemetry.update();

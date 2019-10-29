@@ -347,9 +347,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
-    //CREATION OF TFOD MONITOR VIEW IN ADDITION TO VUFORIA CAMERA MONITOR VIEW IS PROBABLY CAUSING TWO VIEWS
-    // HOW TO FIX? SHOULD I GET RID OF ONE? OR DOES IT NOT MATTER IF THERE ARE TWO?
     public void initTfod() {
+        //CREATION OF TFOD MONITOR VIEW IN ADDITION TO VUFORIA CAMERA MONITOR VIEW IS PROBABLY CAUSING TWO VIEWS
+        // HOW TO FIX? SHOULD I GET RID OF ONE? OR DOES IT NOT MATTER IF THERE ARE TWO?
        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
@@ -358,36 +358,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_STONE, LABEL_SKYSTONE);
    }
 
-    //IDK anymore
-    /**public Bitmap convertToBitmap() throws InterruptedException{
-        Image rgb = null;
-        com.vuforiaPC.Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
-        Bitmap imageBitmap;
-        vuforiaPC.setFrameQueueCapacity(1);
-        vuforiaPC.enableConvertFrameToBitmap();
-        VuforiaLocalizer.CloseableFrame picture;
-
-        frame = vuforiaPC.getFrameQueue();
-        picture = frame.take();
-
-        long imgCount = picture.getNumImages(); //GET NUMBER OF FORMATS FOR FRAME
-
-        for (int i = 0; i < imgCount; i++){
-            if(picture.getImage(i).getFormat() == PIXEL_FORMAT.RGB565){
-                rgb = picture.getImage(i);
-                break;
-            }
-        }
-
-        imageBitmap = Bitmap.createBitmap(rgb.getWidth(), rgb.getHeight(), Bitmap.Config.RGB_565 );
-        imageBitmap.copyPixelsFromBuffer(rgb.getPixels());
-
-        picture.close();
-        return imageBitmap;
-    }**/
-
-
-    //SET POWER TO DRIVE MOTORS
+    //DRIVE METHODS
     public void setMotorPowers(double leftPower, double rightPower) {
         LF.setPower(Range.clip(leftPower, -1, 1));
         RF.setPower(Range.clip(rightPower, -1, 1));
@@ -407,6 +378,17 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             LB.setPower(-power);
             RB.setPower(power);
         }
+    }
+
+    public void setMode(DcMotor.RunMode runMode) throws InterruptedException {
+        LF.setMode(runMode);
+        idle();
+        RF.setMode(runMode);
+        idle();
+        LB.setMode(runMode);
+        idle();
+        RB.setMode(runMode);
+        idle();
     }
 
     public void StrafetoPosition(double power, double tarX, double tarY, double tarheading) {  // Garrett(9/13/19) edited
@@ -450,169 +432,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stopMotors();
     }
 
-    /*public void strafeDistance(double power, boolean right, double dist) {  // Garrett(10/22/19)
-        //Declare variables
-        double min = 0.3;   //adjustable minimum power for strafing
-        double powerG = power * 0.4;   //PowerGiven = Starts out with a lower power so the robot doesn't drift as much
-        dist *= -1 * encoderToInches;   //sets distance (will change after testing to see how short it is of target distance)
-        LF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);    //resets motor encoders
-        RF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        RB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        LF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); //set the mode of the motors
-        RF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        LB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        RB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        if (right) {  //If strafing right
-            //Sets the target position for the motors to move to
-            LF.setTargetPosition(LF.getCurrentPosition() + (int)dist);
-            LB.setTargetPosition(LB.getCurrentPosition() - (int)dist);
-            RF.setTargetPosition(RF.getCurrentPosition() - (int)dist);
-            RB.setTargetPosition(RB.getCurrentPosition() + (int)dist);
-            //tells motors to move to positions set
-            LF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            RF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            LB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            RB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //sets motor powers
-            LF.setPower(-Range.clip(powerG, min, 1));
-            RF.setPower(Range.clip(-powerG, min, 1));
-            LB.setPower(Range.clip(-powerG, min, 1));
-            RB.setPower(-Range.clip(powerG, min, 1));
-        }
-        else {    //If strafing left
-            //Sets the target position for the motors to move to
-            LF.setTargetPosition(LF.getCurrentPosition() - (int)dist);
-            LB.setTargetPosition(LB.getCurrentPosition() + (int)dist);
-            RF.setTargetPosition(RF.getCurrentPosition() + (int)dist);
-            RB.setTargetPosition(RB.getCurrentPosition() - (int)dist);
-            //tells motors to move to positions set
-            LF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            RF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            LB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            RB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            //sets motor powers
-            LF.setPower(Range.clip(-powerG, min, 1));
-            RF.setPower(-Range.clip(powerG, min, 1));
-            LB.setPower(-Range.clip(powerG, min, 1));
-            RB.setPower(Range.clip(-powerG, min, 1));
-        }
-
-        //Waits until all the motors reach their target position then stops them.
-        //Also incrementally increases speed of the robot to full desired power
-        while (LF.isBusy() && RF.isBusy() && LB.isBusy() && RB.isBusy() && opModeIsActive() && !isStopRequested()){
-            if(right) {
-                LF.setPower(-Range.clip(powerG, min, 1));
-                RF.setPower(Range.clip(-powerG, min, 1));
-                LB.setPower(Range.clip(-powerG, min, 1));
-                RB.setPower(-Range.clip(powerG, min, 1));
-            }
-            if(right == false) {
-                LF.setPower(-Range.clip(powerG, min, 1));
-                RF.setPower(Range.clip(-powerG, min, 1));
-                LB.setPower(Range.clip(-powerG, min, 1));
-                RB.setPower(-Range.clip(powerG, min, 1));
-            }
-            //If statement makes sure that powerG stops increasing once it is equal with power
-            if (powerG < power) {
-                powerG += powerG * 0.1;
-            }
-        }
-        stopMotors();
-    }*/
-
-    /**public void strafeAdjust(double power, double distance, boolean right, int timeout){
-
-        double deltaHeading = 0;
-
-        resetEncoders();
-        while (getEncoderAvg() < distance * 55 && !isStopRequested()) {
-           deltaHeading = getYaw();
-           power = Range.clip(deltaHeading/0.5, 0.25, 1);
-
-           if (Math.abs(getYaw()-90) > 5){
-               driveTime(1,0.5);
-           }else{
-               setStrafePowers(power,right);
-           }
-
-        }
-    }**/
-
-    /**COLOR SENSOR
-    public void colorPark(boolean red){
-        Color.RGBToHSV(sensorColor.red() * 8, sensorColor.green() * 8, sensorColor.blue() * 8, hsvValues);
-        float hue = hsvValues[0];
-        boolean redPark = hue < 60 || hue > 320; //red hues
-        boolean bluePark = hue > 120 && hue < 260; /blue hues
-
-        if(red){
-            while(!redPark && !isStopRequested()){
-            setMotorPowers(0.5, 0.5);
-            }
-        stopMotors();
-        }
-        else{
-            while(!bluePark && !isStopRequested()){
-            setMotorPowers(0.5, 0.5);
-            }
-        stopMotors();
-        }
-    **/
-
-    //CLAW SERVO
-    public void setClawPosition(boolean open){
-        if (open){
-            claw.setPosition(clawStartPosition);
-        }
-        else{
-            claw.setPosition(clawEndPosition);
-        }
-    }
-
-    //ARM MOTOR
-    public void setArmPosition(boolean deployed){
-        if (deployed){
-            arm.setTargetPosition(500); //Place holding values
-        }
-        else{
-            arm.setTargetPosition(1000);
-        }
-    }
-
-    //TIME BASED MOVEMENT
-    public void driveTime(double power, double seconds){
-        setMotorPowers(power, power);
-        long time = (long)(seconds) * 1000;
-        sleep(time);
-        stopMotors();
-    }
-
-    //TIME BASED TURNING
-    public void turnTime(double power, boolean right, long seconds){
-        if (right)
-            setMotorPowers(power, -power);
-        else
-            setMotorPowers(-power, power);
-
-        sleep(seconds);
-        stopMotors();
-    }
-
-    //SET RUNMODE TO DRIVE MOTORS
-    public void setMode(DcMotor.RunMode runMode) throws InterruptedException {
-        LF.setMode(runMode);
-        idle();
-        RF.setMode(runMode);
-        idle();
-        LB.setMode(runMode);
-        idle();
-        RB.setMode(runMode);
-        idle();
-    }
-
-    //STOP DRIVE MOTORS
     public void stopMotors(){
         setMotorPowers(0,0);
     }
@@ -648,17 +467,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         idle();
     }
 
-    /**
-    public void resetLift(){
-        //lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        idle();
-
-        //lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        idle();
-    }
-     **/
-
-    // ENCODER BASED MOVEMENT
     public void driveDistance(double power, double distance) throws InterruptedException{
         resetEncoders();
 
@@ -689,387 +497,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 actualP += power * .1;
                 sleep(10);
             }
-        }
-        stopMotors();
-    }
-
-    //GET ANGLE
-    public double getYaw() {
-        angles = imu.getAngularOrientation();
-        return angles.firstAngle;
-    }
-
-    /**
-    public void turnPID(double tAngle, double kP, double kI, double kD, double timeOut){
-        double power, prevError, error, dT, prevTime, currTime, P, I, D; //DECLARE ALL VARIABLES
-        prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
-        power = dT = prevTime = currTime = P = I = D = 0;
-        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
-        resetTime();
-        while (Math.abs(error) > 0.5 && currTime < timeOut){
-            prevError = error;
-            error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
-            prevTime = currTime;
-            currTime = time.milliseconds();
-            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
-            P = error;
-            I = error * dT;
-            D = (error - prevError)/dT;
-            power = P * kP + I * kI + D * kD;
-            setMotorPowers(Range.clip(power, 0.2, 1), -Range.clip(power, 0.2, 1));
-
-            telemetry.addData("tAngle: ", tAngle)
-                    .addData("P:", P)
-                    .addData("I:", I)
-                    .addData("D:", D)
-                    .addData("power", power)
-                    .addData("error: ", error)
-                    .addData("currTime: ", currTime);
-        }
-    }
-    **/
-
-    //ROTATE USING GYRO
-    public void rotate(double targetAngleChange, int timeout) {
-
-        runtime.reset();
-
-        double power = 0;
-        double origDiff = getYaw() - targetAngleChange;
-        double deltaHeading = 0;
-
-        while (opModeIsActive() && (Math.abs(getYaw()-targetAngleChange) > 1) && (runtime.seconds() < timeout)) {
-
-            telemetry.addData("Turning:", "From " + getYaw() + " to " + targetAngleChange);
-            telemetry.update();
-
-            deltaHeading = getYaw() - targetAngleChange; //GET ANGLE LEFT UNTIL TARGET ANGLE
-            power = Range.clip(0.4 * deltaHeading/origDiff, 0.2, 1); //PROPORTIONAL SPEED
-            /** Why is dHeading/oDiff multiplied by 0.4? -Garrett **/
-            if (deltaHeading < -180 || (deltaHeading > 0 && deltaHeading < 180) ) { //LEFT IS + , RIGHT IS -
-                setMotorPowers(power, -power);
-            } else {
-                setMotorPowers(-power, power);
-            }
-        }
-        stopMotors();
-    }
-
-    public void turnP(double tAngle, double kP, double timeOut){
-        double power, prevError, error, dT, prevTime, currTime, P; //DECLARE ALL VARIABLES
-        prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
-        power = dT = prevTime = currTime = P = 0;
-        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
-        resetTime();
-        while (opModeIsActive() && Math.abs(error) > 0.5 && currTime < timeOut){
-            prevError = error;
-            error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
-            prevTime = currTime;
-            currTime = time.milliseconds();
-            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
-            P = error;
-            power = P * kP;
-            setMotorPowers(Range.clip(power, 0.2, 1), -Range.clip(power, 0.2, 1));
-
-            telemetry.addData("tAngle: ", tAngle)
-                    .addData("P:", P)
-                    .addData("power", power)
-                    .addData("error: ", error)
-                    .addData("currTime: ", currTime);
-        }
-        stopMotors();
-    }
-
-    public void resetTime(){
-        runtime.reset();
-    }
-
-    public double getTime(){
-        return runtime.seconds();
-    }
-
-    int pos = 0;
-
-  /**  public void detectSkystone(double timeLimit){
-        runtime.reset();
-        activateTfod();
-        while(runtime.seconds() < timeLimit && opModeIsActive() && tfod != null) {
-            // getUpdatedRecognitions() will return null if no new information is available since the last time that call was made.
-            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-            if (updatedRecognitions != null) {
-                telemetry.addData("# Object Detected", updatedRecognitions.size());
-                if (updatedRecognitions.size() > 0) { //IF DETECT BOTH OBJECTS
-
-                    int skystoneX = -1, stone1X = -1, stone2X = -1;
-                    double skystoneConf = 0;
-
-                    for (Recognition recognition : updatedRecognitions) {
-                        if (recognition.getLabel().equals(LABEL_SKYSTONE)) { //IF OBJECT DETECTED IS GOLD
-                            skystoneX = (int) recognition.getLeft();
-                            skystoneConf = recognition.getConfidence();
-                        } else if (recognition.getLabel().equals(LABEL_STONE) && stone1X != -1) {
-                            stone1X = (int) recognition.getLeft();
-                        } else {
-                            stone2X = (int) recognition.getLeft();
-                        }
-                    }
-
-                    //Adjust based on if it can see 3 stones or 2 stones
-                    //Ask galligher how to get the y-value of the object, but could also use
-                    //ratio of block height to frame height
-
-                    //(*^*)\\ <-- A CHICK!
-
-                    if (skystoneX != -1 && skystoneConf > 0.2) { //adjust confidence level
-
-                        if (skystoneX < 600 || (skystoneX < stone1X && skystoneX < stone2X)) { //adjust threshold3
-                            telemetry.addData("Skystone Position", "Left");
-                            pos = 1;
-                        } else{
-                            telemetry.addData("Skystone Position", "Center");
-                            pos = 2;
-                        }
-                    }else{
-                        telemetry.addData("Skystone Position", "Right");
-                        pos = 3;
-                    }
-                    telemetry.addData("Gold x pos ", skystoneX);
-                    telemetry.addData("Gold conf ", skystoneConf);
-                    telemetry.addData("Runtime", getTime());
-                    telemetry.update();
-                }
-            }
-        }
-    }
-   **/
-
-    //USE VUFORIA TRACKABLE COORDINATE TO DETERMINE SKYSTONE POSITION
-    //GO GET COORDINATES OF THE TARGET IN EACH POSITION
-    public int detectSkystone(){
-        OpenGLMatrix skystonePos = null;
-        VectorF skystoneCoords = null;
-        ElapsedTime runtime = new ElapsedTime();
-        runtime.reset();
-        int pos = 0;
-        while(opModeIsActive()) {
-            for (VuforiaTrackable trackable : allTrackables) {
-                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
-                    telemetry.addData("Visible Target", trackable.getName());
-
-                    if (trackable.getName() == "Stone Target") {
-                        skystonePos = trackable.getLocation();
-                        skystoneCoords = skystonePos.getTranslation();
-
-                        if (skystoneCoords.get(0) / mmPerInch < 0 && skystoneCoords.get(0) / mmPerInch > 0) {
-                            pos = -1;
-                        } else if (skystoneCoords.get(0) / mmPerInch < 0 && skystoneCoords.get(0) / mmPerInch > 0) {
-                            pos = 0;
-                        } else if (skystoneCoords.get(0) / mmPerInch < 0 && skystoneCoords.get(0) / mmPerInch > 0) {
-                            pos = 1;
-                        } else {
-                            pos = 0;
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-        telemetry.addData("Skystone Pos:", pos);
-        telemetry.update();
-        return pos;
-    }
-
-    public int getSkystonePos(){
-        return pos;
-    }
-
-    public boolean updateRobotPosition(){
-
-        if (!opModeIsActive()) return false;
-
-        targetVisible = false;
-        for (VuforiaTrackable trackable : allTrackables) {
-            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() != "Stone Target") {
-                telemetry.addData("Visible Target", trackable.getName());
-                targetVisible = true;
-
-                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
-                if (robotLocationTransform != null) {
-                    lastLocation = robotLocationTransform;
-                }
-                break;
-            }
-        }
-
-        if (targetVisible) {
-            // express position (translation) of robot in inches.
-            translation = lastLocation.getTranslation();
-            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
-
-            // express the rotation of the robot in degrees.
-            rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-            telemetry.update();
-            return true;
-        }
-        else {
-            telemetry.addData("Visible Target", "none");
-            telemetry.update();
-            return false;
-        }
-    }
-
-    public double getRobotX() {
-        return translation.get(0) / mmPerInch;
-    }
-
-    public double getRobotY() {
-        return translation.get(1) / mmPerInch;
-    }
-
-    public double getRobotZ() {
-        return translation.get(2) / mmPerInch;
-    }
-
-    public double getRobotHeading(){
-        return rotation.thirdAngle;
-    }
-
-    public void disableTracking(){
-        targetsSkyStone.deactivate();
-        telemetry.addData("Tracking: ", "Disabled");
-        telemetry.update();
-    }
-
-    /**public void activateTfod(){
-        if (tfod != null)
-            tfod.activate();
-    }
-
-    public void deactivateTfod(){
-        tfod.deactivate(); //is both deactivate and shutdown necessary?
-        tfod.shutdown();
-    }**/
-
-    // PID IMU GYRO BASED TURNING
-    public void turnPID(double tAngle, double P, double I, double D, double timeOut){
-
-        double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
-
-        double kP = P / 90;
-        double kI = I;
-        double kD = D;
-
-        prevError = error = Math.abs(tAngle - getYaw()); //INITIALIZE THESE VARIABLES
-
-        power = dT = prevTime = currTime = 0.0;
-
-        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
-        resetTime();
-        while (opModeIsActive() && Math.abs(error) > 0.5 && currTime < timeOut){
-            prevError = error;
-            error = Math.abs(tAngle - getYaw()); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
-            prevTime = currTime;
-            currTime = time.milliseconds();
-            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
-            power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
-
-            if (power > 0)
-                setMotorPowers(Range.clip(power, 0.2, 0.6), -Range.clip(power, 0.2, 0.6));
-            else
-                setMotorPowers(-Range.clip(power, 0.2, 0.6), Range.clip(power, 0.2, 0.6));
-
-            telemetry.addData("tAngle: ", tAngle)
-                    .addData("kP:", error * kP)
-                    .addData("kI:", error * dT * kI)
-                    .addData("kD:", (error - prevError)/dT * kD)
-                    .addData("power", power)
-                    .addData("error: ", error)
-                    .addData("currTime: ", currTime);
-            telemetry.update();
-        }
-        stopMotors();
-    }
-
-    // VUFORIA BASED MOVEMENT
-    public void driveToPoint(double power, double xTarget, double yTarget) {
-        updateRobotPosition();
-        double curX = getRobotX();
-        double curY = getRobotY();
-
-        double trgtX = xTarget;
-        double trgtY = yTarget;
-
-        double diffX = trgtX - curX;
-        double diffY = trgtY - curY;
-
-        double curHeading = getRobotHeading(); //Assuming 0-360
-        double diffHeading = Math.abs(Math.toDegrees(Math.atan(diffX / diffY))); //CALCULATE ANGLE FROM CURRENT COORD TO TARGET COORD
-        double trgtHeading;
-
-        //ACCOUNT FOR ANGLES IN ALL FOUR QUADRANTS
-        if (diffX > 0 && diffY > 0)
-            trgtHeading = diffHeading;
-        else if (diffX < 0 && diffY > 0)
-            trgtHeading = 360 - diffHeading;
-        else if (diffX < 0 && diffY < 0)
-            trgtHeading = 180 + diffHeading;
-        else if (diffX > 0 && diffY < 0)
-            trgtHeading = 180 - diffHeading;
-        else
-            trgtHeading = 0;
-
-        turnPIDV(trgtHeading, 0.4, 0, 0, (trgtHeading - curHeading > 180));
-        driveForward(trgtX, trgtY, power, trgtHeading);
-        stopMotors();
-    }
-
-    public void turnPIDV(double tAngle, double kP, double kI, double kD, boolean flip){
-
-        double power, prevError, error, dT, prevTime, currTime, P, I, D; //DECLARE ALL VARIABLES
-
-        prevError = error = tAngle - getRobotHeading(); //INITIALIZE THESE VARIABLES
-
-        power = dT = prevTime = currTime = P = I = D = 0;
-
-        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
-        resetTime();
-        while (opModeIsActive() && Math.abs(error) > 0.5){ //put timeout in later
-            updateRobotPosition();
-            prevError = error;
-            error = tAngle - getRobotHeading(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
-            prevTime = currTime;
-            currTime = time.milliseconds();
-            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
-            P = error;
-            I = error * dT;
-            D = (error - prevError)/dT;
-            power = P * kP + I * kI + D * kD;
-
-            if (flip)
-                power *= -1;
-
-            //Basically, tell the robot to take the shortest way to the target angle.
-            //For example, if robot is at 359 and target angle is 5 degrees, move 6 deg clockwise instead
-            //of 354 deg counter clockwise
-
-            if(power < 0.2){
-                power = 0.2;
-            }else if(power > -0.2){
-                power = -0.2;
-            }
-
-            setMotorPowers(power, -power);
-
-            telemetry.addData("tAngle: ", tAngle)
-                    .addData("P:", P)
-                    .addData("I:", I)
-                    .addData("D:", D)
-                    .addData("power", power)
-                    .addData("error: ", error)
-                    .addData("currTime: ", currTime);
-            telemetry.update();
         }
         stopMotors();
     }
@@ -1178,6 +605,284 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         telemetry.update();
     }
 
+    public void driveToPoint(double power, double xTarget, double yTarget) {
+        updateRobotPosition();
+        double curX = getRobotX();
+        double curY = getRobotY();
+
+        double trgtX = xTarget;
+        double trgtY = yTarget;
+
+        double diffX = trgtX - curX;
+        double diffY = trgtY - curY;
+
+        double curHeading = getRobotHeading(); //Assuming 0-360
+        double diffHeading = Math.abs(Math.toDegrees(Math.atan(diffX / diffY))); //CALCULATE ANGLE FROM CURRENT COORD TO TARGET COORD
+        double trgtHeading;
+
+        //ACCOUNT FOR ANGLES IN ALL FOUR QUADRANTS
+        if (diffX > 0 && diffY > 0)
+            trgtHeading = diffHeading;
+        else if (diffX < 0 && diffY > 0)
+            trgtHeading = 360 - diffHeading;
+        else if (diffX < 0 && diffY < 0)
+            trgtHeading = 180 + diffHeading;
+        else if (diffX > 0 && diffY < 0)
+            trgtHeading = 180 - diffHeading;
+        else
+            trgtHeading = 0;
+
+        turnPIDV(trgtHeading, 0.4, 0, 0, (trgtHeading - curHeading > 180));
+        driveForward(trgtX, trgtY, power, trgtHeading);
+        stopMotors();
+    }
+
+    public void turnPIDV(double tAngle, double kP, double kI, double kD, boolean flip){
+
+        double power, prevError, error, dT, prevTime, currTime, P, I, D; //DECLARE ALL VARIABLES
+
+        prevError = error = tAngle - getRobotHeading(); //INITIALIZE THESE VARIABLES
+
+        power = dT = prevTime = currTime = P = I = D = 0;
+
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        while (opModeIsActive() && Math.abs(error) > 0.5){ //put timeout in later
+            updateRobotPosition();
+            prevError = error;
+            error = tAngle - getRobotHeading(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+            prevTime = currTime;
+            currTime = time.milliseconds();
+            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
+            P = error;
+            I = error * dT;
+            D = (error - prevError)/dT;
+            power = P * kP + I * kI + D * kD;
+
+            if (flip)
+                power *= -1;
+
+            //Basically, tell the robot to take the shortest way to the target angle.
+            //For example, if robot is at 359 and target angle is 5 degrees, move 6 deg clockwise instead
+            //of 354 deg counter clockwise
+
+            if(power < 0.2){
+                power = 0.2;
+            }else if(power > -0.2){
+                power = -0.2;
+            }
+
+            setMotorPowers(power, -power);
+
+            telemetry.addData("tAngle: ", tAngle)
+                    .addData("P:", P)
+                    .addData("I:", I)
+                    .addData("D:", D)
+                    .addData("power", power)
+                    .addData("error: ", error)
+                    .addData("currTime: ", currTime);
+            telemetry.update();
+        }
+        stopMotors();
+    }
+
+    public void driveTime(double power, double seconds){
+        setMotorPowers(power, power);
+        long time = (long)(seconds) * 1000;
+        sleep(time);
+        stopMotors();
+    }
+
+    //MANIP METHODS
+
+    public void setClawPosition(boolean open){
+        if (open){
+            claw.setPosition(clawStartPosition);
+        }
+        else{
+            claw.setPosition(clawEndPosition);
+        }
+    }
+
+    public void setArmPosition(boolean deployed){
+        if (deployed){
+            arm.setTargetPosition(500); //Place holding values
+        }
+        else{
+            arm.setTargetPosition(1000);
+        }
+    }
+
+    public void resetLift(){
+     lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+     idle();
+
+     lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+     idle();
+    }
+
+    //TURN METHODS
+
+    public void turnPID(double tAngle, double P, double I, double D, double timeOut){
+
+        double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
+
+        double kP = P / 90;
+        double kI = I;
+        double kD = D;
+
+        prevError = error = Math.abs(tAngle - getYaw()); //INITIALIZE THESE VARIABLES
+
+        power = dT = prevTime = currTime = 0.0;
+
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        while (opModeIsActive() && Math.abs(error) > 0.5 && currTime < timeOut){
+            prevError = error;
+            error = Math.abs(tAngle - getYaw()); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+            prevTime = currTime;
+            currTime = time.milliseconds();
+            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
+            power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
+
+            if (power > 0)
+                setMotorPowers(Range.clip(power, 0.2, 0.6), -Range.clip(power, 0.2, 0.6));
+            else
+                setMotorPowers(-Range.clip(power, 0.2, 0.6), Range.clip(power, 0.2, 0.6));
+
+            telemetry.addData("tAngle: ", tAngle)
+                    .addData("kP:", error * kP)
+                    .addData("kI:", error * dT * kI)
+                    .addData("kD:", (error - prevError)/dT * kD)
+                    .addData("power", power)
+                    .addData("error: ", error)
+                    .addData("currTime: ", currTime);
+            telemetry.update();
+        }
+        stopMotors();
+    }
+
+    public void turnTime(double power, boolean right, long seconds){
+        if (right)
+            setMotorPowers(power, -power);
+        else
+            setMotorPowers(-power, power);
+
+        sleep(seconds);
+        stopMotors();
+    }
+
+    public void rotate(double targetAngleChange, int timeout) {
+
+        runtime.reset();
+
+        double power = 0;
+        double origDiff = getYaw() - targetAngleChange;
+        double deltaHeading = 0;
+
+        while (opModeIsActive() && (Math.abs(getYaw()-targetAngleChange) > 1) && (runtime.seconds() < timeout)) {
+
+            telemetry.addData("Turning:", "From " + getYaw() + " to " + targetAngleChange);
+            telemetry.update();
+
+            deltaHeading = getYaw() - targetAngleChange; //GET ANGLE LEFT UNTIL TARGET ANGLE
+            power = Range.clip(0.4 * deltaHeading/origDiff, 0.2, 1); //PROPORTIONAL SPEED
+            /** Why is dHeading/oDiff multiplied by 0.4? -Garrett **/
+            if (deltaHeading < -180 || (deltaHeading > 0 && deltaHeading < 180) ) { //LEFT IS + , RIGHT IS -
+                setMotorPowers(power, -power);
+            } else {
+                setMotorPowers(-power, power);
+            }
+        }
+        stopMotors();
+    }
+
+    //TIME METHODS
+
+    public void resetTime(){
+        runtime.reset();
+    }
+
+    public double getTime(){
+        return runtime.seconds();
+    }
+
+    //VISION METHODS
+
+    int pos = 0;
+
+    public int getSkystonePos(){
+        return pos;
+    }
+
+    public boolean updateRobotPosition(){
+
+        if (!opModeIsActive()) return false;
+
+        targetVisible = false;
+        for (VuforiaTrackable trackable : allTrackables) {
+            if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible() && trackable.getName() != "Stone Target") {
+                telemetry.addData("Visible Target", trackable.getName());
+                targetVisible = true;
+
+                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
+                if (robotLocationTransform != null) {
+                    lastLocation = robotLocationTransform;
+                }
+                break;
+            }
+        }
+
+        if (targetVisible) {
+            // express position (translation) of robot in inches.
+            translation = lastLocation.getTranslation();
+            telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                    translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+
+            // express the rotation of the robot in degrees.
+            rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+            telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+            telemetry.update();
+            return true;
+        }
+        else {
+            telemetry.addData("Visible Target", "none");
+            telemetry.update();
+            return false;
+        }
+    }
+
+    //ROBOT ORIENTATION METHODS
+
+    public double getYaw() {
+        angles = imu.getAngularOrientation();
+        return angles.firstAngle;
+    }
+
+    public double getRobotX() {
+        return translation.get(0) / mmPerInch;
+    }
+
+    public double getRobotY() {
+        return translation.get(1) / mmPerInch;
+    }
+
+    public double getRobotZ() {
+        return translation.get(2) / mmPerInch;
+    }
+
+    public double getRobotHeading(){
+        return rotation.thirdAngle;
+    }
+
+    public void position(){ //constantly gives X and Y position of robot
+        while(!isStopRequested()){
+            telemetry.addData("X -", getRobotX());
+            telemetry.addData("Y -", getRobotY());
+            telemetry.update();
+        }
+    }
+
     public boolean isRed(int timeout) { // in milliseconds
         runtime.reset();
         CameraDevice camera = CameraDevice.getInstance();
@@ -1205,16 +910,281 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 }
             }
         }
-            return false;
+        return false;
     }
 
-    public void position(){ //constantly gives X and Y position of robot
-        while(!isStopRequested()){
-            telemetry.addData("X -", getRobotX());
-            telemetry.addData("Y -", getRobotY());
-            telemetry.update();
-        }
+    public void disableTracking(){
+        targetsSkyStone.deactivate();
+        telemetry.addData("Tracking: ", "Disabled");
+        telemetry.update();
     }
+
+    public void activateTfod(){
+        if (tfod != null)
+            tfod.activate();
+    }
+
+    public void deactivateTfod(){
+        tfod.deactivate(); //is both deactivate and shutdown necessary?
+        tfod.shutdown();
+    }
+
+    //UNUSED METHODS
+
+    //public Bitmap convertToBitmap() throws InterruptedException{
+    /**    Image rgb = null;
+     com.vuforiaPC.Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
+     Bitmap imageBitmap;
+     vuforiaPC.setFrameQueueCapacity(1);
+     vuforiaPC.enableConvertFrameToBitmap();
+     VuforiaLocalizer.CloseableFrame picture;
+
+     frame = vuforiaPC.getFrameQueue();
+     picture = frame.take();
+
+     long imgCount = picture.getNumImages(); //GET NUMBER OF FORMATS FOR FRAME
+
+     for (int i = 0; i < imgCount; i++){
+     if(picture.getImage(i).getFormat() == PIXEL_FORMAT.RGB565){
+     rgb = picture.getImage(i);
+     break;
+     }
+     }
+
+     imageBitmap = Bitmap.createBitmap(rgb.getWidth(), rgb.getHeight(), Bitmap.Config.RGB_565 );
+     imageBitmap.copyPixelsFromBuffer(rgb.getPixels());
+
+     picture.close();
+     return imageBitmap;
+     }**/
+
+    //public void detectSkystone(double timeLimit){
+    /** runtime.reset();
+     activateTfod();
+     while(runtime.seconds() < timeLimit && opModeIsActive() && tfod != null) {
+     // getUpdatedRecognitions() will return null if no new information is available since the last time that call was made.
+     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+     if (updatedRecognitions != null) {
+     telemetry.addData("# Object Detected", updatedRecognitions.size());
+     if (updatedRecognitions.size() > 0) { //IF DETECT BOTH OBJECTS
+
+     int skystoneX = -1, stone1X = -1, stone2X = -1;
+     double skystoneConf = 0;
+
+     for (Recognition recognition : updatedRecognitions) {
+     if (recognition.getLabel().equals(LABEL_SKYSTONE)) { //IF OBJECT DETECTED IS GOLD
+     skystoneX = (int) recognition.getLeft();
+     skystoneConf = recognition.getConfidence();
+     } else if (recognition.getLabel().equals(LABEL_STONE) && stone1X != -1) {
+     stone1X = (int) recognition.getLeft();
+     } else {
+     stone2X = (int) recognition.getLeft();
+     }
+     }
+
+     //Adjust based on if it can see 3 stones or 2 stones
+     //Ask galligher how to get the y-value of the object, but could also use
+     //ratio of block height to frame height
+
+     //(*^*)\\ <-- A CHICK!
+
+     if (skystoneX != -1 && skystoneConf > 0.2) { //adjust confidence level
+
+     if (skystoneX < 600 || (skystoneX < stone1X && skystoneX < stone2X)) { //adjust threshold3
+     telemetry.addData("Skystone Position", "Left");
+     pos = 1;
+     } else{
+     telemetry.addData("Skystone Position", "Center");
+     pos = 2;
+     }
+     }else{
+     telemetry.addData("Skystone Position", "Right");
+     pos = 3;
+     }
+     telemetry.addData("Gold x pos ", skystoneX);
+     telemetry.addData("Gold conf ", skystoneConf);
+     telemetry.addData("Runtime", getTime());
+     telemetry.update();
+     }
+     }
+     }
+     }
+     **/
+
+    //public int detectSkystone(){
+    /**   //USE VUFORIA TRACKABLE COORDINATE TO DETERMINE SKYSTONE POSITION
+     //GO GET COORDINATES OF THE TARGET IN EACH POSITION
+     OpenGLMatrix skystonePos = null;
+     VectorF skystoneCoords = null;
+     ElapsedTime runtime = new ElapsedTime();
+     runtime.reset();
+     int pos = 0;
+     while(opModeIsActive()) {
+     for (VuforiaTrackable trackable : allTrackables) {
+     if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
+     telemetry.addData("Visible Target", trackable.getName());
+
+     if (trackable.getName() == "Stone Target") {
+     skystonePos = trackable.getLocation();
+     skystoneCoords = skystonePos.getTranslation();
+
+     if (skystoneCoords.get(0) / mmPerInch < 0 && skystoneCoords.get(0) / mmPerInch > 0) {
+     pos = -1;
+     } else if (skystoneCoords.get(0) / mmPerInch < 0 && skystoneCoords.get(0) / mmPerInch > 0) {
+     pos = 0;
+     } else if (skystoneCoords.get(0) / mmPerInch < 0 && skystoneCoords.get(0) / mmPerInch > 0) {
+     pos = 1;
+     } else {
+     pos = 0;
+     }
+     }
+     break;
+     }
+     }
+     }
+     telemetry.addData("Skystone Pos:", pos);
+     telemetry.update();
+     return pos;
+     }**/
+
+    //public void turnPID(double tAngle, double kP, double kI, double kD, double timeOut){
+    /** double power, prevError, error, dT, prevTime, currTime, P, I, D; //DECLARE ALL VARIABLES
+     prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
+     power = dT = prevTime = currTime = P = I = D = 0;
+     ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+     resetTime();
+     while (Math.abs(error) > 0.5 && currTime < timeOut){
+     prevError = error;
+     error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+     prevTime = currTime;
+     currTime = time.milliseconds();
+     dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
+     P = error;
+     I = error * dT;
+     D = (error - prevError)/dT;
+     power = P * kP + I * kI + D * kD;
+     setMotorPowers(Range.clip(power, 0.2, 1), -Range.clip(power, 0.2, 1));
+
+     telemetry.addData("tAngle: ", tAngle)
+     .addData("P:", P)
+     .addData("I:", I)
+     .addData("D:", D)
+     .addData("power", power)
+     .addData("error: ", error)
+     .addData("currTime: ", currTime);
+     }
+     }
+     **/
+
+    //public void colorPark(boolean red){
+    /** Color.RGBToHSV(sensorColor.red() * 8, sensorColor.green() * 8, sensorColor.blue() * 8, hsvValues);
+     float hue = hsvValues[0];
+     boolean redPark = hue < 60 || hue > 320; //red hues
+     boolean bluePark = hue > 120 && hue < 260; /blue hues
+
+     if(red){
+     while(!redPark && !isStopRequested()){
+     setMotorPowers(0.5, 0.5);
+     }
+     stopMotors();
+     }
+     else{
+     while(!bluePark && !isStopRequested()){
+     setMotorPowers(0.5, 0.5);
+     }
+     stopMotors();
+     }
+     **/
+
+    //public void strafeDistance(double power, boolean right, double dist) {  // Garrett(10/22/19)
+    /**    //Declare variables
+     double min = 0.3;   //adjustable minimum power for strafing
+     double powerG = power * 0.4;   //PowerGiven = Starts out with a lower power so the robot doesn't drift as much
+     dist *= -1 * encoderToInches;   //sets distance (will change after testing to see how short it is of target distance)
+     LF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);    //resets motor encoders
+     RF.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+     LB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+     RB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+     LF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER); //set the mode of the motors
+     RF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+     LB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+     RB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+     if (right) {  //If strafing right
+     //Sets the target position for the motors to move to
+     LF.setTargetPosition(LF.getCurrentPosition() + (int)dist);
+     LB.setTargetPosition(LB.getCurrentPosition() - (int)dist);
+     RF.setTargetPosition(RF.getCurrentPosition() - (int)dist);
+     RB.setTargetPosition(RB.getCurrentPosition() + (int)dist);
+     //tells motors to move to positions set
+     LF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+     RF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+     LB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+     RB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+     //sets motor powers
+     LF.setPower(-Range.clip(powerG, min, 1));
+     RF.setPower(Range.clip(-powerG, min, 1));
+     LB.setPower(Range.clip(-powerG, min, 1));
+     RB.setPower(-Range.clip(powerG, min, 1));
+     }
+     else {    //If strafing left
+     //Sets the target position for the motors to move to
+     LF.setTargetPosition(LF.getCurrentPosition() - (int)dist);
+     LB.setTargetPosition(LB.getCurrentPosition() + (int)dist);
+     RF.setTargetPosition(RF.getCurrentPosition() + (int)dist);
+     RB.setTargetPosition(RB.getCurrentPosition() - (int)dist);
+     //tells motors to move to positions set
+     LF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+     RF.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+     LB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+     RB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+     //sets motor powers
+     LF.setPower(Range.clip(-powerG, min, 1));
+     RF.setPower(-Range.clip(powerG, min, 1));
+     LB.setPower(-Range.clip(powerG, min, 1));
+     RB.setPower(Range.clip(-powerG, min, 1));
+     }
+
+     //Waits until all the motors reach their target position then stops them.
+     //Also incrementally increases speed of the robot to full desired power
+     while (LF.isBusy() && RF.isBusy() && LB.isBusy() && RB.isBusy() && opModeIsActive() && !isStopRequested()){
+     if(right) {
+     LF.setPower(-Range.clip(powerG, min, 1));
+     RF.setPower(Range.clip(-powerG, min, 1));
+     LB.setPower(Range.clip(-powerG, min, 1));
+     RB.setPower(-Range.clip(powerG, min, 1));
+     }
+     if(right == false) {
+     LF.setPower(-Range.clip(powerG, min, 1));
+     RF.setPower(Range.clip(-powerG, min, 1));
+     LB.setPower(Range.clip(-powerG, min, 1));
+     RB.setPower(-Range.clip(powerG, min, 1));
+     }
+     //If statement makes sure that powerG stops increasing once it is equal with power
+     if (powerG < power) {
+     powerG += powerG * 0.1;
+     }
+     }
+     stopMotors();
+     }*/
+
+    //public void strafeAdjust(double power, double distance, boolean right, int timeout){
+    /**
+     double deltaHeading = 0;
+
+     resetEncoders();
+     while (getEncoderAvg() < distance * 55 && !isStopRequested()) {
+     deltaHeading = getYaw();
+     power = Range.clip(deltaHeading/0.5, 0.25, 1);
+
+     if (Math.abs(getYaw()-90) > 5){
+     driveTime(1,0.5);
+     }else{
+     setStrafePowers(power,right);
+     }
+
+     }
+     }**/
 
     @Override
     public void runOpMode() throws InterruptedException {

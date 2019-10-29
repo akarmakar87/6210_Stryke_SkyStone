@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Testing;
+package org.firstinspires.ftc.teamcode.Testing.AML1Testing;
 
 import android.graphics.Bitmap;
 
@@ -22,9 +22,9 @@ import static android.graphics.Color.green;
 import static android.graphics.Color.red;
 
 
-@TeleOp(name="skystone bm", group = "auto")
+@TeleOp(name="pray to all the vuforia gods", group = "auto")
 //@Disabled
-public class SkystoneBitmap extends LinearOpMode {
+public class bitmapMethodsPleaseWork extends LinearOpMode {
 
     public VuforiaLocalizer vuforiaWC = null;
 
@@ -38,13 +38,11 @@ public class SkystoneBitmap extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        /*To access the image: you need to iterate through the images of the frame object:*/
-
         initVuforia();
 
         waitForStart();
 
-        while (opModeIsActive()){
+        while (opModeIsActive() && !isStopRequested()){
             detectSkystone(getBitmap());
         }
     }
@@ -62,6 +60,9 @@ public class SkystoneBitmap extends LinearOpMode {
 
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true); //enables RGB565 format for the image
         vuforiaWC.setFrameQueueCapacity(1); //tells VuforiaLocalizer to only store one frame at a time
+
+        telemetry.addData("Vuforia:", "initialized");
+        telemetry.update();
     }
 
     public Bitmap getBitmap() throws InterruptedException {
@@ -77,6 +78,9 @@ public class SkystoneBitmap extends LinearOpMode {
 
         Bitmap bm = Bitmap.createBitmap(rgb.getWidth(), rgb.getHeight(), Bitmap.Config.RGB_565);
         bm.copyPixelsFromBuffer(rgb.getPixels());
+
+        telemetry.addData("Bitmap:", "Got it");
+        telemetry.update();
 
         frame.close();
 
@@ -94,6 +98,10 @@ public class SkystoneBitmap extends LinearOpMode {
             int blueLim = 2;
 
             ArrayList<Integer> colorPix = new ArrayList<Integer>();
+
+            telemetry.addData("Bitmap width:", bm.getWidth());
+            telemetry.addData("Bitmap height:", bm.getHeight());
+            telemetry.update();
 
             for (int c = 0; c < bm.getWidth(); c++){
                 for(int r = 0; r < bm.getHeight(); r++){
