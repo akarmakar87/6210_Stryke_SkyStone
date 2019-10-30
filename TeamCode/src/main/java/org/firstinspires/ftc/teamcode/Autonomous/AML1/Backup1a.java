@@ -14,10 +14,12 @@ public class Backup1a extends SkystoneLinearOpMode{
     @Override
     public void runOpMode() throws InterruptedException {
 
+        //sets up imu and vuforia
         init(hardwareMap, true);
 
         boolean red = true;
 
+        //should we keep this button pressing system? is it legal?
         while (!isStarted()) {
 
             if (gamepad1.b) red = false;
@@ -35,7 +37,7 @@ public class Backup1a extends SkystoneLinearOpMode{
         // no need to set a variable for distance traveled to skystone 2 because skystones are paired up
         // and thus a set distance apart << measured
         // will be different for red and blue side so set inside if else loop
-        int stonePos = 0;
+        int stonePos = detectSkystone(getBitmap(1000));
         int seeyouontheotherside = 0;
         int heading = 0; // << we only turn one way ever but the angle depends on alliance side
 

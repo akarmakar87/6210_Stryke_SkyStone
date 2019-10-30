@@ -15,17 +15,25 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 import java.io.Closeable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static android.graphics.Color.blue;
 import static android.graphics.Color.green;
 import static android.graphics.Color.red;
+import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
 
 @TeleOp (name="pray to all the vuforia gods", group = "teleop")
 //@Disabled
-public class bitmapMethodsPleaseWork extends LinearOpMode {
+public class bitmapMethodsPleaseWork extends LinearOpMode{
 
+    public static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
+    public static final boolean PHONE_IS_PORTRAIT = false;
+    public float phoneXRotate    = 0;
+    public float phoneYRotate    = 0;
+    public float phoneZRotate    = 0;
     public VuforiaLocalizer vuforiaWC = null;
 
     WebcamName LogitechC310 = null;
@@ -48,6 +56,18 @@ public class bitmapMethodsPleaseWork extends LinearOpMode {
     }
 
     public void initVuforia(){
+
+        if (CAMERA_CHOICE == BACK) {
+            phoneYRotate = -90;
+        } else {
+            phoneYRotate = 90;
+        }
+
+        // Rotate the phone vertical about the X axis if it's in portrait mode
+        if (PHONE_IS_PORTRAIT) {
+            phoneXRotate = 90 ;
+        }
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
         LogitechC310 = hardwareMap.get(WebcamName.class, "Logitech C310");
@@ -79,8 +99,8 @@ public class bitmapMethodsPleaseWork extends LinearOpMode {
         Bitmap bm = Bitmap.createBitmap(rgb.getWidth(), rgb.getHeight(), Bitmap.Config.RGB_565);
         bm.copyPixelsFromBuffer(rgb.getPixels());
 
-        telemetry.addData("Bitmap:", "Got it");
-        telemetry.update();
+        /*telemetry.addData("Bitmap:", "Got it");
+        telemetry.update();*/
 
         frame.close();
 
@@ -93,6 +113,7 @@ public class bitmapMethodsPleaseWork extends LinearOpMode {
             //set threshold for yellow or not yellow?
             int stonepos = 0;
 
+            //figure out proper thresholds
             int redLim = 250;
             int greenLim = 220;
             int blueLim = 2;
@@ -101,7 +122,6 @@ public class bitmapMethodsPleaseWork extends LinearOpMode {
 
             for (int c = 0; c < bm.getWidth(); c++){
                 for(int r = 0; r < bm.getHeight(); r++){
-
                     if(red(bm.getPixel(c, r)) >= redLim && green(bm.getPixel(c, r)) >= greenLim && blue(bm.getPixel(c, r)) >= blueLim){
                         colorPix.add(c);
                     }
@@ -113,7 +133,9 @@ public class bitmapMethodsPleaseWork extends LinearOpMode {
                 sum += x;
 
             int avgX = sum/colorPix.size();
-            int maxX = color
+
+            int maxX = Collections.max(colorPix);
+            int minX = Collections.min(colorPix);
 
             if(avgX < 0){
                 stonepos = -1;
@@ -123,6 +145,8 @@ public class bitmapMethodsPleaseWork extends LinearOpMode {
                 stonepos = 1;
             }
 
+            telemetry.addData("max x: ", maxX);
+            telemetry.addData("min x: ", minX);
             telemetry.addData("x avg: ", avgX);
             telemetry.addData("stonepos: ", stonepos);
             telemetry.update();
