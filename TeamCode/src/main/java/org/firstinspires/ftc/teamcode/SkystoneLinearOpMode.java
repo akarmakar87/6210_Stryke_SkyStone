@@ -68,7 +68,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     //ClAW VARIABLES
     private double clawStartPosition = 0.5;
-    private double clawEndPosition = 0.61;
+    private double clawEndPosition = 0.7;
 
 
     //GYRO VARIABLES

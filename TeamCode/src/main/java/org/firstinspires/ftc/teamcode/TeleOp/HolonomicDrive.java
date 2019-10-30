@@ -17,9 +17,10 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
         init(hardwareMap, false);
 
-        double xAxis = 0, yAxis = 0, zAxis = 0;
+        double xAxis = 0, yAxis = 0, zAxis = 0, position = 0.5;
         double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0;
-        long ptime = 0;
+        long htime = 0, rtime = 0;
+
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
@@ -55,7 +56,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 int tarPos = ((int)currPos/10) - 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
                 lift.setTargetPosition(tarPos * 10); //Make lift go to position
             }
-            double position = .6;
+
             //CLAW MOVEMENT
             if (gamepad2.b){
                 setClawPosition(true); //OPEN CLAW
@@ -72,10 +73,14 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }
 
             //CLAW ROTATE
-            if (gamepad2.dpad_left){
-                rotate.setPosition(1);
-            }else if(gamepad2.dpad_right){
-                rotate.setPosition(0);
+            if (gamepad2.dpad_left && rtime + 50 < time.now(TimeUnit.MILLISECONDS)){
+                rtime = time.now(TimeUnit.MILLISECONDS);
+                position += 0.5;
+                rotate.setPosition(Range.clip(position, 0, 1));
+            }else if(gamepad2.dpad_right && rtime + 50 < time.now(TimeUnit.MILLISECONDS)){
+                rtime = time.now(TimeUnit.MILLISECONDS);
+                position -= 0.25;
+                rotate.setPosition(Range.clip(position, 0, 1));
             }
 
             //HOLONOMIC DRIVE
@@ -99,8 +104,8 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }
 
             //HALFSPEED (toggle)
-            if (gamepad1.x && ptime + 1 > time.now(TimeUnit.SECONDS)) {
-                ptime = time.now(TimeUnit.SECONDS);
+            if (gamepad1.x && htime + 1 > time.now(TimeUnit.SECONDS)) {
+                htime = time.now(TimeUnit.SECONDS);
                 halfSpeed = !halfSpeed;
             }
 
