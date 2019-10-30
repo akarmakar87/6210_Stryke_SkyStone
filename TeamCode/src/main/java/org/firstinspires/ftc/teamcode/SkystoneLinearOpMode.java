@@ -67,8 +67,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     **/
 
     //ClAW VARIABLES
-    private double clawStartPosition = 0.0;
-    private double clawEndPosition = 1.0;
+    private double clawStartPosition = 0.5;
+    private double clawEndPosition = 0.61;
 
 
     //GYRO VARIABLES
@@ -770,14 +770,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         else{
             arm.setTargetPosition(1000);
         }
-    }
-
-    public void resetLift(){
-     lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-     idle();
-
-     lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-     idle();
     }
 
     //TURN METHODS

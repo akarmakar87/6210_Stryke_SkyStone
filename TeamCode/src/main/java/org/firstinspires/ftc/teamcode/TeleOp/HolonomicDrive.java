@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
+
+import java.util.concurrent.TimeUnit;
 
 @TeleOp(name="HolonomicDriveNew", group="teleop")
 //@Disabled
@@ -14,8 +17,9 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
         init(hardwareMap, false);
 
-        double xAxis = 0, yAxis = 0, zAxis = 0, ptime = 0;
+        double xAxis = 0, yAxis = 0, zAxis = 0;
         double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0;
+        long ptime = 0;
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
@@ -51,7 +55,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 int tarPos = ((int)currPos/10) - 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
                 lift.setTargetPosition(tarPos * 10); //Make lift go to position
             }
-
+            double position = .6;
             //CLAW MOVEMENT
             if (gamepad2.b){
                 setClawPosition(true); //OPEN CLAW
@@ -62,7 +66,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
             //ARM MOVEMENT
             if (Math.abs(gamepad2.right_stick_y) > 0.05){
-                arm.setPower(gamepad2.right_stick_y);
+                arm.setPower(Range.clip(gamepad2.right_stick_y, 0.0, 0.3));
             }else{
                 arm.setPower(0);
             }
@@ -95,8 +99,8 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }
 
             //HALFSPEED (toggle)
-            if (gamepad1.x && ptime > time - 5) {
-                ptime = time;
+            if (gamepad1.x && ptime + 1 > time.now(TimeUnit.SECONDS)) {
+                ptime = time.now(TimeUnit.SECONDS);
                 halfSpeed = !halfSpeed;
             }
 
@@ -136,7 +140,9 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             telemetry.addData("RF Power", rfPower);
             telemetry.addData("LB Power", lbPower);
             telemetry.addData("RB Power", rbPower);
-            telemetry.addData("arm encoder", arm.getTargetPosition());
+            telemetry.addData("arm encoder", arm.getCurrentPosition());
+            telemetry.addData("claw position", claw.getPosition());
+            telemetry.addData("rotate position", rotate.getPosition());
             telemetry.update();
         }
     }
