@@ -14,12 +14,16 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
         init(hardwareMap, false);
 
-        double xAxis = 0, yAxis = 0, zAxis = 0;
+        double xAxis = 0, yAxis = 0, zAxis = 0, ptime = 0;
         double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0;
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
         resetEncoders();
+
+        //Set up a timer for half speed
+        ElapsedTime time = new ElapsedTime();
+        resetTime();
 
         telemetry.addData("Mode: ", "Waiting for start");
         telemetry.update();
@@ -27,7 +31,6 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
-
             //LIFT CONTROLS
             if (gamepad2.right_trigger > 0.05) {
                 lift.setPower(gamepad2.right_trigger); //LIFT DOWN
@@ -92,7 +95,8 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }
 
             //HALFSPEED (toggle)
-            if (gamepad1.x) {
+            if (gamepad1.x && ptime > time - 5) {
+                ptime = time;
                 halfSpeed = !halfSpeed;
             }
 
