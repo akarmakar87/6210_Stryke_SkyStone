@@ -782,24 +782,24 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         double kI = I;
         double kD = D;
 
-        prevError = error = Math.abs(tAngle - getYaw()); //INITIALIZE THESE VARIABLES
+        prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
 
         power = dT = prevTime = currTime = 0.0;
 
         ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
         resetTime();
-        while (opModeIsActive() && Math.abs(error) > 0.5 && currTime < timeOut){
+        while (opModeIsActive() && Math.abs(error) > 0.7 && currTime < timeOut){
             prevError = error;
-            error = Math.abs(tAngle - getYaw()); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+            error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
             prevTime = currTime;
             currTime = time.milliseconds();
             dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
             power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
 
             if (power > 0)
-                setMotorPowers(Range.clip(power, 0.2, 0.6), -Range.clip(power, 0.2, 0.6));
+                setMotorPowers(Range.clip(power, 0.3, 0.7), -Range.clip(power, 0.3, 0.7));
             else
-                setMotorPowers(-Range.clip(power, 0.2, 0.6), Range.clip(power, 0.2, 0.6));
+                setMotorPowers(-Range.clip(power, 0.3, 0.7), Range.clip(power, 0.3, 0.7));
 
             telemetry.addData("tAngle: ", tAngle)
                     .addData("kP:", error * kP)
@@ -904,9 +904,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public Bitmap getBitmap(long milliseconds) throws InterruptedException {
-        runtime.reset();
+        ElapsedTime t = new ElapsedTime();
+        t.reset();
         Bitmap bm = null;
-        while(opModeIsActive()&& !isStopRequested() && runtime.milliseconds() < milliseconds){
+        //while(opModeIsActive()&& !isStopRequested()){
             frame = vuforiaWC.getFrameQueue().take();
             long num = frame.getNumImages();
 
@@ -918,20 +919,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
             bm = Bitmap.createBitmap(rgb.getWidth(), rgb.getHeight(), Bitmap.Config.RGB_565);
             bm.copyPixelsFromBuffer(rgb.getPixels());
-
-            telemetry.addData("Bitmap:", "Got it");
-            telemetry.update();
-        }
+       // }
 
         frame.close();
-
-        telemetry.addData("Frame:", "Closed");
-        telemetry.update();
 
         return bm;
     }
 
-    public int detectSkystone(Bitmap bm){
+    public void detectSkystone(Bitmap bm) throws InterruptedException {
 
         //set threshold for yellow or not yellow?
         int stonepos = 0;
@@ -939,15 +934,15 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         if (bm != null) {
 
             //figure out proper thresholds
-            int redLim = 250;
-            int greenLim = 220;
-            int blueLim = 2;
+            int redLim = 30;
+            int greenLim = 30;
+            int blueLim = 30;
 
             ArrayList<Integer> colorPix = new ArrayList<Integer>();
 
-            for (int c = 0; c < bm.getWidth(); c++) {
+            for (int c = 0; c < bm.getWidth()/2; c++) {
                 for (int r = 0; r < bm.getHeight(); r++) {
-                    if (red(bm.getPixel(c, r)) >= redLim && green(bm.getPixel(c, r)) >= greenLim && blue(bm.getPixel(c, r)) >= blueLim) {
+                    if (red(bm.getPixel(c, r)) <= redLim && green(bm.getPixel(c, r)) <= greenLim && blue(bm.getPixel(c, r)) <= blueLim) {
                         colorPix.add(c);
                     }
                 }
@@ -957,23 +952,29 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             for (Integer x : colorPix)
                 sum += x;
 
-            int avgX = sum / colorPix.size();
+            int avgX = 0, maxX = 0, minX =0;
+            if(colorPix.size() != 0){
+                avgX = sum / colorPix.size();
 
-            int maxX = Collections.max(colorPix);
-            int minX = Collections.min(colorPix);
+                maxX = Collections.max(colorPix);
+                minX = Collections.min(colorPix);
+            }
 
-            if (avgX < 0) {
+
+            if (avgX < 160) {
                 stonepos = -1;
-            } else if (avgX < 0) {
+            } else if (avgX < 320) {
                 stonepos = 0;
             } else {
                 stonepos = 1;
             }
 
+            telemetry.addData("bitmap width:", bm.getWidth());
+            telemetry.addData("bitmap height:", bm.getHeight());
             telemetry.addData("max x: ", maxX);
             telemetry.addData("min x: ", minX);
             telemetry.addData("x avg: ", avgX);
-            telemetry.addData("stonepos: ", stonepos);
+            //telemetry.addData("stonepos: ", stonepos);
             telemetry.update();
         }else{
             //change it to whatever is closest
@@ -981,7 +982,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             telemetry.update();
         }
 
-        return stonepos;
+        //return stonepos;
     }
 
     //ROBOT ORIENTATION METHODS

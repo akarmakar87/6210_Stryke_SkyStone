@@ -37,7 +37,8 @@ public class Backup1a extends SkystoneLinearOpMode{
         // no need to set a variable for distance traveled to skystone 2 because skystones are paired up
         // and thus a set distance apart << measured
         // will be different for red and blue side so set inside if else loop
-        int stonePos = detectSkystone(getBitmap(1000));
+        int stonePos = 0;
+        //int whereStone = detectSkystone(getBitmap(1000));
         int seeyouontheotherside = 0;
         int heading = 0; // << we only turn one way ever but the angle depends on alliance side
 
@@ -60,9 +61,55 @@ public class Backup1a extends SkystoneLinearOpMode{
         }
 
         // +-+-+- first skystone
-        //strafeAdjust(0.5, stonePos, true);
-        //driveAdjust(0.5, 10);
 
+        driveDistance(0.3, 35);
+
+        sleep(250);
+
+        driveDistance(-0.3, 7);
+
+        sleep(250);
+
+        turnPID(-90, 0.75, 0, 2, 3500);
+
+        sleep(250);
+
+        driveDistance(0.5, 40);
+
+        sleep(250);
+
+        turnPID(-90, 0.6, 0, 2, 3500);
+
+        sleep(250);
+
+        driveDistance(-0.5, 33);
+
+        sleep(250);
+
+        turnPID(0, 0.6, 0, 2, 3500);
+
+        sleep(250);
+
+        driveDistance(0.3, 6);
+
+        sleep(250);
+
+        driveDistance(-0.3, 6);
+
+        sleep(250);
+
+        turnPID(-90, 0.6, 0, 2, 3500);
+
+        sleep(250);
+
+        driveDistance(0.5, 33);
+
+
+
+
+
+
+        /*
         strafeDistance(0.5, 6, true);       // strafe to in front of skystone
         driveDistance(0.8, 15);                 // drive to skystone
         // intake
@@ -85,6 +132,8 @@ public class Backup1a extends SkystoneLinearOpMode{
 
         // park
         driveDistance(-0.5, 10);
+
+        */
     }
 
 }
