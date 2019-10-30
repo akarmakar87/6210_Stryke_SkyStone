@@ -62,11 +62,11 @@ public class Backup1a extends SkystoneLinearOpMode{
 
         // +-+-+- first skystone
 
-        driveDistance(0.3, 35);
+        driveDistance(0.3, 38);
 
         sleep(250);
 
-        driveDistance(-0.3, 7);
+        driveDistance(-0.3, 14);
 
         sleep(250);
 
@@ -90,11 +90,11 @@ public class Backup1a extends SkystoneLinearOpMode{
 
         sleep(250);
 
-        driveDistance(0.3, 6);
+        driveDistance(0.3, 9);
 
         sleep(250);
 
-        driveDistance(-0.3, 6);
+        driveDistance(-0.3, 9);
 
         sleep(250);
 
