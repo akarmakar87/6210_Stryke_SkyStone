@@ -28,6 +28,8 @@ public class Backup1a extends SkystoneLinearOpMode{
             telemetry.update();
         }
 
+        resetArm();
+
         waitForStart();
 
         // scan for skystone
@@ -62,11 +64,15 @@ public class Backup1a extends SkystoneLinearOpMode{
 
         // +-+-+- first skystone
 
+        setArmPosition(true);
+
         driveDistance(0.3, 38);
+        setClawPosition(false);
 
         sleep(250);
 
         driveDistance(-0.3, 14);
+        setArmPosition(false);
 
         sleep(250);
 
@@ -75,6 +81,7 @@ public class Backup1a extends SkystoneLinearOpMode{
         sleep(250);
 
         driveDistance(0.5, 40);
+        setClawPosition(true);
 
         sleep(250);
 
@@ -83,6 +90,7 @@ public class Backup1a extends SkystoneLinearOpMode{
         sleep(250);
 
         driveDistance(-0.5, 33);
+        setArmPosition(true);
 
         sleep(250);
 
@@ -91,9 +99,11 @@ public class Backup1a extends SkystoneLinearOpMode{
         sleep(250);
 
         driveDistance(0.3, 9);
+        setClawPosition(false);
 
         sleep(250);
 
+        setArmPosition(false);
         driveDistance(-0.3, 9);
 
         sleep(250);
@@ -103,6 +113,7 @@ public class Backup1a extends SkystoneLinearOpMode{
         sleep(250);
 
         driveDistance(0.5, 33);
+        setClawPosition(true);
 
 
 

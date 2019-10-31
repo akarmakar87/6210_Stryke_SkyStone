@@ -22,6 +22,9 @@ public class Backup1b extends SkystoneLinearOpMode{
 
         telemetry.addData("red? ", red);
 
+        resetArm();
+        resetEncoders();
+
         waitForStart();
 
         // scan for skystone
@@ -58,11 +61,15 @@ public class Backup1b extends SkystoneLinearOpMode{
         // +-+-+- first skystone
         strafeDistance(0.5, 6, true);       // strafe to in front of skystone
         driveDistance(0.8, 15);                 // drive to skystone
-        // intake
+        setArmPosition(true);                   //Deploy arm
+        sleep(1000);
+        setClawPosition(false);                 //Close claw
+        sleep(500);
+        setArmPosition(false);                  //Lift arm
         driveDistance(-0.5, 5);                 // back up
         turnPIDV(heading, 0, 0, 0, false);
         driveDistance(0.5, seeyouontheotherside);       // drive to other side
-        // drop stone
+        setClawPosition(true);
 
         // +-+-+- other skystone
 
