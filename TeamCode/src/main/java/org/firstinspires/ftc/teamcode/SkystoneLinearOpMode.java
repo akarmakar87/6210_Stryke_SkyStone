@@ -947,8 +947,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
             for (int c = 0; c < bm.getWidth()/2; c++) {
                 for (int r = 0; r < bm.getHeight(); r++) {
-                    if (red(bm.getPixel(c, r)) <= redLim && green(bm.getPixel(c, r)) <= greenLim && blue(bm.getPixel(c, r)) <= blueLim) {
-                        colorPix.add(c);
+                    //previously (c,r)
+                    if (red(bm.getPixel(r, c)) <= redLim && green(bm.getPixel(c, r)) <= greenLim && blue(bm.getPixel(c, r)) <= blueLim) {
+                        colorPix.add(r); // previously it was adding c, so the column instead of row
+                        //check once more if 480 is the x and 640 is y
                     }
                 }
             }
@@ -974,8 +976,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 stonepos = 1;
             }
 
-            telemetry.addData("bitmap width:", bm.getWidth());
-            telemetry.addData("bitmap height:", bm.getHeight());
+            telemetry.addData("bitmap width:", bm.getWidth()); //640
+            telemetry.addData("bitmap height:", bm.getHeight()); //480 across I think?
             telemetry.addData("max x: ", maxX);
             telemetry.addData("min x: ", minX);
             telemetry.addData("x avg: ", avgX);
@@ -988,6 +990,44 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
 
         //return stonepos;
+    }
+
+    public void findThreshold(Bitmap bm) throws InterruptedException {
+
+        if (bm != null) {
+
+            ArrayList<Integer> redPix = new ArrayList<Integer>();
+            ArrayList<Integer> greenPix = new ArrayList<Integer>();
+            ArrayList<Integer> bluePix = new ArrayList<Integer>();
+
+            for (int c = 0; c < bm.getWidth(); c++) {
+                for (int r = 0; r < bm.getHeight(); r++) {
+                    redPix.add(red(bm.getPixel(r,c)));
+                    greenPix.add(green(bm.getPixel(r,c)));
+                    bluePix.add(blue(bm.getPixel(r,c)));
+                }
+            }
+
+            int redP = 0;
+            int greenP = 0;
+            int blueP = 0;
+
+            for(Integer p: redPix)
+                redP += p;
+            for(Integer p: greenPix)
+                greenP += p;
+            for(Integer p: bluePix)
+                blueP += p;
+
+            telemetry.addData("red: ", redP/redPix.size());
+            telemetry.addData("green: ", greenP/greenPix.size());
+            telemetry.addData("blue: ", blueP/bluePix.size());
+            telemetry.update();
+        }else{
+            //change it to whatever is closest
+            telemetry.addData("Bitmap null:", "Default center(?)");
+            telemetry.update();
+        }
     }
 
     //ROBOT ORIENTATION METHODS

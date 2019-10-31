@@ -39,7 +39,8 @@ public class bitmapMethodsPleaseWork extends SkystoneLinearOpMode {
 
         int pos;
         while (opModeIsActive() && !isStopRequested()){
-            detectSkystone(getBitmap(500));
+            findThreshold(getBitmap(1));
+            //detectSkystone(getBitmap(500));
         }
     }
 }
