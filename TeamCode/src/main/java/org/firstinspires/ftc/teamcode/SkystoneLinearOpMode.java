@@ -527,10 +527,15 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public void driveDistance(double power, double distance) throws InterruptedException{
+        double total = distance * encoderToInches;
+        double remaining, finalPower;
         resetEncoders();
 
         while (opModeIsActive()&& !isStopRequested() && getEncoderAvg() < distance * encoderToInches){
-            setMotorPowers(power, power);
+            remaining = total - getEncoderAvg();
+            finalPower = (remaining/total) * power;
+            //put in range clip if necessary
+            setMotorPowers(finalPower, finalPower);
         }
 
         stopMotors();
