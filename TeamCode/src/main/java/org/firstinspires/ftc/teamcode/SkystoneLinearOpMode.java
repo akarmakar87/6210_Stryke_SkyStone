@@ -67,7 +67,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     **/
 
     //ClAW VARIABLES
-    private double clawStartPosition = 0.5;
+    private double clawStartPosition = 0.4;
     private double clawEndPosition = 0.7;
 
 
@@ -770,11 +770,12 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void setArmPosition(boolean deployed){
         if (deployed){
-            arm.setTargetPosition(500); //Place holding values
+            arm.setTargetPosition(357); //Place holding values
         }
-        else{
-            arm.setTargetPosition(1000);
+        else{ //Extended striaght out
+            arm.setTargetPosition(290);
         }
+        arm.setPower(0.3);
     }
 
     //TURN METHODS
