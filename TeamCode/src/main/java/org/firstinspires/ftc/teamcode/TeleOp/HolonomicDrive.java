@@ -25,6 +25,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
         resetEncoders();
+        resetArm();
 
         //Set up a timer for half speed
         ElapsedTime time = new ElapsedTime();
@@ -67,7 +68,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
             //ARM MOVEMENT
             if (Math.abs(gamepad2.right_stick_y) > 0.05){
-                arm.setPower(Range.clip(gamepad2.right_stick_y, 0.0, 0.3));
+                arm.setPower(Range.clip(gamepad2.right_stick_y, 0.0, 0.5));
             }else{
                 arm.setPower(0);
             }

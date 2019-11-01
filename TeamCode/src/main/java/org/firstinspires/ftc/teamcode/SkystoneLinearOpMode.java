@@ -70,6 +70,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     private double clawStartPosition = 0.4;
     private double clawEndPosition = 0.7;
 
+    //ARM MOVEMENT
+    private double armSpeed = 0.1;
+
 
     //GYRO VARIABLES
     Orientation angles;
@@ -176,6 +179,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         //intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm.setPower(armSpeed);
         resetEncoders();
 
         //SET UP GYRO
@@ -524,6 +528,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         idle();
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         idle();
+        /*arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        idle();*/
     }
 
     public void driveDistance(double power, double distance) throws InterruptedException{
@@ -773,14 +779,24 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
-    public void setArmPosition(boolean deployed){
-        if (deployed){
-            arm.setTargetPosition(357); //Place holding values
+    public void setArmPosition(int position) {
+        arm.setTargetPosition(position);
+        int c = arm.getCurrentPosition();
+        while (!(c < position + 10 && c > position - 10)) {
+            if (c < position - 10) {
+                if (c > 150)
+                    arm.setPower(0.1);
+                else
+                    arm.setPower(0.6);
+            }
+            if (c > position + 10) {
+                if (c > 250)
+                    arm.setPower(-0.6);
+                else
+                    arm.setPower(-0.1);
+            }
         }
-        else{ //Extended striaght out
-            arm.setTargetPosition(290);
-        }
-        arm.setPower(0.3);
+        //arm.setTargetPosition(position);
     }
 
     //TURN METHODS
