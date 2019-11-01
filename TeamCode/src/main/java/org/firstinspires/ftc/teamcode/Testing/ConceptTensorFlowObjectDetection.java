@@ -167,12 +167,14 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                 if (updatedRecognitions.size() > 0) { //IF DETECT BOTH OBJECTS
 
                     int skystoneX = -1, stone1X = -1, stone2X = -1;
+                    float stoneWidth = 0;
                     double skystoneConf = 0;
 
                     for (Recognition recognition : updatedRecognitions) {
                         if (recognition.getLabel().equals(LABEL_SECOND_ELEMENT)) { //IF OBJECT DETECTED IS GOLD
                             skystoneX = (int) recognition.getLeft();
                             skystoneConf = recognition.getConfidence();
+                            stoneWidth = recognition.getWidth();
                         } else if (recognition.getLabel().equals(LABEL_FIRST_ELEMENT) && stone1X != -1) {
                             stone1X = (int) recognition.getLeft();
                         } else {
@@ -201,6 +203,7 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                     }
                     telemetry.addData("Gold x pos ", skystoneX);
                     telemetry.addData("Gold conf ", skystoneConf);
+                    telemetry.addData("Stone width ", stoneWidth);
                     telemetry.addData("Runtime", runtime.milliseconds());
                     telemetry.update();
                 }

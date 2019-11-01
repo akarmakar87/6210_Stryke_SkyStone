@@ -373,12 +373,12 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
-        LogitechC310 = hardwareMap.get(WebcamName.class, "Logitech C310");
+        //LogitechC310 = hardwareMap.get(WebcamName.class, "Logitech C310");
 
         //localizer for webcam
         VuforiaLocalizer.Parameters paramWC = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         paramWC.vuforiaLicenseKey = VUFORIA_KEY;
-        paramWC.cameraName = LogitechC310;
+        //paramWC.cameraName = LogitechC310;
         vuforiaWC = ClassFactory.getInstance().createVuforia(paramWC);
 
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true); //enables RGB565 format for the image
@@ -535,7 +535,12 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             remaining = total - getEncoderAvg();
             finalPower = (remaining/total) * power;
             //put in range clip if necessary
-            setMotorPowers(finalPower, finalPower);
+            if(power > 0){
+                setMotorPowers(Range.clip(finalPower, 0.2, 1), Range.clip(finalPower, 0.2, 1));
+            }else{
+                setMotorPowers(Range.clip(finalPower, -1, -0.2), Range.clip(finalPower, -1, -0.2));
+            }
+
         }
 
         stopMotors();
@@ -819,6 +824,45 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stopMotors();
     }
 
+    public void turnPIDAsha(double tAngle, double maxPower, double I, double D, double timeOut){
+
+        double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
+
+        prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
+
+        double kP = maxPower / error;
+        double kI = I;
+        double kD = D;
+
+        power = dT = prevTime = currTime = 0.0;
+
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        while (opModeIsActive() && Math.abs(error) > 0.7 && currTime < timeOut){
+            prevError = error;
+            error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+            prevTime = currTime;
+            currTime = time.milliseconds();
+            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
+            power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
+
+            if (power > 0)
+                setMotorPowers(Range.clip(power, 0.3, 0.7), -Range.clip(power, 0.3, 0.7));
+            else
+                setMotorPowers(-Range.clip(power, 0.3, 0.7), Range.clip(power, 0.3, 0.7));
+
+            telemetry.addData("tAngle: ", tAngle)
+                    .addData("kP:", error * kP)
+                    .addData("kI:", error * dT * kI)
+                    .addData("kD:", (error - prevError)/dT * kD)
+                    .addData("power", power)
+                    .addData("error: ", error)
+                    .addData("currTime: ", currTime);
+            telemetry.update();
+        }
+        stopMotors();
+    }
+
     public void turnTime(double power, boolean right, long seconds){
         if (right)
             setMotorPowers(power, -power);
@@ -913,7 +957,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         ElapsedTime t = new ElapsedTime();
         t.reset();
         Bitmap bm = null;
-        //while(opModeIsActive()&& !isStopRequested()){
+        while(opModeIsActive()&& !isStopRequested() && t.milliseconds() < milliseconds){
             frame = vuforiaWC.getFrameQueue().take();
             long num = frame.getNumImages();
 
@@ -925,7 +969,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
             bm = Bitmap.createBitmap(rgb.getWidth(), rgb.getHeight(), Bitmap.Config.RGB_565);
             bm.copyPixelsFromBuffer(rgb.getPixels());
-       // }
+        }
 
         frame.close();
 
@@ -946,11 +990,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
             ArrayList<Integer> colorPix = new ArrayList<Integer>();
 
-            for (int c = 0; c < bm.getWidth()/2; c++) {
-                for (int r = 0; r < bm.getHeight(); r++) {
+            for (int x = 0; x < bm.getHeight(); x++) {
+                for (int y = 0; y < bm.getWidth(); y++) {
                     //previously (c,r)
-                    if (red(bm.getPixel(r, c)) <= redLim && green(bm.getPixel(c, r)) <= greenLim && blue(bm.getPixel(c, r)) <= blueLim) {
-                        colorPix.add(r); // previously it was adding c, so the column instead of row
+                    if (red(bm.getPixel(y, x)) <= redLim && green(bm.getPixel(y, x)) <= greenLim && blue(bm.getPixel(y, x)) <= blueLim) {
+                        colorPix.add(x); // previously it was adding c, so the column instead of row
                         //check once more if 480 is the x and 640 is y
                     }
                 }
@@ -993,6 +1037,76 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         //return stonepos;
     }
 
+    public void detectSkystoneNew(Bitmap bm) throws InterruptedException {
+
+        //set threshold for yellow or not yellow?
+        int stonepos = 0;
+
+        if (bm != null) {
+
+            //figure out proper thresholds
+            int redLim = 30;
+
+            int redLeft = 0, redCenter = 0, redRight = 0;
+
+            for (int x = 0; x < bm.getWidth()/3; x++) {
+                for (int y = 0; y < bm.getHeight(); y++) {
+                    redLeft += red(bm.getPixel(x,y)); // previously it was adding c, so the column instead of row
+                        //check once more if 480 is the x and 640 is y
+                }
+            }
+
+            for (int x = bm.getWidth()/3; x < 2*bm.getWidth()/3; x++) {
+                for (int y = 0; y < bm.getHeight(); y++) {
+                    redCenter += red(bm.getPixel(x,y)); // previously it was adding c, so the column instead of row
+                    //check once more if 480 is the x and 640 is y
+                }
+            }
+
+            for (int x = 2*bm.getWidth()/3; x < bm.getWidth(); x++) {
+                for (int y = 0; y < bm.getHeight(); y++) {
+                    redRight += red(bm.getPixel(x,y)); // previously it was adding c, so the column instead of row
+                    //check once more if 480 is the x and 640 is y
+                }
+            }
+
+            /*int sum = 0;
+            for (Integer x : colorPix)
+                sum += x;
+
+            int avgX = 0, maxX = 0, minX =0;
+            if(colorPix.size() != 0){
+                avgX = sum / colorPix.size();
+
+                maxX = Collections.max(colorPix);
+                minX = Collections.min(colorPix);
+            }
+
+
+            if (avgX < 160) {
+                stonepos = -1;
+            } else if (avgX < 320) {
+                stonepos = 0;
+            } else {
+                stonepos = 1;
+            }*/
+
+            telemetry.addData("bitmap width:", bm.getWidth()); //640
+            telemetry.addData("bitmap height:", bm.getHeight()); //480 across I think?
+            telemetry.addData("red left: ", redLeft);
+            telemetry.addData("red center: ", redCenter);
+            telemetry.addData("red right: ", redRight);
+            //telemetry.addData("stonepos: ", stonepos);
+            telemetry.update();
+        }else{
+            //change it to whatever is closest
+            telemetry.addData("Bitmap null:", "Default center(?)");
+            telemetry.update();
+        }
+
+        //return stonepos;
+    }
+
     public void findThreshold(Bitmap bm) throws InterruptedException {
 
         if (bm != null) {
@@ -1003,9 +1117,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
             for (int c = 0; c < bm.getWidth(); c++) {
                 for (int r = 0; r < bm.getHeight(); r++) {
-                    redPix.add(red(bm.getPixel(r,c)));
-                    greenPix.add(green(bm.getPixel(r,c)));
-                    bluePix.add(blue(bm.getPixel(r,c)));
+                    redPix.add(red(bm.getPixel(c,r)));
+                    greenPix.add(green(bm.getPixel(c,r)));
+                    bluePix.add(blue(bm.getPixel(c,r)));
                 }
             }
 
