@@ -72,7 +72,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     private double clawEndPosition = 0.7;
 
     //ARM MOVEMENT
-    private double armSpeed = 0.1;
+    private double armSpeed = 0;
 
 
     //GYRO VARIABLES
@@ -180,7 +180,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         //intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        arm.setPower(armSpeed);
+        //arm.setPower(armSpeed);
         resetEncoders();
 
         //SET UP GYRO
@@ -577,6 +577,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stopMotors();
     }
 
+    /*
     public void driveAdjust(double power, double distance) throws InterruptedException{
         double setHeading = getYaw();
         double error = 0;
@@ -599,6 +600,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
         stopMotors();
     }
+
+     */
 
     public void strafeAdjust(double power, double distance, boolean right) throws InterruptedException{
         double setHeading = getYaw();
