@@ -39,9 +39,9 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             //LIFT CONTROLS
             if (gamepad2.right_trigger > 0.05) {
-                lift.setPower(gamepad2.right_trigger); //LIFT DOWN
+                lift.setPower(Range.clip(gamepad2.right_trigger, 0, 0.5)); //LIFT DOWN
             }else if(gamepad2.left_trigger > 0.05){
-                lift.setPower(-gamepad2.left_trigger); //LIFT UP
+                lift.setPower(-Range.clip(gamepad2.right_trigger, 0, 0.5)); //LIFT UP
             }else{
                 lift.setPower(0);
             }
@@ -68,7 +68,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
             //ARM MOVEMENT
             if (Math.abs(gamepad2.right_stick_y) > 0.05){
-                arm.setPower(Range.clip(gamepad2.right_stick_y, 0.0, 0.5));
+                arm.setPower(Range.clip(gamepad2.right_stick_y, -0.4, 0.4));
             }else{
                 arm.setPower(0);
             }
@@ -105,7 +105,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }
 
             //HALFSPEED (toggle)
-            if (gamepad1.x && htime + 1 > time.now(TimeUnit.SECONDS)) {
+            if (gamepad1.x && htime + 1 < time.now(TimeUnit.SECONDS)) {
                 htime = time.now(TimeUnit.SECONDS);
                 halfSpeed = !halfSpeed;
             }
