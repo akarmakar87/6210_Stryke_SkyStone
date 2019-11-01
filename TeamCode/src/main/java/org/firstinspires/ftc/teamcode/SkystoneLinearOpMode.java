@@ -29,6 +29,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -973,7 +974,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         ElapsedTime t = new ElapsedTime();
         t.reset();
         Bitmap bm = null;
-        while(opModeIsActive()&& !isStopRequested() && t.milliseconds() < milliseconds){
+        if(opModeIsActive()&& !isStopRequested()){
             frame = vuforiaWC.getFrameQueue().take();
             long num = frame.getNumImages();
 
@@ -1058,33 +1059,71 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         //set threshold for yellow or not yellow?
         int stonepos = 0;
 
-        if (bm != null) {
+        if (bm != null && opModeIsActive() && !isStopRequested()) {
+
+            /**
+             * R: >200
+             * G: <140
+             * B: <50
+             */
 
             //figure out proper thresholds
-            int redLim = 30;
+            int redLim = 200;
+            int greenLim = 140;
+            int blueLim = 50;
 
-            int redLeft = 0, redCenter = 0, redRight = 0;
+            int pixel;
 
-            for (int x = 0; x < bm.getWidth()/3; x++) {
+            ArrayList<Integer> left = new ArrayList<>();
+            ArrayList<Integer> center = new ArrayList<>();
+            ArrayList<Integer> right = new ArrayList<>();
+
+            ArrayList<Integer> range = new ArrayList<>();
+            for (int x = 0; x < bm.getWidth(); x++) {
+                for (int y = 0; y < bm.getHeight()/2; y++) {
+                    pixel = bm.getPixel(x,y);
+                    if(red(pixel) > redLim && green(pixel) < greenLim && blue(pixel) < blueLim){
+                        range.add(x);
+                    }
+                }
+            }
+
+            int min = Collections.min(range);
+            int max = Collections.max(range);
+
+            int leftSum = 0, rightSum = 0, midSum = 0;
+            for (Integer p: range) {
+                if(p < (min + (max-min)/3)){
+                    leftSum++;
+                }else if(p < (min + 2*(max-min)/3)){
+                    midSum++;
+                }else{
+                    rightSum++;
+                }
+                // previously it was adding c, so the column instead of row
+                //check once more if 480 is the x and 640 is y
+            }
+
+           /* for (int x = 0; x < bm.getWidth()/3; x++) {
                 for (int y = 0; y < bm.getHeight(); y++) {
-                    redLeft += red(bm.getPixel(x,y)); // previously it was adding c, so the column instead of row
+                    left.add(red(bm.getPixel(x,y))); // previously it was adding c, so the column instead of row
                         //check once more if 480 is the x and 640 is y
                 }
             }
 
             for (int x = bm.getWidth()/3; x < 2*bm.getWidth()/3; x++) {
                 for (int y = 0; y < bm.getHeight(); y++) {
-                    redCenter += red(bm.getPixel(x,y)); // previously it was adding c, so the column instead of row
+                    center.add(red(bm.getPixel(x,y))); // previously it was adding c, so the column instead of row
                     //check once more if 480 is the x and 640 is y
                 }
             }
 
             for (int x = 2*bm.getWidth()/3; x < bm.getWidth(); x++) {
                 for (int y = 0; y < bm.getHeight(); y++) {
-                    redRight += red(bm.getPixel(x,y)); // previously it was adding c, so the column instead of row
+                    right.add(red(bm.getPixel(x,y))); // previously it was adding c, so the column instead of row
                     //check once more if 480 is the x and 640 is y
                 }
-            }
+            }*/
 
             /*int sum = 0;
             for (Integer x : colorPix)
@@ -1107,12 +1146,26 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 stonepos = 1;
             }*/
 
-            telemetry.addData("bitmap width:", bm.getWidth()); //640
-            telemetry.addData("bitmap height:", bm.getHeight()); //480 across I think?
-            telemetry.addData("red left: ", redLeft);
-            telemetry.addData("red center: ", redCenter);
-            telemetry.addData("red right: ", redRight);
-            //telemetry.addData("stonepos: ", stonepos);
+            ArrayList<Integer> compare = new ArrayList<>();
+            compare.add(leftSum);
+            compare.add(midSum);
+            compare.add(rightSum);
+
+            if(Collections.max(compare) == leftSum)
+                stonepos = -1;
+            else if (Collections.max(compare) == midSum)
+                stonepos = 0;
+            else if (Collections.max(compare) == rightSum)
+                stonepos = 1;
+
+            telemetry.addData("bitmap width:", bm.getWidth()); //1280
+            telemetry.addData("bitmap height:", bm.getHeight()); //720 across I think?);
+            telemetry.addData("min:", min);
+            telemetry.addData("max:", max);
+            telemetry.addData("leftsum: ", leftSum);
+            telemetry.addData("midsum: ", midSum);
+            telemetry.addData("rightsum: ", rightSum);
+            telemetry.addData("stonepos: ", stonepos);
             telemetry.update();
         }else{
             //change it to whatever is closest
