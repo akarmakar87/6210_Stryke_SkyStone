@@ -20,7 +20,7 @@ public class Backup1a extends SkystoneLinearOpMode{
         boolean red = true;
 
         //should we keep this button pressing system? is it legal?
-        while (!isStarted()) {
+        while (!isStarted() && opModeIsActive()) {
 
             if (gamepad1.b) red = false;
 
@@ -28,7 +28,7 @@ public class Backup1a extends SkystoneLinearOpMode{
             telemetry.update();
         }
 
-        resetArm();
+        //resetArm();
 
         waitForStart();
 
@@ -48,14 +48,14 @@ public class Backup1a extends SkystoneLinearOpMode{
 
 
         if (red){
-            heading = 90;
+            heading = -90;
 
             // if stone is on left
             stonePos = 0;
             seeyouontheotherside = 0;
         }
         else {
-            heading = -90;
+            heading = 90;
 
             // if stone is on left
             stonePos = 0;
@@ -72,75 +72,49 @@ public class Backup1a extends SkystoneLinearOpMode{
         sleep(250);
 
         driveDistance(-0.3, 14);
-        setArmPosition(325);
+        //setArmPosition(325);
 
         sleep(250);
 
         //turnPID(-90, 0.75, 0, 2, 3500);
-        turnPID(-90, 0.6, 0, 2, 3500);
+        turnPID(heading, 0.6, 0, 0, 3500);
 
         sleep(250);
 
         driveDistance(0.5, 40);
-        setClawPosition(true);
+        //setClawPosition(true);
 
         sleep(250);
 
-        turnPID(-90, 0.6, 0, 2, 3500);
+        turnPID(heading, 0.6, 0, 0, 3500);
 
         sleep(250);
 
         driveDistance(-0.5, 33);
-        setArmPosition(350);
+        //setArmPosition(350);
 
         sleep(250);
 
-        turnPID(0, 0.6, 0, 2, 3500);
+        turnPID(0, 0.6, 0, 0, 3500);
 
         sleep(250);
 
         driveDistance(0.3, 9);
-        setClawPosition(false);
+        //setClawPosition(false);
 
         sleep(250);
 
-        setArmPosition(325);
+        //setArmPosition(325);
         driveDistance(-0.3, 9);
 
         sleep(250);
 
-        turnPID(-90, 0.6, 0, 2, 3500);
+        turnPID(heading, 0.6, 0, 2, 3500);
 
         sleep(250);
 
         driveDistance(0.5, 33);
-        setClawPosition(true);
-
-        /*
-        strafeDistance(0.5, 6, true);       // strafe to in front of skystone
-        driveDistance(0.8, 15);                 // drive to skystone
-        // intake
-        driveDistance(-0.5, 5);                 // back up
-        turnPIDV(heading, 0, 0, 0, false);
-        driveDistance(0.5, seeyouontheotherside);       // drive to other side
-        // drop stone
-
-        // +-+-+- other skystone
-
-        seeyouontheotherside += 10;
-
-        driveDistance(-0.5, seeyouontheotherside);      // back up to other skystone
-        turnPIDV(0, 0, 0, 0, false);    // turn to skystone
-        // intake
-        driveDistance(-0.5, 5);                 // back up
-        turnPIDV(heading, 0, 0, 0, false);
-        driveDistance(0.5, seeyouontheotherside);       // drive to other side
-        // drop stone
-
-        // park
-        driveDistance(-0.5, 10);
-
-        */
+        //setClawPosition(true);
     }
 
 }
