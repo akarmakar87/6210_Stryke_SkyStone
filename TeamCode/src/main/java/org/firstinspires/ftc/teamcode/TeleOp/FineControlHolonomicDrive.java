@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@TeleOp(name="HolonomicDrive", group="teleop")
+@TeleOp(name="(X)HolonomicDrive", group="teleop")
 //@Disabled
 public class FineControlHolonomicDrive extends SkystoneLinearOpMode {
 

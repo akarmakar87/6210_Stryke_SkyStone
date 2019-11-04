@@ -387,7 +387,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         vuforiaWC = ClassFactory.getInstance().createVuforia(paramWC);
 
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true); //enables RGB565 format for the image
-        vuforiaWC.setFrameQueueCapacity(1); //tells VuforiaLocalizer to only store one frame at a time
+        vuforiaWC.setFrameQueueCapacity(4); //tells VuforiaLocalizer to only store one frame at a time
 
         telemetry.addData("Vuforia:", "initialized");
         telemetry.update();
@@ -412,12 +412,46 @@ public class SkystoneLinearOpMode extends LinearOpMode{
        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_STONE, LABEL_SKYSTONE);
    }
 
+
     //DRIVE METHODS
     public void setMotorPowers(double leftPower, double rightPower) {
         LF.setPower(Range.clip(leftPower, -1, 1));
         RF.setPower(Range.clip(rightPower, -1, 1));
         LB.setPower(Range.clip(leftPower, -1, 1));
         RB.setPower(Range.clip(rightPower, -1, 1));
+    }
+
+    public void setEachMotorPowers(double lf, double rf, double lb, double rb, boolean halfspeed) {
+
+        if (halfspeed){
+            lf /= 2;
+            rf /= 2;
+            lb /= 2;
+            rb /= 2;
+        }
+
+        double min = 0.25;
+
+        if (lf < 0)
+            LF.setPower(Range.clip(lf, -1, -min));
+        else if (lf > 0)
+            LF.setPower(Range.clip(lf, min, 1));
+
+        if (rf < 0)
+            RF.setPower(Range.clip(rf, -1, -min));
+        else if (rf > 0)
+            RF.setPower(Range.clip(rf, min, 1));
+
+        if (lb < 0)
+            LB.setPower(Range.clip(lb, -1, -min));
+        else if (lb > 0)
+            LB.setPower(Range.clip(lb, min, 1));
+
+        if (rb < 0)
+            RB.setPower(Range.clip(rb, -1, -min));
+        else if (rb > 0)
+            RB.setPower(Range.clip(rb, min, 1));
+
     }
 
     public void setStrafePowers(double power, boolean right){
@@ -542,12 +576,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             remaining = total - getEncoderAvg();
             finalPower = (remaining/total) * power;
             //put in range clip if necessary
-            if(power > 0){
-                setMotorPowers(Range.clip(finalPower, 0.2, 1), Range.clip(finalPower, 0.2, 1));
-            }else{
-                setMotorPowers(Range.clip(finalPower, -1, -0.2), Range.clip(finalPower, -1, -0.2));
-            }
-
+            setEachMotorPowers(finalPower,finalPower,finalPower,finalPower,false);
         }
 
         stopMotors();
@@ -1057,6 +1086,67 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         //return stonepos;
     }
 
+    public void detectSkystoneCropped(Bitmap bm) throws InterruptedException {
+
+        //set threshold for yellow or not yellow?
+        int stonepos = 0;
+
+        if (bm != null) {
+
+            //figure out proper thresholds
+            int redLim = 30;
+            int greenLim = 30;
+            int blueLim = 30;
+            int pix;
+            ArrayList<Integer> blackPix = new ArrayList<Integer>();
+
+            for (int x = 0; x < 795; x++) {
+                for (int y = bm.getHeight()/2; y < bm.getHeight(); y++) {
+                    pix = bm.getPixel(x,y);
+                    if(red(pix) < 25 && green(pix) < 25 && blue(pix) < 25){
+                        blackPix.add(x);
+                    }
+                }
+            }
+
+            int sum = 0;
+            for (Integer x : blackPix)
+                sum += x;
+
+            int avgX = 0, maxX = 0, minX =0;
+            if(blackPix.size() != 0){
+                avgX = sum / blackPix.size();
+
+                maxX = Collections.max(blackPix);
+                minX = Collections.min(blackPix);
+            }
+
+
+            if (avgX < 265) {
+                stonepos = -1;
+            } else if (avgX < 530) {
+                stonepos = 0;
+            } else {
+                stonepos = 1;
+            }
+
+            telemetry.addData("bitmap width:", bm.getWidth()); //640
+            telemetry.addData("bitmap height:", bm.getHeight()); //480 across I think?
+            telemetry.addData("max x: ", maxX);
+            telemetry.addData("min x: ", minX);
+            telemetry.addData("x avg: ", avgX);
+            telemetry.addData("black", blackPix.size());
+            telemetry.addData("stonepos: ", stonepos);
+            telemetry.update();
+        }else{
+            //change it to whatever is closest
+            telemetry.addData("Bitmap null:", "Default center(?)");
+            telemetry.update();
+        }
+
+        //return stonepos;
+    }
+
     public void detectSkystoneNew(Bitmap bm) throws InterruptedException {
 
         //set threshold for yellow or not yellow?
@@ -1154,11 +1244,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             compare.add(midSum);
             compare.add(rightSum);
 
-            if(Collections.max(compare) == leftSum)
+            if(Collections.min(compare) == leftSum)
                 stonepos = -1;
-            else if (Collections.max(compare) == midSum)
+            else if (Collections.min(compare) == midSum)
                 stonepos = 0;
-            else if (Collections.max(compare) == rightSum)
+            else if (Collections.min(compare) == rightSum)
                 stonepos = 1;
 
             telemetry.addData("bitmap width:", bm.getWidth()); //1280

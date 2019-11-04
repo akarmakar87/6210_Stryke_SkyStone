@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 import java.util.concurrent.TimeUnit;
 
-@TeleOp(name="HolonomicDriveNew", group="teleop")
+@TeleOp(name="(->)HolonomicDrive", group="teleop")
 //@Disabled
 public class HolonomicDrive extends SkystoneLinearOpMode {
 
@@ -110,6 +110,10 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 halfSpeed = !halfSpeed;
             }
 
+            lfPower = yAxis+xAxis-zAxis;
+            rfPower = yAxis-xAxis+zAxis;
+            lbPower = yAxis-xAxis-zAxis;
+            rbPower = yAxis+xAxis+zAxis;
 
             if (gamepad1.left_trigger > 0.05){
                 strafePower = gamepad1.left_trigger * 0.75;
@@ -127,18 +131,18 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 RF.setPower(Range.clip(rfPower, -0.5, 0.5));
                 LB.setPower(Range.clip(lbPower, -0.5, 0.5));
                 RB.setPower(Range.clip(rbPower, -0.5, 0.5));
-            }else{
-                lfPower = yAxis+xAxis-zAxis;
-                rfPower = yAxis-xAxis+zAxis;
-                lbPower = yAxis-xAxis-zAxis;
-                rbPower = yAxis+xAxis+zAxis;
+            }else {
+                lfPower = yAxis + xAxis - zAxis;
+                rfPower = yAxis - xAxis + zAxis;
+                lbPower = yAxis - xAxis - zAxis;
+                rbPower = yAxis + xAxis + zAxis;
 
                 LF.setPower(Range.clip(lfPower, -1, 1));
                 RF.setPower(Range.clip(rfPower, -1, 1));
                 LB.setPower(Range.clip(lbPower, -1, 1));
                 RB.setPower(Range.clip(rbPower, -1, 1));
             }
-
+            
             telemetry.addData("Y Axis", yAxis);
             telemetry.addData("X Axis", xAxis);
             telemetry.addData("Z Axis", zAxis);
@@ -146,6 +150,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             telemetry.addData("RF Power", rfPower);
             telemetry.addData("LB Power", lbPower);
             telemetry.addData("RB Power", rbPower);
+            telemetry.addData("strafe Power", strafePower);
             telemetry.addData("arm encoder", arm.getCurrentPosition());
             telemetry.addData("claw position", claw.getPosition());
             telemetry.addData("rotate position", rotate.getPosition());
