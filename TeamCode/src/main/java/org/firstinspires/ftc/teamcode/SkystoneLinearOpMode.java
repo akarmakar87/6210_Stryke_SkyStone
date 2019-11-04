@@ -561,7 +561,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public void resetArm(){
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         idle();
-        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         idle();
         /*arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         idle();*/
@@ -815,7 +815,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public void setArmPosition(int position) {
         arm.setTargetPosition(position);
         int c = arm.getCurrentPosition();
-        while (!(c < position + 10 && c > position - 10)) {
+        while (opModeIsActive() && !(c < position + 10 && c > position - 10)) {
             if (c < position - 10) {
                 if (c > 150)
                     arm.setPower(0.1);
@@ -830,6 +830,38 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
         }
         //arm.setTargetPosition(position);
+    }
+
+    public void setArmPositionP(int position){
+        arm.setTargetPosition(position);
+        int c = arm.getCurrentPosition();
+        double prevError, slope, error = position - c;
+        while (opModeIsActive() && !(c < position + 10 && c > position - 10)){
+             prevError = error;
+             error = position - c;
+             slope = error/prevError;
+             if (slope > 6)
+            arm.setPower(error * 6);
+        }
+    }
+
+    public void armSmallUp() {
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        double error = 25 - arm.getCurrentPosition();
+        ElapsedTime time = new ElapsedTime();
+        double P, D, prevE, pTime = 0.0;
+        while( opModeIsActive() && !isStopRequested() && Math.abs(error) > 1){
+            prevE = error;
+            error = 25 - arm.getCurrentPosition();
+
+            P = (0.3) * error;
+            D = (error - prevE) / (time.milliseconds() - pTime) * (0.002 / 25);
+            arm.setPower(-(P + D));
+
+            pTime = time.milliseconds();
+        }
+        arm.setPower(0);
     }
 
     //TURN METHODS
