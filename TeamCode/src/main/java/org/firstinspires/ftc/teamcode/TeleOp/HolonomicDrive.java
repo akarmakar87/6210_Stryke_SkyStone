@@ -18,7 +18,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
         init(hardwareMap, false);
 
         double xAxis = 0, yAxis = 0, zAxis = 0, position = 0.5;
-        double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0;
+        double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0;
         long htime = 0, rtime = 0;
 
 
@@ -41,7 +41,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             if (gamepad2.right_trigger > 0.05) {
                 lift.setPower(Range.clip(gamepad2.right_trigger, 0, 0.5)); //LIFT DOWN
             }else if(gamepad2.left_trigger > 0.05){
-                lift.setPower(-Range.clip(gamepad2.right_trigger, 0, 0.5)); //LIFT UP
+                lift.setPower(-Range.clip(gamepad2.right_trigger, -0.5, 0)); //LIFT UP
             }else{
                 lift.setPower(0);
             }
@@ -59,22 +59,38 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }
 
             //CLAW MOVEMENT
-            if (gamepad2.b){
+            if (gamepad2.x){
                 setClawPosition(true); //OPEN CLAW
             }
-            if (gamepad2.a){
+            if (gamepad2.y){
                 setClawPosition(false); //CLOSE CLAW
             }
 
             //ARM MOVEMENT
             if (Math.abs(gamepad2.right_stick_y) > 0.05){
-                arm.setPower(Range.clip(gamepad2.right_stick_y, -0.4, 0.4));
+                /*if(arm.getCurrentPosition() < 0){
+                    arm.setPower(Range.clip(-Math.abs(gamepad2.right_stick_y), 0, -0.5));
+                }else if(arm.getCurrentPosition() > 375){
+                    arm.setPower(Range.clip(Math.abs(gamepad2.right_stick_y), 0, 0.5));
+                }else{
+                    arm.setPower(Range.clip(gamepad2.right_stick_y, -0.5, 0.5));
+                }*/
+                if(gamepad2.right_stick_y < 0 && arm.getCurrentPosition() < 200){
+                    armPower = Range.clip(gamepad2.right_stick_y, -3.0, 0.0);
+                    telemetry.addData("reduced power", " when stick up");
+                }else if(gamepad2.right_stick_y > 0 && arm.getCurrentPosition() > 200){
+                    armPower = Range.clip(gamepad2.right_stick_y, 0.0, 3.0);
+                    telemetry.addData("reduced power", " when stick down");
+                }else{
+                    armPower = Range.clip(gamepad2.right_stick_y, -0.6, 0.6);
+                }
+                arm.setPower(armPower);
             }else{
                 arm.setPower(0);
             }
 
             //CLAW ROTATE
-            if (gamepad2.dpad_left && rtime + 50 < time.now(TimeUnit.MILLISECONDS)){
+            /*if (gamepad2.dpad_left && rtime + 50 < time.now(TimeUnit.MILLISECONDS)){
                 rtime = time.now(TimeUnit.MILLISECONDS);
                 position += 0.5;
                 rotate.setPosition(Range.clip(position, 0, 1));
@@ -82,6 +98,14 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 rtime = time.now(TimeUnit.MILLISECONDS);
                 position -= 0.25;
                 rotate.setPosition(Range.clip(position, 0, 1));
+            }*/
+
+            if (gamepad2.dpad_left){
+                //position += 0.1;
+                rotate.setPosition(0.8);
+            }else if(gamepad2.dpad_right){
+                //position -= 0.1;
+                rotate.setPosition(0.5);
             }
 
             //HOLONOMIC DRIVE
@@ -142,7 +166,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 LB.setPower(Range.clip(lbPower, -1, 1));
                 RB.setPower(Range.clip(rbPower, -1, 1));
             }
-            
+
             telemetry.addData("Y Axis", yAxis);
             telemetry.addData("X Axis", xAxis);
             telemetry.addData("Z Axis", zAxis);
@@ -151,6 +175,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             telemetry.addData("LB Power", lbPower);
             telemetry.addData("RB Power", rbPower);
             telemetry.addData("strafe Power", strafePower);
+            telemetry.addData("arm Power", armPower);
             telemetry.addData("arm encoder", arm.getCurrentPosition());
             telemetry.addData("claw position", claw.getPosition());
             telemetry.addData("rotate position", rotate.getPosition());
