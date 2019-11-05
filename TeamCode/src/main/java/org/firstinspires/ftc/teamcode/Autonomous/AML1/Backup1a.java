@@ -77,7 +77,7 @@ public class Backup1a extends SkystoneLinearOpMode{
         sleep(250);
 
         //turnPID(-90, 0.75, 0, 2, 3500);
-        turnPID(heading, 0.6, 0, 0, 3500);
+        turnPID(heading, 0.6, 0, 2, 3500);
 
         sleep(250);
 
