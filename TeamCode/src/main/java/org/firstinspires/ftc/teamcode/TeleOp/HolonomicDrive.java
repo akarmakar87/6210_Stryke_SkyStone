@@ -138,10 +138,10 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 halfSpeed = !halfSpeed;
             }
 
-            lfPower = 0.75 * (yAxis+xAxis-zAxis);
-            rfPower = 0.75 * (yAxis-xAxis+zAxis);
-            lbPower = 0.75 * (yAxis-xAxis-zAxis);
-            rbPower = 0.75 * (yAxis+xAxis+zAxis);
+            lfPower = -0.75 * (yAxis+xAxis-zAxis);
+            rfPower = -0.75 * (yAxis-xAxis+zAxis);
+            lbPower = -0.75 * (yAxis-xAxis-zAxis);
+            rbPower = -0.75 * (yAxis+xAxis+zAxis);
 
             if (gamepad1.left_trigger > 0.05){
                 strafePower = gamepad1.left_trigger * 0.75;

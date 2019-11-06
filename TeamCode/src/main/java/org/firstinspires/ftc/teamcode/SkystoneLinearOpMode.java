@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Bitmap;
-import android.graphics.Color;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -12,7 +11,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.vuforia.CameraDevice;
-import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.vuforia.Image;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
@@ -29,9 +27,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import static android.graphics.Color.blue;
@@ -864,6 +860,33 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         arm.setPower(0);
     }
 
+    public void setArm(int target){
+        double endPos = target; //GET VALUE RANGE IN TELEOP : 0 - ?
+        double startPos = arm.getCurrentPosition();
+        double power = 0;
+        while (opModeIsActive()&& !isStopRequested() && Math.abs(target-arm.getCurrentPosition()) > 3){ //3 TICKS MARGIN OF ERROR
+            if(arm.getCurrentPosition() < target){
+                if(arm.getCurrentPosition() < 220){ //VALUE OF HIGHEST POINT
+                    power = -0.3;
+                }else{
+                    power = -0.1;
+                }
+            }else if(arm.getCurrentPosition() > target){
+                if(arm.getCurrentPosition() < 220){ //VALUE OF HIGHEST POINT
+                    power = 0.1;
+                }else{
+                    power = 0.3;
+                }
+            }
+
+            arm.setPower(power);
+            telemetry.addData("arm encoder:", arm.getCurrentPosition());
+            telemetry.addData("arm power:", arm.getCurrentPosition());
+            telemetry.update();
+        }
+        arm.setPower(0);
+    }
+
     //TURN METHODS
 
     public void turnPID(double tAngle, double P, double I, double D, double timeOut){
@@ -1034,9 +1057,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
-    public Bitmap getBitmap(long milliseconds) throws InterruptedException {
-        ElapsedTime t = new ElapsedTime();
-        t.reset();
+    public Bitmap getBitmap() throws InterruptedException {
         Bitmap bm = null;
         if(opModeIsActive()&& !isStopRequested()){
             frame = vuforiaWC.getFrameQueue().take();
@@ -1179,56 +1200,39 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         //return stonepos;
     }
 
-    public void detectSkystoneOnePix(Bitmap bm) throws InterruptedException {
+    public int detectSkystoneOnePix(Bitmap bm, boolean red) throws InterruptedException {
 
         //set threshold for yellow or not yellow?
         int stonepos = 0;
+        int leftPix, rightPix;
 
         if (bm != null) {
 
             //figure out proper thresholds
             int redLim = 30;
-            int greenLim = 30;
-            int blueLim = 30;
-            int pix;
-            ArrayList<Integer> blackPix = new ArrayList<Integer>();
 
-            for (int x = 0; x < 795; x++) {
-                for (int y = bm.getHeight()/2; y < bm.getHeight(); y++) {
-                    pix = bm.getPixel(x,y);
-                    if(red(pix) < 25 && green(pix) < 25 && blue(pix) < 25){
-                        blackPix.add(x);
-                    }
+            if(red){
+                leftPix = red(bm.getPixel(320,550));
+                rightPix = red(bm.getPixel(960,550));
+            }else{
+                leftPix = red(bm.getPixel(960,550));
+                rightPix = red(bm.getPixel(320,550));
+            }
+
+            if (Math.abs(leftPix - rightPix) >= 50) {
+                if(leftPix < rightPix){
+                    stonepos = 0;
+                }else{
+                    stonepos = 1;
                 }
-            }
-
-            int sum = 0;
-            for (Integer x : blackPix)
-                sum += x;
-
-            int avgX = 0, maxX = 0, minX =0;
-            if(blackPix.size() != 0){
-                avgX = sum / blackPix.size();
-
-                maxX = Collections.max(blackPix);
-                minX = Collections.min(blackPix);
-            }
-
-
-            if (avgX < 265) {
+            }else{
                 stonepos = -1;
-            } else if (avgX < 530) {
-                stonepos = 0;
-            } else {
-                stonepos = 1;
             }
 
             telemetry.addData("bitmap width:", bm.getWidth()); //640
             telemetry.addData("bitmap height:", bm.getHeight()); //480 across I think?
-            telemetry.addData("max x: ", maxX);
-            telemetry.addData("min x: ", minX);
-            telemetry.addData("x avg: ", avgX);
-            telemetry.addData("black", blackPix.size());
+            telemetry.addData("left pix red: ", leftPix);
+            telemetry.addData("right pix red: ", rightPix);
             telemetry.addData("stonepos: ", stonepos);
             telemetry.update();
         }else{
@@ -1237,7 +1241,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             telemetry.update();
         }
 
-        //return stonepos;
+        return stonepos;
     }
 
     public void detectSkystoneNew(Bitmap bm) throws InterruptedException {
@@ -1398,6 +1402,26 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             telemetry.addData("Bitmap null:", "Default center(?)");
             telemetry.update();
         }
+    }
+
+    public int adjustForSkystone(int pos) throws InterruptedException{
+        int amt = 0;
+        switch(pos){
+            case -1:
+                //adjust values
+                driveDistance(0.5, 8);
+                amt = 8;
+                break;
+            case  0:
+                //add stuff?
+                break;
+            case  1:
+                //adjust values
+                driveDistance(-0.5, 8);
+                amt = -8;
+                break;
+        }
+        return amt;
     }
 
     //ROBOT ORIENTATION METHODS
