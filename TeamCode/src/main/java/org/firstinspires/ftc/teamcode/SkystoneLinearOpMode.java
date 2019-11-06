@@ -1179,6 +1179,67 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         //return stonepos;
     }
 
+    public void detectSkystoneOnePix(Bitmap bm) throws InterruptedException {
+
+        //set threshold for yellow or not yellow?
+        int stonepos = 0;
+
+        if (bm != null) {
+
+            //figure out proper thresholds
+            int redLim = 30;
+            int greenLim = 30;
+            int blueLim = 30;
+            int pix;
+            ArrayList<Integer> blackPix = new ArrayList<Integer>();
+
+            for (int x = 0; x < 795; x++) {
+                for (int y = bm.getHeight()/2; y < bm.getHeight(); y++) {
+                    pix = bm.getPixel(x,y);
+                    if(red(pix) < 25 && green(pix) < 25 && blue(pix) < 25){
+                        blackPix.add(x);
+                    }
+                }
+            }
+
+            int sum = 0;
+            for (Integer x : blackPix)
+                sum += x;
+
+            int avgX = 0, maxX = 0, minX =0;
+            if(blackPix.size() != 0){
+                avgX = sum / blackPix.size();
+
+                maxX = Collections.max(blackPix);
+                minX = Collections.min(blackPix);
+            }
+
+
+            if (avgX < 265) {
+                stonepos = -1;
+            } else if (avgX < 530) {
+                stonepos = 0;
+            } else {
+                stonepos = 1;
+            }
+
+            telemetry.addData("bitmap width:", bm.getWidth()); //640
+            telemetry.addData("bitmap height:", bm.getHeight()); //480 across I think?
+            telemetry.addData("max x: ", maxX);
+            telemetry.addData("min x: ", minX);
+            telemetry.addData("x avg: ", avgX);
+            telemetry.addData("black", blackPix.size());
+            telemetry.addData("stonepos: ", stonepos);
+            telemetry.update();
+        }else{
+            //change it to whatever is closest
+            telemetry.addData("Bitmap null:", "Default center(?)");
+            telemetry.update();
+        }
+
+        //return stonepos;
+    }
+
     public void detectSkystoneNew(Bitmap bm) throws InterruptedException {
 
         //set threshold for yellow or not yellow?

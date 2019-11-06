@@ -18,6 +18,6 @@ public class park extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        driveDistance(0.5, 40);
+        driveDistance(-0.5, 20);
     }
 }

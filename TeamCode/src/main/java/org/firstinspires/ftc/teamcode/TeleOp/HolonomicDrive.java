@@ -18,7 +18,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
         init(hardwareMap, false);
 
         double xAxis = 0, yAxis = 0, zAxis = 0, position = 0.5;
-        double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0;
+        double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0, liftPower = 0;
         long htime = 0, rtime = 0;
 
 
@@ -39,11 +39,14 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             //LIFT CONTROLS
             if (gamepad2.right_trigger > 0.05) {
-                lift.setPower(Range.clip(gamepad2.right_trigger, 0, 0.5)); //LIFT DOWN
-            }else if(gamepad2.left_trigger > 0.05){
-                lift.setPower(-Range.clip(gamepad2.right_trigger, -0.5, 0)); //LIFT UP
+                liftPower = Range.clip(gamepad2.right_trigger, 0, 0.5);
+                lift.setPower(liftPower); //LIFT DOWN
+            }else if(gamepad2.left_trigger < 0.05){
+                liftPower = Range.clip(gamepad2.right_trigger, -0.5, 0);
+                lift.setPower(liftPower); //LIFT UP
             }else{
-                lift.setPower(0);
+                liftPower = 0;
+                lift.setPower(liftPower);
             }
 
             //LIFT CONTROLS (incremental)
@@ -75,15 +78,16 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 }else{
                     arm.setPower(Range.clip(gamepad2.right_stick_y, -0.5, 0.5));
                 }*/
-                if(gamepad2.right_stick_y < 0 && arm.getCurrentPosition() < 200){
-                    armPower = Range.clip(gamepad2.right_stick_y, -3.0, 0.0);
+                /*if(gamepad2.right_stick_y < 0 && arm.getCurrentPosition() < 200){
+                    armPower = Range.clip(gamepad2.right_stick_y, -.5, 0.5);
                     telemetry.addData("reduced power", " when stick up");
                 }else if(gamepad2.right_stick_y > 0 && arm.getCurrentPosition() > 200){
-                    armPower = Range.clip(gamepad2.right_stick_y, 0.0, 3.0);
+                    armPower = Range.clip(gamepad2.right_stick_y, -.5, .5);
                     telemetry.addData("reduced power", " when stick down");
                 }else{
                     armPower = Range.clip(gamepad2.right_stick_y, -0.6, 0.6);
-                }
+                }*/
+                armPower = Range.clip(gamepad2.right_stick_y, -0.5, 0.5)/2;
                 arm.setPower(armPower);
             }else{
                 arm.setPower(0);
@@ -129,15 +133,15 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }
 
             //HALFSPEED (toggle)
-            if (gamepad1.x && htime + 1 < time.now(TimeUnit.SECONDS)) {
+            if (gamepad1.x) {
                 htime = time.now(TimeUnit.SECONDS);
                 halfSpeed = !halfSpeed;
             }
 
-            lfPower = yAxis+xAxis-zAxis;
-            rfPower = yAxis-xAxis+zAxis;
-            lbPower = yAxis-xAxis-zAxis;
-            rbPower = yAxis+xAxis+zAxis;
+            lfPower = 0.75 * (yAxis+xAxis-zAxis);
+            rfPower = 0.75 * (yAxis-xAxis+zAxis);
+            lbPower = 0.75 * (yAxis-xAxis-zAxis);
+            rbPower = 0.75 * (yAxis+xAxis+zAxis);
 
             if (gamepad1.left_trigger > 0.05){
                 strafePower = gamepad1.left_trigger * 0.75;
@@ -177,6 +181,8 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             telemetry.addData("strafe Power", strafePower);
             telemetry.addData("arm Power", armPower);
             telemetry.addData("arm encoder", arm.getCurrentPosition());
+            telemetry.addData("lift encoder", lift.getCurrentPosition());
+            telemetry.addData("lift power", liftPower);
             telemetry.addData("claw position", claw.getPosition());
             telemetry.addData("rotate position", rotate.getPosition());
             telemetry.update();
