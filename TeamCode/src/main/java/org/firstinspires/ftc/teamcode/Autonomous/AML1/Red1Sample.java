@@ -50,7 +50,7 @@ public class Red1Sample extends SkystoneLinearOpMode{
 
         turnPID(90, 0.6, 0, 2, 3500); //TURN 90 TO FACE STONES
 
-        setArm(300); //PUT ARM DOWN
+        setArm(-600); //PUT ARM DOWN
 
         setClawPosition(true);//OPEN CLAW
 
@@ -62,7 +62,7 @@ public class Red1Sample extends SkystoneLinearOpMode{
 
         sleep(250); //WHAT IS THIS FOR?
 
-        setArmPosition(325); //LIFT ARM
+        setArmPosition(-550); //LIFT ARM
 
         driveDistance(-0.3, 14); //MOVE BACKWARDS A BIT
 
@@ -78,17 +78,17 @@ public class Red1Sample extends SkystoneLinearOpMode{
 
         turnPID(0, 0.6, 0, 0, 3500); //TURN TO FACE STONES
 
-        setArmPosition(350); //MOVE ARM BACK TO POSITION ABOVE BLOCK?
+        setArmPosition(-550); //MOVE ARM BACK TO POSITION ABOVE BLOCK?
 
         driveDistance(0.3, 9); //MOVE TO THE STONES
 
-        //PROBABLY WILL ALSO HAVE TO LOWER ARM BEFORE
+        setArmPosition(-600);//PROBABLY WILL ALSO HAVE TO LOWER ARM BEFORE
 
         setClawPosition(false); //CLOSE CLAW
 
         sleep(250);
 
-        setArmPosition(325); //LIFT UP ARM
+        setArmPosition(-550); //LIFT UP ARM
 
         driveDistance(-0.3, 9); //MOVE BACKWARDS
 
