@@ -41,8 +41,8 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             if (gamepad2.right_trigger > 0.05) {
                 liftPower = Range.clip(gamepad2.right_trigger, 0, 0.5);
                 lift.setPower(liftPower); //LIFT DOWN
-            }else if(gamepad2.left_trigger < 0.05){
-                liftPower = Range.clip(gamepad2.right_trigger, -0.5, 0);
+            }else if(gamepad2.left_trigger > 0.05){
+                liftPower = -Range.clip(gamepad2.right_trigger, 0, 0.5);
                 lift.setPower(liftPower); //LIFT UP
             }else{
                 liftPower = 0;
