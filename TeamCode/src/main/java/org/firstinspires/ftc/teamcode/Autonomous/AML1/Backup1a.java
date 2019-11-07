@@ -64,7 +64,7 @@ public class Backup1a extends SkystoneLinearOpMode{
 
         // +-+-+- first skystone
 
-        setArmPosition(-600);
+        setArmPosition(-630);
 
         driveDistance(0.5, 38);
         //setClawPosition(false);
@@ -72,7 +72,7 @@ public class Backup1a extends SkystoneLinearOpMode{
         sleep(250);
 
         driveDistance(-0.3, 14);
-        setArmPosition(-550);
+        setArmPosition(-580);
 
         sleep(250);
 
@@ -91,7 +91,7 @@ public class Backup1a extends SkystoneLinearOpMode{
         sleep(250);
 
         driveDistance(-0.5, 33);
-        setArmPosition(-600);
+        setArmPosition(-630);
 
         sleep(250);
 
@@ -104,7 +104,7 @@ public class Backup1a extends SkystoneLinearOpMode{
 
         sleep(250);
 
-        setArmPosition(-550);
+        setArmPosition(-580);
         driveDistance(-0.3, 9);
 
         sleep(250);
