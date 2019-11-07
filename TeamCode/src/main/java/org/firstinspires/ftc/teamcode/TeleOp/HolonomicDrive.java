@@ -16,7 +16,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         init(hardwareMap, false);
-
+        double pos = 0;
         double xAxis = 0, yAxis = 0, zAxis = 0, position = 0.5;
         double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0, liftPower = 0;
         long htime = 0, rtime = 0;
@@ -61,12 +61,15 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 lift.setTargetPosition(tarPos * 10); //Make lift go to position
             }*/
 
+
             //CLAW MOVEMENT
             if (gamepad2.x){
-                setClawPosition(true); //OPEN CLAW
+                //setClawPosition(true); //OPEN CLAW
+                claw.setPosition(1.0);
             }
             if (gamepad2.y){
-                setClawPosition(false); //CLOSE CLAW
+                pos -= 0.1;
+                claw.setPosition(0.0); //CLOSE CLAW
             }
 
             //ARM MOVEMENT
@@ -87,7 +90,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 }else{
                     armPower = Range.clip(gamepad2.right_stick_y, -0.6, 0.6);
                 }*/
-                armPower = Range.clip(gamepad2.right_stick_y, -0.5, 0.5)/2;
+                armPower = Range.clip(gamepad2.right_stick_y, -0.3, 0.3);
                 arm.setPower(armPower);
             }else{
                 arm.setPower(0);
@@ -106,7 +109,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
             if (gamepad2.dpad_left){
                 //position += 0.1;
-                rotate.setPosition(0.8);
+                rotate.setPosition(0.95);
             }else if(gamepad2.dpad_right){
                 //position -= 0.1;
                 rotate.setPosition(0.5);
@@ -139,10 +142,10 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }
 
             if (gamepad1.right_trigger > 0.05){
-                strafePower = gamepad1.left_trigger * 0.75;
+                strafePower = gamepad1.right_trigger * 0.75;
                 setStrafePowers(strafePower,false);
             }else if (gamepad1.left_trigger > 0.05) {
-                strafePower = gamepad1.right_trigger * 0.75;
+                strafePower = gamepad1.left_trigger * 0.75;
                 setStrafePowers(strafePower, true);
             }else if (halfSpeed){
                 lfPower = ((yAxis+xAxis-zAxis)/2);
