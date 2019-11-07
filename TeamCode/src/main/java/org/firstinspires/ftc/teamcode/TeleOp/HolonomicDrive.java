@@ -49,8 +49,8 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 lift.setPower(liftPower);
             }
 
-            //LIFT CONTROLS (incremental)
-            if (gamepad2.dpad_up) {
+            //LIFT CONTROLS (incremental)   ------------------------Uncomment when we know encoder positions
+            /*if (gamepad2.dpad_up) {
                 double currPos = lift.getCurrentPosition();//get current position
                 int tarPos = ((int)currPos/10) + 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
                 lift.setTargetPosition(tarPos * 10); //Make lift go to position
@@ -59,7 +59,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 double currPos = lift.getCurrentPosition();//get current position
                 int tarPos = ((int)currPos/10) - 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
                 lift.setTargetPosition(tarPos * 10); //Make lift go to position
-            }
+            }*/
 
             //CLAW MOVEMENT
             if (gamepad2.x){
@@ -126,7 +126,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 xAxis = 0;
             }
             if (Math.abs(gamepad1.right_stick_x) > 0.05) {
-                zAxis = gamepad1.right_stick_x;
+                zAxis = -gamepad1.right_stick_x;
             }
             else{
                 zAxis = 0;
@@ -138,15 +138,10 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 halfSpeed = !halfSpeed;
             }
 
-            lfPower = -0.75 * (yAxis+xAxis-zAxis);
-            rfPower = -0.75 * (yAxis-xAxis+zAxis);
-            lbPower = -0.75 * (yAxis-xAxis-zAxis);
-            rbPower = -0.75 * (yAxis+xAxis+zAxis);
-
-            if (gamepad1.left_trigger > 0.05){
+            if (gamepad1.right_trigger > 0.05){
                 strafePower = gamepad1.left_trigger * 0.75;
                 setStrafePowers(strafePower,false);
-            }else if (gamepad1.right_trigger > 0.05) {
+            }else if (gamepad1.left_trigger > 0.05) {
                 strafePower = gamepad1.right_trigger * 0.75;
                 setStrafePowers(strafePower, true);
             }else if (halfSpeed){
@@ -155,20 +150,20 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 lbPower = ((yAxis-xAxis-zAxis)/2);
                 rbPower = ((yAxis+xAxis+zAxis)/2);
 
-                LF.setPower(Range.clip(lfPower, -0.5, 0.5));
-                RF.setPower(Range.clip(rfPower, -0.5, 0.5));
-                LB.setPower(Range.clip(lbPower, -0.5, 0.5));
-                RB.setPower(Range.clip(rbPower, -0.5, 0.5));
+                LF.setPower(-Range.clip(lfPower, -0.5, 0.5));
+                RF.setPower(-Range.clip(rfPower, -0.5, 0.5));
+                LB.setPower(-Range.clip(lbPower, -0.5, 0.5));
+                RB.setPower(-Range.clip(rbPower, -0.5, 0.5));
             }else {
                 lfPower = yAxis + xAxis - zAxis;
                 rfPower = yAxis - xAxis + zAxis;
                 lbPower = yAxis - xAxis - zAxis;
                 rbPower = yAxis + xAxis + zAxis;
 
-                LF.setPower(Range.clip(lfPower, -1, 1));
-                RF.setPower(Range.clip(rfPower, -1, 1));
-                LB.setPower(Range.clip(lbPower, -1, 1));
-                RB.setPower(Range.clip(rbPower, -1, 1));
+                LF.setPower(-Range.clip(lfPower, -1, 1));
+                RF.setPower(-Range.clip(rfPower, -1, 1));
+                LB.setPower(-Range.clip(lbPower, -1, 1));
+                RB.setPower(-Range.clip(rbPower, -1, 1));
             }
 
             telemetry.addData("Y Axis", yAxis);
