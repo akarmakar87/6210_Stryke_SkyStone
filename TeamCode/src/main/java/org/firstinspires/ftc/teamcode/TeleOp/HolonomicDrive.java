@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -16,11 +17,12 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         init(hardwareMap, false);
-        double pos = 0;
+        int lpos = 0, apos = 0;
         double xAxis = 0, yAxis = 0, zAxis = 0, position = 0.5;
         double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0, liftPower = 0;
-        long htime = 0, rtime = 0;
-
+        long htime = 0;
+        boolean lControl = false, aControl = true;
+        double lTime = 0, aTime = 0;
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
@@ -37,17 +39,37 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
-            //LIFT CONTROLS
-            if (gamepad2.right_trigger > 0.05) {
-                liftPower = Range.clip(gamepad2.right_trigger, 0, 0.5);
-                lift.setPower(liftPower); //LIFT DOWN
-            }else if(gamepad2.left_trigger > 0.05){
-                liftPower = -Range.clip(gamepad2.right_trigger, 0, 0.5);
-                lift.setPower(liftPower); //LIFT UP
-            }else{
-                liftPower = 0;
-                lift.setPower(liftPower);
+            //LIFT CONTROLS TOGGLE      --FOR USE AND REVISION ONCE USING LIFT
+            /*if (gamepad2.right_bumper && lTime + 500 < time.milliseconds()){
+                lControl = !lControl;
+                lTime = time.milliseconds();
+                lpos = lift.getCurrentPosition();
             }
+            //MANUAL LIFT CONTROLS
+            if (lControl = true) {
+                arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                if (gamepad2.right_trigger > 0.05) {
+                    liftPower = Range.clip(gamepad2.right_trigger, 0, 0.5);
+                    lift.setPower(liftPower); //LIFT DOWN
+                } else if (gamepad2.left_trigger > 0.05) {
+                    liftPower = -Range.clip(gamepad2.right_trigger, 0, 0.5);
+                    lift.setPower(liftPower); //LIFT UP
+                } else {
+                    liftPower = 0;
+                    lift.setPower(liftPower);
+                }
+            }
+            //POSITION LIFT CONTROLS
+            else {
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setPower(0.3);
+                if (gamepad2.dpad_up) {
+                    lpos -= 10; //LIFT DOWN
+                } else if (gamepad2.left_trigger > 0.05) {
+                    lpos += 10; //LIFT UP
+                }
+                lift.setTargetPosition(lpos);
+            }*/
 
             //LIFT CONTROLS (incremental)   ------------------------Uncomment when we know encoder positions
             /*if (gamepad2.dpad_up) {
@@ -68,52 +90,56 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 claw.setPosition(1.0);
             }
             if (gamepad2.y){
-                pos -= 0.1;
+                //pos -= 0.1;
                 claw.setPosition(0.0); //CLOSE CLAW
             }
 
             //ARM MOVEMENT
-            if (Math.abs(gamepad2.right_stick_y) > 0.05){
-                /*if(arm.getCurrentPosition() < 0){
-                    arm.setPower(Range.clip(-Math.abs(gamepad2.right_stick_y), 0, -0.5));
-                }else if(arm.getCurrentPosition() > 375){
-                    arm.setPower(Range.clip(Math.abs(gamepad2.right_stick_y), 0, 0.5));
+            if (gamepad2.right_bumper && aTime + 500 < time.milliseconds()){
+                aControl = !aControl;
+                aTime = time.milliseconds();
+                apos = arm.getCurrentPosition();
+            }
+            if (aControl){
+                arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                if (Math.abs(gamepad2.right_stick_y) > 0.05){
+                    armPower = Range.clip(gamepad2.right_stick_y, -0.2, 0.2);
+                    arm.setPower(-armPower);
                 }else{
-                    arm.setPower(Range.clip(gamepad2.right_stick_y, -0.5, 0.5));
-                }*/
-                /*if(gamepad2.right_stick_y < 0 && arm.getCurrentPosition() < 200){
-                    armPower = Range.clip(gamepad2.right_stick_y, -.5, 0.5);
-                    telemetry.addData("reduced power", " when stick up");
-                }else if(gamepad2.right_stick_y > 0 && arm.getCurrentPosition() > 200){
-                    armPower = Range.clip(gamepad2.right_stick_y, -.5, .5);
-                    telemetry.addData("reduced power", " when stick down");
-                }else{
-                    armPower = Range.clip(gamepad2.right_stick_y, -0.6, 0.6);
-                }*/
-                armPower = Range.clip(gamepad2.right_stick_y, -0.3, 0.3);
-                arm.setPower(armPower);
-            }else{
-                arm.setPower(0);
+                    arm.setPower(0);
+                }
+            }
+            else{
+                arm.setPower(0.3);
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                if (gamepad2.dpad_up){
+                    apos += 10;
+                }
+                if (gamepad2.dpad_down){
+                    apos -= 10;
+                }
+                arm.setTargetPosition(apos);
             }
 
-            //CLAW ROTATE
-            /*if (gamepad2.dpad_left && rtime + 50 < time.now(TimeUnit.MILLISECONDS)){
-                rtime = time.now(TimeUnit.MILLISECONDS);
-                position += 0.5;
-                rotate.setPosition(Range.clip(position, 0, 1));
-            }else if(gamepad2.dpad_right && rtime + 50 < time.now(TimeUnit.MILLISECONDS)){
-                rtime = time.now(TimeUnit.MILLISECONDS);
-                position -= 0.25;
-                rotate.setPosition(Range.clip(position, 0, 1));
-            }*/
 
+            //CLAW ROTATE
             if (gamepad2.dpad_left){
+                rotate.setPosition(0.6);
+            }else if(gamepad2.dpad_right){
+                rotate.setPosition(0.4);
+            }
+            else{
+                rotate.setPosition(0.5);
+            }
+
+            //IF WE DECIDE TO HAVE INCREMENTAL ROTATE INSTEAD OF CONTINUOUS
+            /*if (gamepad2.dpad_left){
                 //position += 0.1;
                 rotate.setPosition(0.95);
             }else if(gamepad2.dpad_right){
                 //position -= 0.1;
                 rotate.setPosition(0.5);
-            }
+            }*/
 
             //HOLONOMIC DRIVE
             if (Math.abs(gamepad1.left_stick_y) > 0.05) {
