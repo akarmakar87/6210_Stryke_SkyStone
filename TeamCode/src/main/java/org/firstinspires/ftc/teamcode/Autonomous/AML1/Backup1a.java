@@ -66,13 +66,16 @@ public class Backup1a extends SkystoneLinearOpMode{
 
         setArmPosition(-600);
 
+        //open = -610
+        //lifted -550
+
         driveDistance(0.5, 38);
         //setClawPosition(false);
 
         sleep(250);
 
         driveDistance(-0.3, 14);
-        setArmPosition(-550);
+        setArmPosition(-603);
 
         sleep(250);
 

@@ -64,8 +64,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     **/
 
     //ClAW VARIABLES
-    private double clawStartPosition = 0.4;
-    private double clawEndPosition = 0.7;
+    private double clawStartPosition = 0.0;
+    private double clawEndPosition = 1.0;
 
     //ARM MOVEMENT
     private double armSpeed = 0;
@@ -536,6 +536,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         idle();
         LB.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         idle();
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        idle();
 
         RF.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         idle();
@@ -545,6 +547,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         idle();
         LB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         idle();
+        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        idle();
+
+
     }
 
     public void resetLift(){
@@ -801,10 +807,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void setClawPosition(boolean open){
         if (open){
-            claw.setPosition(clawStartPosition);
+            claw.setPosition(clawEndPosition);
         }
         else{
-            claw.setPosition(clawEndPosition);
+            claw.setPosition(clawStartPosition);
         }
     }
 
@@ -860,12 +866,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         arm.setPower(0);
     }
 
-    public void setArm(int target){
+    public void setArm(int target, double pwr){
         double endPos = target; //GET VALUE RANGE IN TELEOP : 0 - ?
         double startPos = arm.getCurrentPosition();
         double power = 0;
-        while (opModeIsActive()&& !isStopRequested() && Math.abs(target-arm.getCurrentPosition()) > 3){ //3 TICKS MARGIN OF ERROR
-            if(arm.getCurrentPosition() < target){
+
+        //while (opModeIsActive()&& !isStopRequested() && Math.abs(target-arm.getCurrentPosition()) > 3){ //3 TICKS MARGIN OF ERROR
+            /*if(arm.getCurrentPosition() < target){
                 if(arm.getCurrentPosition() < 220){ //VALUE OF HIGHEST POINT
                     power = -0.3;
                 }else{
@@ -877,14 +884,18 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 }else{
                     power = 0.3;
                 }
-            }
+            }*/
 
+            power = pwr;
+            arm.setTargetPosition(target);
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm.setPower(power);
-            telemetry.addData("arm encoder:", arm.getCurrentPosition());
-            telemetry.addData("arm power:", arm.getCurrentPosition());
-            telemetry.update();
-        }
-        arm.setPower(0);
+            while (opModeIsActive()&& !isStopRequested() && arm.isBusy()) {
+                telemetry.addData("arm encoder:", arm.getCurrentPosition());
+                telemetry.addData("arm power:", power);
+                telemetry.update();
+             //   sleep(250);
+            }
     }
 
     //TURN METHODS
@@ -912,9 +923,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
 
             if (power > 0)
-                setMotorPowers(Range.clip(power, 0.3, 0.7), -Range.clip(power, 0.3, 0.7));
+                setMotorPowers(Range.clip(power, 0.2, 0.7), -Range.clip(power, 0.3, 0.7));
             else
-                setMotorPowers(-Range.clip(power, 0.3, 0.7), Range.clip(power, 0.3, 0.7));
+                setMotorPowers(-Range.clip(power, 0.2, 0.7), Range.clip(power, 0.3, 0.7));
 
             telemetry.addData("tAngle: ", tAngle)
                     .addData("kP:", error * kP)
@@ -1215,8 +1226,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 leftPix = red(bm.getPixel(320,550));
                 rightPix = red(bm.getPixel(960,550));
             }else{
-                leftPix = red(bm.getPixel(960,550));
-                rightPix = red(bm.getPixel(320,550));
+                rightPix = red(bm.getPixel(960,550));
+                leftPix = red(bm.getPixel(320,550));
             }
 
             if (Math.abs(leftPix - rightPix) >= 50) {
@@ -1409,7 +1420,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         switch(pos){
             case -1:
                 //adjust values
-                driveDistance(0.5, 8);
+                //driveDistance(0.5, 8);
                 amt = 8;
                 break;
             case  0:
@@ -1417,7 +1428,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 break;
             case  1:
                 //adjust values
-                driveDistance(-0.5, 8);
+                //driveDistance(-0.5, 8);
                 amt = -8;
                 break;
         }

@@ -46,27 +46,33 @@ public class Red1Sample extends SkystoneLinearOpMode{
             heading = 90;
         }
 
-        adjustment = adjustForSkystone(detectSkystoneOnePix(getBitmap(),red)); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL
+        //adjustment = adjustForSkystone(detectSkystoneOnePix(getBitmap(),red)); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL
 
-        turnPID(90, 0.6, 0, 2, 3500); //TURN 90 TO FACE STONES
+        turnPID(heading, 0.6, 0, 2, 3000); //TURN 90 TO FACE STONES
 
-        setArm(-600); //PUT ARM DOWN
 
-        setClawPosition(true);//OPEN CLAW
 
-        sleep(250);
+        //setClawPosition(true);//OPEN CLAW
 
-        driveDistance(0.5, 38);
+        driveDistance(0.5, 25);
+
+        setArm(-600,-0.3); //PUT ARM DOWN
+
+        arm.setPower(0);
+
+        sleep(2000);
+
+        driveDistance(0.4, 5);
 
         setClawPosition(false); //CLOSE CLAW
 
-        sleep(250); //WHAT IS THIS FOR?
+        sleep(250); //WAIT FOR CLAW TO CLOSE
 
-        setArmPosition(-550); //LIFT ARM
+        setArm(-550,0.3); //LIFT ARM
 
         driveDistance(-0.3, 14); //MOVE BACKWARDS A BIT
 
-        turnPID(heading, 0.6, 0, 2, 3500); //WHATS HEADING HERE?
+        turnPID(180, 0.6, 0, 2, 3500); //WHATS HEADING HERE?
 
         driveDistance(0.5, 40 + adjustment); //DRIVE TO LINE
 
