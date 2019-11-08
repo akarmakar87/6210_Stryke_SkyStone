@@ -57,6 +57,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public Servo claw;
     //public RevColorSensorV3 sensorColor;
     public Servo rotate;
+    public Servo foundationR;
+    public Servo foundationL;
 
     /**COLOR SENSOR VARIABLES
     float hsvValues[] = {0f, 0f, 0f};
@@ -158,6 +160,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         lift = map.dcMotor.get("lift");
         claw = map.servo.get("claw");
         rotate = map.servo.get("rotate");
+        foundationL = map.servo.get("fL");
+        foundationR = map.servo.get("fR");
         //sensorColor = map.get(RevColorSensorV3.class, "color");
 
         LF.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -864,6 +868,17 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             pTime = time.milliseconds();
         }
         arm.setPower(0);
+    }
+
+    public void foundationD( boolean deployed){
+        if (deployed){
+            foundationL.setPosition(1);
+            foundationR.setPosition(0);
+        }
+        else {
+            foundationL.setPosition(0);
+            foundationR.setPosition(1);
+        }
     }
 
     public void setArm(int target, double pwr){
