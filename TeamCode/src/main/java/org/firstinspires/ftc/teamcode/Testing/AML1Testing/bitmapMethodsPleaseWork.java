@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Testing.AML1Testing;
 
 import android.graphics.Bitmap;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.vuforia.Image;
@@ -27,7 +28,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 
 @TeleOp (name="pray to all the vuforia gods", group = "teleop")
-//@Disabled
+@Disabled
 public class bitmapMethodsPleaseWork extends SkystoneLinearOpMode {
 
     @Override

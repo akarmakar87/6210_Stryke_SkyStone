@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous.AML1;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Foundation", group = "auto")
 
-//@Disabled
+@Disabled
 public class foundation extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -29,7 +30,9 @@ public class foundation extends SkystoneLinearOpMode {
         waitForStart();
 
         if(red){
-            driveDistance(0.5,-30 );    //Drive to foundation
+            strafeDistance(0.5, 10, false); //Strafe in front of foundation
+
+            driveDistance(-0.5,30 );    //Drive to foundation
 
             foundationD(true);  //Grab foundation
 
@@ -43,17 +46,21 @@ public class foundation extends SkystoneLinearOpMode {
         }
 
         else{
-            driveDistance(0.5,-30 );    //Drive to foundation
+            strafeAdjust(0.5, 10, false);//Strafe in front of foundation
+
+            driveDistance(-0.5, 45);    //Drive to foundation
 
             foundationD(true);  //Grab foundation
 
-            driveDistance(0.5, 30);     //Drag foundation to build site
+            sleep(1500);
+
+            driveDistance(0.5, 45);     //Drag foundation to build site
 
             foundationD(false);     //Release foundation
 
             turnPID(-90, 0.6, 0, 2, 3000);   //Turn toward alliance bridge
 
-            driveDistance(0.5, 30);     // Drive to alliance bridge
+            driveDistance(0.5, 50);     // Drive to alliance bridge
         }
     }
 }

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Testing;
 
 import android.graphics.Bitmap;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.vuforia.PIXEL_FORMAT;
@@ -30,7 +31,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 
 @TeleOp(name="AshaBitmap", group = "auto")
-//@Disabled
+@Disabled
 public class AshaBitmap extends LinearOpMode {
 
     public static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous.AML1;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.vuforia.CameraDevice;
 
 
@@ -8,7 +9,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="bread and one apple", group = "auto")
 
-//@Disabled
+@Disabled
 public class Backup1a extends SkystoneLinearOpMode{
 
     @Override

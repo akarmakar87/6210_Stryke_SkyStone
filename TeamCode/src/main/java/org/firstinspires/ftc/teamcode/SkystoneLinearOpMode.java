@@ -181,12 +181,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //arm.setPower(armSpeed);
-        resetEncoders();
 
         //SET UP GYRO
         angles = new Orientation();
 
         if (auto) {
+            resetEncoders();
+            foundationD(false);
             BNO055IMU.Parameters bparameters = new BNO055IMU.Parameters();
             bparameters.mode = BNO055IMU.SensorMode.IMU;
             bparameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -208,7 +209,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             telemetry.addData("imu calib status", imu.getCalibrationStatus().toString());
             telemetry.update();
 
-            initBitmapVuforia();
+            //initBitmapVuforia();
             telemetry.addData("Vuforia: ", "Initialization complete");
             telemetry.update();
         }
@@ -436,6 +437,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             LF.setPower(Range.clip(lf, -1, -min));
         else if (lf > 0)
             LF.setPower(Range.clip(lf, min, 1));
+        else{
+            LF.setPower(0);
+        }
 
         if (rf < 0)
             RF.setPower(Range.clip(rf, -1, -min));

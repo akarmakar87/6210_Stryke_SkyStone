@@ -22,7 +22,7 @@ import static android.graphics.Color.blue;
 import static android.graphics.Color.green;
 import static android.graphics.Color.red;
 @Autonomous(name="Bitmap", group = "auto")
-//@Disabled
+@Disabled
 public class BitmapTest extends SkystoneLinearOpMode {
 
     private LinearOpMode opMode;

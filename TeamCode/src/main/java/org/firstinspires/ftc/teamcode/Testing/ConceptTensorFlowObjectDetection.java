@@ -53,7 +53,7 @@ import java.util.List;
  * is explained below.
  */
 @TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-//@Disabled
+@Disabled
 public class ConceptTensorFlowObjectDetection extends LinearOpMode {
     public static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     public static final String STONE = "Stone";

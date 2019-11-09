@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.OldMecanumLinearOpMode;
 
 @Autonomous(name="ReferenceAuto", group = "auto")
-//@Disabled
+@Disabled
 public class ReferenceAuto extends OldMecanumLinearOpMode {
 
     @Override

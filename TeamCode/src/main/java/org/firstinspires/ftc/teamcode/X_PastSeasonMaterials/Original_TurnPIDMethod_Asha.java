@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.X_PastSeasonMaterials;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @Autonomous(name="Original_TurnPIDTestAsha", group="auto")
-
+@Disabled
 public class Original_TurnPIDMethod_Asha extends MecanumLinearOpMode {
 
     @Override

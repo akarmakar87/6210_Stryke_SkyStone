@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.X_PastSeasonMaterials;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name="PID concept Test", group="teleop")
-
+@Disabled
 public class PIDConceptTest extends AutoLinearOpMode {
 
     /**

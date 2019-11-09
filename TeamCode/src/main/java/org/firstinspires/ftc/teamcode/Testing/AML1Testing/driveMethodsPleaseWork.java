@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Testing.AML1Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="pray to all the drive/strafe gods", group = "auto")
 
-//@Disabled
+@Disabled
 public class driveMethodsPleaseWork extends SkystoneLinearOpMode {
 
     @Override

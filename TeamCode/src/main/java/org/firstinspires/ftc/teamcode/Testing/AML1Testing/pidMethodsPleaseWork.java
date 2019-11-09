@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Testing.AML1Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.vuforia.CameraDevice;
 
 
@@ -8,7 +9,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="pray to all the pid gods", group = "auto")
 
-//@Disabled
+@Disabled
 public class pidMethodsPleaseWork extends SkystoneLinearOpMode {
 
     @Override

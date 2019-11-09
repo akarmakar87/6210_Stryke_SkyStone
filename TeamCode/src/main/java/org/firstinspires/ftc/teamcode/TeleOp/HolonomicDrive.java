@@ -21,8 +21,8 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
         double xAxis = 0, yAxis = 0, zAxis = 0, position = 0.5;
         double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0, liftPower = 0;
         long htime = 0;
-        boolean lControl = false, aControl = true;
-        double lTime = 0, aTime = 0;
+        boolean lControl = false, aControl = true, foundation = false;
+        double lTime = 0, aTime = 0, fTime = 0;
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
@@ -93,6 +93,12 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 //pos -= 0.1;
                 claw.setPosition(0.0); //CLOSE CLAW
             }
+
+            if (gamepad1.right_bumper && fTime + 500 < time.milliseconds()){
+                foundation = !foundation;
+                fTime = time.milliseconds();
+            }
+            foundationD(foundation);
 
             //ARM MOVEMENT
             if (gamepad2.right_bumper && aTime + 500 < time.milliseconds()){
