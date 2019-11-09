@@ -445,16 +445,25 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             RF.setPower(Range.clip(rf, -1, -min));
         else if (rf > 0)
             RF.setPower(Range.clip(rf, min, 1));
+        else{
+            RF.setPower(0);
+        }
 
         if (lb < 0)
             LB.setPower(Range.clip(lb, -1, -min));
         else if (lb > 0)
             LB.setPower(Range.clip(lb, min, 1));
+        else{
+            LB.setPower(0);
+        }
 
         if (rb < 0)
             RB.setPower(Range.clip(rb, -1, -min));
         else if (rb > 0)
             RB.setPower(Range.clip(rb, min, 1));
+        else{
+            RB.setPower(0);
+        }
 
     }
 
@@ -578,17 +587,19 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public void driveDistance(double power, double distance) throws InterruptedException{
+
         double total = distance * encoderToInches;
         double remaining, finalPower;
+        ElapsedTime t = new ElapsedTime();
+        t.reset();
         resetEncoders();
 
-        while (opModeIsActive()&& !isStopRequested() && getEncoderAvg() < distance * encoderToInches){
+        while (opModeIsActive()&& !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < 10){
             remaining = total - getEncoderAvg();
             finalPower = (remaining/total) * power;
             //put in range clip if necessary
             setEachMotorPowers(finalPower,finalPower,finalPower,finalPower,false);
         }
-
         stopMotors();
     }
 
@@ -661,16 +672,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 backPower = power;
             }
 
-            if (right){
-                LF.setPower(-backPower);
-                RF.setPower(fwdPower);
-                LB.setPower(fwdPower);
-                RB.setPower(-backPower);
-            }else {
+            if (right){ //FLIPPED RIGHT AND LEFT
                 LF.setPower(fwdPower);
                 RF.setPower(-backPower);
                 LB.setPower(-backPower);
                 RB.setPower(fwdPower);
+            }else {
+                LF.setPower(-backPower);
+                RF.setPower(fwdPower);
+                LB.setPower(fwdPower);
+                RB.setPower(-backPower);
             }
         }
         stopMotors();
