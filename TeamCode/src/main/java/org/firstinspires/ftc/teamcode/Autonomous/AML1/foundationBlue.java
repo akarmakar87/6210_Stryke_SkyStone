@@ -19,7 +19,7 @@ public class foundationBlue extends SkystoneLinearOpMode {
 
         waitForStart();
 
-            strafeAdjust(0.5, 15, false);//Strafe in front of foundation
+            strafeAdjust(0.6, 30, false);//Strafe in front of foundation
 
             driveDistance(-0.6, 48);    //Drive to foundation
 
@@ -27,13 +27,19 @@ public class foundationBlue extends SkystoneLinearOpMode {
 
             sleep(1500);
 
-            driveDistance(0.6, 50);     //Drag foundation to build site
+            driveDistance(1, 70);     //Drag foundation to build site
 
             foundationD(false);     //Release foundation
 
-            turnPID(0, 0.6, 0, 2, 3000);   //Turn toward alliance bridge
+            turnPID(0, 0.6, 0, 2, 2000);   //Turn toward alliance bridge
 
-            strafeDistance(0.6, 53,true);     // Drive to alliance bridge
+            //strafeDistance(0.6, 53,false);     // Drive to alliance bridge
+            strafeDistance(0.6, 30,false);     // Drive to alliance bridge
+            driveDistance(-0.6, 30);     //Drag foundation to build site
+            strafeDistance(0.6, 15,true);     // Drive to alliance bridge
+            driveDistance(0.6, 35);     // Drive to alliance bridge
+            strafeDistance(0.6, 27,false);     // Drive to alliance bridge
+
 
     }
 }

@@ -21,7 +21,7 @@ public class foundationRed extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        strafeAdjust(0.5, 15, true);//Strafe in front of foundation
+        strafeAdjust(0.6, 15, true);//Strafe in front of foundation
 
         driveDistance(-0.6, 48);    //Drive to foundation
 
@@ -35,6 +35,6 @@ public class foundationRed extends SkystoneLinearOpMode {
 
         turnPID(0, 0.6, 0, 2, 3000);   //Turn toward alliance bridge
 
-        strafeDistance(0.6, 53,false);     // Drive to alliance bridge
+        strafeDistance(0.6, 53,true);     // Drive to alliance bridge
     }
 }
