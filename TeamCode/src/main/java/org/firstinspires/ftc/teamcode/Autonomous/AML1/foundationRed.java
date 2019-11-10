@@ -17,10 +17,10 @@ public class foundationRed extends SkystoneLinearOpMode {
         waitForStart();
 
         //strafeAdjust(0.6, 30, true); <--ORIGINAL
-        strafeAdjust(0.6, 30, false);//Strafe in front of foundation
+        strafeDistance(0.8, 35, false);//Strafe in front of foundation
 
         //driveDistance(-0.6, 48);    <--ORIGINAL
-        driveDistance(-0.6, 50);    //Drive to foundation
+        driveDistance(-0.5, 45);    //Drive to foundation
 
         foundationD(true);  //Grab foundation
 
@@ -35,7 +35,7 @@ public class foundationRed extends SkystoneLinearOpMode {
 
         //strafeDistance(0.6, 53,false);     // Drive to alliance bridge (REMOVE)
 
-        strafeDistance(0.6, 30,true);     // Drive a little towards alliance bridge
+        strafeDistance(0.6, 35,true);     // Drive a little towards alliance bridge
 
         driveDistance(-0.6, 30);     //move away from wall (forward)
 

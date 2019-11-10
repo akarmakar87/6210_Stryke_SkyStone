@@ -20,13 +20,6 @@ public class armTesting extends SkystoneLinearOpMode{
         int heading = 0, adjustment = 0;
 
         //should we keep this button pressing system? is it legal?
-        while (!isStarted() && opModeIsActive()) {
-
-            if (gamepad1.b) red = false;
-
-            telemetry.addData("red? ", red);
-            telemetry.update();
-        }
 
         // scan for skystone
         // variables based on:
@@ -41,7 +34,10 @@ public class armTesting extends SkystoneLinearOpMode{
         waitForStart();
 
 
-        setArm(-560 ,-1.0); //PUT ARM DOWN
+        foundationD(true);
+
+        sleep(1000);
+        foundationD(false);
 
         sleep(1000);
 
