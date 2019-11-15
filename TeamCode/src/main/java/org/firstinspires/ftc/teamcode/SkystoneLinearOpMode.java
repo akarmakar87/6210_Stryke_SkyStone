@@ -605,9 +605,17 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void strafeDistance(double power, double distance, boolean right) throws InterruptedException{
         resetEncoders();
-        double minP = 0.3;
+        double minP = 0.25;
         double actualP = minP;
+        double sTime = runtime.milliseconds();
+        double cTime = runtime.milliseconds();
         while (opModeIsActive() && getEncoderAvg() < distance * 55 && !isStopRequested()){
+            sTime = runtime.milliseconds();
+            if(actualP < power && cTime + 200 >= sTime){
+                actualP += .05;
+                cTime = runtime.milliseconds();
+                Range.clip(actualP,0, power);
+            }
             if (right){
                 LF.setPower(actualP);
                 RF.setPower(-actualP);
@@ -618,10 +626,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 RF.setPower(actualP);
                 LB.setPower(actualP);
                 RB.setPower(-actualP);
-            }
-            if(actualP < power){
-                actualP += power * .1;
-                sleep(10);
             }
         }
         stopMotors();
