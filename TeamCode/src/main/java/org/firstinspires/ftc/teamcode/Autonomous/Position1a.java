@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.vuforia.CameraDevice;
 
 
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 // THAT WILL RUN DIFFERENT CODE DEPENDING ON WHICH VUFORIA MARK IS IDENTIFIED ON THE WALL RIGHT NEXT TO ROBOT
 // ------------ ASK MINDY FOR CLARIFICATION
 
-//@Disabled
+@Disabled
 public class Position1a extends SkystoneLinearOpMode {
 
     @Override

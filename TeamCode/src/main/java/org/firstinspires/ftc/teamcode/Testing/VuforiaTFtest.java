@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @TeleOp(name="VuforiaTFtest", group = "auto")
-//@Disabled
+@Disabled
 public class VuforiaTFtest extends SkystoneLinearOpMode {
 
     @Override

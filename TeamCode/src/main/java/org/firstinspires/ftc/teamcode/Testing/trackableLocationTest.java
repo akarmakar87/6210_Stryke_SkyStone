@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Le Croissant:", group = "auto")  // PARKS AWAY FORM WALL
 
-//@Disabled
+@Disabled
 public class trackableLocationTest extends SkystoneLinearOpMode {
 
     @Override

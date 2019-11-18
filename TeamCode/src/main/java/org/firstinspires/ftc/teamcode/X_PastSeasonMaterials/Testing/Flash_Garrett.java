@@ -2,6 +2,7 @@
 package org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.Testing;
 
         import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+        import com.qualcomm.robotcore.eventloop.opmode.Disabled;
         import com.vuforia.CameraDevice;
 
         import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -9,7 +10,7 @@ package org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.Testing;
         import org.firstinspires.ftc.teamcode.X_PastSeasonMaterials.MecanumLinearOpMode;
 
 @Autonomous(name = "FlashTest", group = "Phone")
-//@Disabled
+@Disabled
 public class Flash_Garrett extends SkystoneLinearOpMode {
 
     @Override

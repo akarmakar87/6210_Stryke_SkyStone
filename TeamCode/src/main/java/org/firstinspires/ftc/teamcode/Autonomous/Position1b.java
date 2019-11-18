@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Position 1b", group = "auto") // PARKS NEXT TO WALL
-//@Disabled
+@Disabled
 public class Position1b extends SkystoneLinearOpMode {
 
     @Override

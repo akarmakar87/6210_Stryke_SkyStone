@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @TeleOp(name="DrivetrainTeleOp", group="teleop")
-//@Disabled
+@Disabled
 public class DrivetrainTeleOp extends SkystoneLinearOpMode {
 
     @Override

@@ -53,11 +53,11 @@ import java.util.List;
  * is explained below.
  */
 @TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-//@Disabled
+@Disabled
 public class ConceptTensorFlowObjectDetection extends LinearOpMode {
     public static final String TFOD_MODEL_ASSET = "Skystone.tflite";
-    public static final String LABEL_FIRST_ELEMENT = "Stone";
-    public static final String LABEL_SECOND_ELEMENT = "Skystone";
+    public static final String STONE = "Stone";
+    public static final String SKYSTONE = "Skystone";
 
     //jerry test
 
@@ -150,9 +150,11 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
             "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minimumConfidence = 0.8;
+        //tfodParameters.minimumConfidence = 0.8;
+        tfodParameters.minimumConfidence = 0.6;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, STONE, SKYSTONE);
+        tfod.setClippingMargins(400,0,0,0);
     }
 
     public void detectSkystone(){
@@ -164,15 +166,33 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
-                if (updatedRecognitions.size() > 0) { //IF DETECT BOTH OBJECTS
+                int stoneX = -1;
+                if(updatedRecognitions.size() == 1 && updatedRecognitions.get(0).getLabel() == STONE){
+                    stoneX = (int) updatedRecognitions.get(0).getLeft();
 
-                    int skystoneX = -1, stone1X = -1, stone2X = -1;
-                    double skystoneConf = 0;
+                    if(stoneX < 440){
+                        pos = 1;
+                    }else if(stoneX > 440){
+                        pos = 0;
+                    }
+                }else if (updatedRecognitions.size() == 2 && updatedRecognitions.get(0).getLabel() == STONE && updatedRecognitions.get(1).getLabel() == STONE){
+                    pos = -1;
+                }
+
+                telemetry.addData("stone x:", stoneX);
+                telemetry.addData("skystone pos ", pos);
+                telemetry.update();
+
+
+                /*if (updatedRecognitions.size() > 0) { //IF DETECT BOTH OBJECTS
+
+                    int stone1X = -1, stone2X = -1;
 
                     for (Recognition recognition : updatedRecognitions) {
-                        if (recognition.getLabel().equals(LABEL_SECOND_ELEMENT)) { //IF OBJECT DETECTED IS GOLD
-                            skystoneX = (int) recognition.getLeft();
+                        if (recognition.getLabel().equals(STONE)) { //IF OBJECT DETECTED IS GOLD
+                            stone1X = (int) recognition.getLeft();
                             skystoneConf = recognition.getConfidence();
+                            //stoneWidth = recognition.getWidth();
                         } else if (recognition.getLabel().equals(LABEL_FIRST_ELEMENT) && stone1X != -1) {
                             stone1X = (int) recognition.getLeft();
                         } else {
@@ -199,11 +219,13 @@ public class ConceptTensorFlowObjectDetection extends LinearOpMode {
                         telemetry.addData("Skystone Position", "Right");
                         pos = 3;
                     }
-                    telemetry.addData("Gold x pos ", skystoneX);
-                    telemetry.addData("Gold conf ", skystoneConf);
+                    telemetry.addData("skystone x pos ", skystoneX);
+                    telemetry.addData("stone1 x pos ", stone1X);
+                    telemetry.addData("stone2 x pos ", stone2X);
+                    telemetry.addData("skystone conf ", skystoneConf);
                     telemetry.addData("Runtime", runtime.milliseconds());
                     telemetry.update();
-                }
+                }*/
             }
         }
     }
