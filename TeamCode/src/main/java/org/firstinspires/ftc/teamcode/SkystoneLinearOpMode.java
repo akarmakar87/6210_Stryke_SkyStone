@@ -388,7 +388,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         vuforiaWC = ClassFactory.getInstance().createVuforia(paramWC);
 
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true); //enables RGB565 format for the image
-        vuforiaWC.setFrameQueueCapacity(4); //tells VuforiaLocalizer to only store one frame at a time
+        vuforiaWC.setFrameQueueCapacity(1); //tells VuforiaLocalizer to only store one frame at a time
 
         telemetry.addData("Vuforia:", "initialized");
         telemetry.update();
@@ -1245,7 +1245,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         //return stonepos;
     }
 
-    public int detectSkystoneOnePix(Bitmap bm, boolean red) throws InterruptedException {
+    public int detectSkystoneOnePix(Bitmap bm, boolean red, int rx, int ry, int lx, int ly) throws InterruptedException {
 
         //set threshold for yellow or not yellow?
         int stonepos = 0;
@@ -1255,10 +1255,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
             //figure out proper thresholds
             int redLim = 30;
+            lx = Range.clip(lx, 0, bm.getWidth()-1);
+            ly = Range.clip(ly, 0, bm.getHeight()-1);
+            rx = Range.clip(rx, 0, bm.getWidth()-1);
+            ry = Range.clip(ry, 0, bm.getHeight()-1);
 
             if(red){
-                leftPix = red(bm.getPixel(320,550));
-                rightPix = red(bm.getPixel(960,550));
+                leftPix = red(bm.getPixel(lx,ly));
+                rightPix = red(bm.getPixel(rx,ry));
             }else{
                 rightPix = red(bm.getPixel(960,550));
                 leftPix = red(bm.getPixel(320,550));
@@ -1274,6 +1278,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 stonepos = -1;
             }
 
+            telemetry.addData("rx: ", rx);
+            telemetry.addData("ry: ", ry);
+            telemetry.addData("lx: ", lx);
+            telemetry.addData("ly: ", ly);
             telemetry.addData("bitmap width:", bm.getWidth()); //640
             telemetry.addData("bitmap height:", bm.getHeight()); //480 across I think?
             telemetry.addData("left pix red: ", leftPix);

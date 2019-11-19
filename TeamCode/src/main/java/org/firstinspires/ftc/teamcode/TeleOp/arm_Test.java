@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="arm_Test", group="auto")
-@Disabled
+//@Disabled
 public class arm_Test extends SkystoneLinearOpMode {
 
     @Override
