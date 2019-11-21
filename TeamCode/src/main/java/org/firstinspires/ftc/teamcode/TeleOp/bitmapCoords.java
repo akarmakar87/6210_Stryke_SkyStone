@@ -5,23 +5,55 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="arm_Test", group="auto")
-@Disabled
+@Autonomous(name="bitmapTeleOpTest", group="auto")
+//@Disabled
 public class bitmapCoords extends SkystoneLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        init(hardwareMap, true);
-        resetArm(); //350 = pick up stone           300 = pointing straight forward
+        init(hardwareMap, false);
+        initBitmapVuforia();
 
         waitForStart();
 
-        rotate.setPosition(0.5);
-        //setArmPosition(100);
-        //sleep(3000);
-        /*setArmPosition(false);
-        sleep(3000);
-        setArmPosition(false);
-        sleep(2000);*/
+        int rx =0,ry=0,lx=0,ly=0;
+
+        while(opModeIsActive() && !isStopRequested()) {
+            if(gamepad1.a){
+                ry -= 20;
+                sleep(250);
+            }
+            if(gamepad1.y){
+                ry += 20;
+                sleep(250);
+            }
+            if(gamepad1.x){
+                rx -= 20;
+                sleep(250);
+            }
+            if(gamepad1.b){
+                rx += 20;
+                sleep(250);
+            }
+
+            if(gamepad1.dpad_down){
+                ly -= 20;
+                sleep(250);
+            }
+            if(gamepad1.dpad_up){
+                ly += 20;
+                sleep(250);
+            }
+            if(gamepad1.dpad_left){
+                lx -= 20;
+                sleep(250);
+            }
+            if(gamepad1.dpad_right){
+                lx += 20;
+                sleep(250);
+            }
+
+            detectSkystoneOnePix(getBitmap(), true, rx, ry, lx, ly);
+        }
     }
 }

@@ -50,7 +50,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public DcMotor RF;
     public DcMotor LB;
     public DcMotor RB;
-    public DcMotor intake;
+    public DcMotor intakeR;
+    public  DcMotor intakeL;
     public BNO055IMU imu;
     public DcMotor lift;
     public DcMotor arm;
@@ -154,7 +155,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RF  = map.dcMotor.get("RF");
         LB  = map.dcMotor.get("LB");
         RB  = map.dcMotor.get("RB");
-       // intake  = map.dcMotor.get("intake");
+        intakeR  = map.dcMotor.get("iR");
+        intakeL = map.dcMotor.get("iL");
         imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
         arm = map.dcMotor.get("arm");
         lift = map.dcMotor.get("lift");
@@ -169,15 +171,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RB.setDirection(DcMotorSimple.Direction.REVERSE);
         LB.setDirection(DcMotorSimple.Direction.FORWARD);
         arm.setDirection(DcMotorSimple.Direction.REVERSE);
-        //intake.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeR.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeL.setDirection(DcMotorSimple.Direction.REVERSE);
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
-        //setClawPosition(false);
 
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //arm.setPower(armSpeed);
@@ -388,7 +391,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         vuforiaWC = ClassFactory.getInstance().createVuforia(paramWC);
 
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true); //enables RGB565 format for the image
-        vuforiaWC.setFrameQueueCapacity(4); //tells VuforiaLocalizer to only store one frame at a time
+        vuforiaWC.setFrameQueueCapacity(1); //tells VuforiaLocalizer to only store one frame at a time
 
         telemetry.addData("Vuforia:", "initialized");
         telemetry.update();
@@ -1245,7 +1248,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         //return stonepos;
     }
 
-    public int detectSkystoneOnePix(Bitmap bm, boolean red) throws InterruptedException {
+    public int detectSkystoneOnePix(Bitmap bm, boolean red, int rx, int ry, int lx, int ly) throws InterruptedException {
 
         //set threshold for yellow or not yellow?
         int stonepos = 0;
@@ -1255,10 +1258,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
             //figure out proper thresholds
             int redLim = 30;
+            lx = Range.clip(lx, 0, bm.getWidth()-1);
+            ly = Range.clip(ly, 0, bm.getHeight()-1);
+            rx = Range.clip(rx, 0, bm.getWidth()-1);
+            ry = Range.clip(ry, 0, bm.getHeight()-1);
 
             if(red){
-                leftPix = red(bm.getPixel(320,550));
-                rightPix = red(bm.getPixel(960,550));
+                leftPix = red(bm.getPixel(lx,ly));
+                rightPix = red(bm.getPixel(rx,ry));
             }else{
                 rightPix = red(bm.getPixel(960,550));
                 leftPix = red(bm.getPixel(320,550));
@@ -1274,6 +1281,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 stonepos = -1;
             }
 
+            telemetry.addData("rx: ", rx);
+            telemetry.addData("ry: ", ry);
+            telemetry.addData("lx: ", lx);
+            telemetry.addData("ly: ", ly);
             telemetry.addData("bitmap width:", bm.getWidth()); //640
             telemetry.addData("bitmap height:", bm.getHeight()); //480 across I think?
             telemetry.addData("left pix red: ", leftPix);
