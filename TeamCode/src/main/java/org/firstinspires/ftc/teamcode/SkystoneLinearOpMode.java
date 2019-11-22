@@ -51,7 +51,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public DcMotor RF;
     public DcMotor LB;
     public DcMotor RB;
-    public DcMotor intake;
+    public DcMotor intakeR;
+    public  DcMotor intakeL;
     public BNO055IMU imu;
     public DcMotor lift;
     public DcMotor arm;
@@ -155,7 +156,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RF  = map.dcMotor.get("RF");
         LB  = map.dcMotor.get("LB");
         RB  = map.dcMotor.get("RB");
-       // intake  = map.dcMotor.get("intake");
+        intakeR  = map.dcMotor.get("iR");
+        intakeL = map.dcMotor.get("iL");
         imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
         arm = map.dcMotor.get("arm");
         lift = map.dcMotor.get("lift");
@@ -170,15 +172,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         RB.setDirection(DcMotorSimple.Direction.REVERSE);
         LB.setDirection(DcMotorSimple.Direction.FORWARD);
         arm.setDirection(DcMotorSimple.Direction.REVERSE);
-        //intake.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeR.setDirection(DcMotorSimple.Direction.FORWARD);
+        intakeL.setDirection(DcMotorSimple.Direction.REVERSE);
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
-        //setClawPosition(false);
 
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //arm.setPower(armSpeed);

@@ -83,6 +83,11 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 lift.setTargetPosition(tarPos * 10); //Make lift go to position
             }*/
 
+            //INTAKE
+            if(Math.abs(gamepad2.right_trigger) > 0.05){
+                intakeL.setPower(gamepad2.right_trigger);
+                intakeR.setPower(gamepad2.right_trigger);
+            }
 
             //CLAW MOVEMENT
             if (gamepad2.x){
@@ -128,7 +133,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }
 
 
-            //CLAW ROTATE
+            /*//CLAW ROTATE
             if (gamepad2.dpad_left){
                 rotate.setPosition(0.6);
             }else if(gamepad2.dpad_right){
@@ -139,7 +144,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }
 
             //IF WE DECIDE TO HAVE INCREMENTAL ROTATE INSTEAD OF CONTINUOUS
-            /*if (gamepad2.dpad_left){
+            if (gamepad2.dpad_left){
                 //position += 0.1;
                 rotate.setPosition(0.95);
             }else if(gamepad2.dpad_right){
@@ -214,7 +219,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             telemetry.addData("lift encoder", lift.getCurrentPosition());
             telemetry.addData("lift power", liftPower);
             telemetry.addData("claw position", claw.getPosition());
-            telemetry.addData("rotate position", rotate.getPosition());
+            //telemetry.addData("rotate position", rotate.getPosition());
             telemetry.update();
         }
     }
