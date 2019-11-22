@@ -27,6 +27,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -1285,8 +1286,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             telemetry.addData("ry: ", ry);
             telemetry.addData("lx: ", lx);
             telemetry.addData("ly: ", ly);
-            telemetry.addData("bitmap width:", bm.getWidth()); //640
-            telemetry.addData("bitmap height:", bm.getHeight()); //480 across I think?
+            telemetry.addData("bitmap width:", bm.getWidth()); //1280
+            telemetry.addData("bitmap height:", bm.getHeight()); //720
             telemetry.addData("left pix red: ", leftPix);
             telemetry.addData("right pix red: ", rightPix);
             telemetry.addData("stonepos: ", stonepos);
@@ -1294,6 +1295,52 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }else{
             //change it to whatever is closest
             telemetry.addData("Bitmap null:", "Default center(?)");
+            telemetry.update();
+        }
+
+        return stonepos;
+    }
+
+    public int detectSkystoneOnePix(Bitmap bm, boolean red) throws InterruptedException {
+
+        //set threshold for yellow or not yellow?
+        int stonepos = 0;
+        int leftRed, midRed, rightRed;
+
+        if (bm != null) {
+
+            //figure out proper threshold
+
+            if(red){
+                //USE ALL THREE OR JUST TWO?
+                leftRed = red(bm.getPixel(1150,250));
+                midRed = red(bm.getPixel(860,250));
+                rightRed = red(bm.getPixel(780,250));
+            }else{ //GET PIXELS FOR BLUE LATER
+                leftRed = red(bm.getPixel(1150,250));
+                midRed = red(bm.getPixel(860,250));
+                rightRed = red(bm.getPixel(780,250));
+            }
+
+            ArrayList<Integer> pixels = new ArrayList<>();
+            pixels.add(leftRed);
+            pixels.add(midRed);
+            pixels.add(rightRed);
+
+            if(Collections.min(pixels) == leftRed){
+                stonepos = -1;
+            }else if(Collections.min(pixels) == midRed){
+                stonepos = 0;
+            }else if (Collections.min(pixels) == rightRed){
+                stonepos = 1;
+            }
+
+            telemetry.addData("Reds Detected: ", pixels);
+            telemetry.addData("stonepos: ", stonepos);
+            telemetry.update();
+        }else{
+            //change it to whatever is closest
+            telemetry.addData("Bitmap null:", "Default center");
             telemetry.update();
         }
 
