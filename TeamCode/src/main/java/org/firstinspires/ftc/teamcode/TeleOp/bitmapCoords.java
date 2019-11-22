@@ -2,10 +2,11 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="bitmapTeleOpTest", group="auto")
+@TeleOp(name="bitmapTeleOpTest", group="auto")
 //@Disabled
 public class bitmapCoords extends SkystoneLinearOpMode {
 
@@ -20,36 +21,36 @@ public class bitmapCoords extends SkystoneLinearOpMode {
 
         while(opModeIsActive() && !isStopRequested()) {
             if(gamepad1.a){
-                ry -= 20;
+                ry -= 10;
                 sleep(250);
             }
             if(gamepad1.y){
-                ry += 20;
+                ry += 10;
                 sleep(250);
             }
             if(gamepad1.x){
-                rx -= 20;
+                rx -= 10;
                 sleep(250);
             }
             if(gamepad1.b){
-                rx += 20;
+                rx += 10;
                 sleep(250);
             }
 
             if(gamepad1.dpad_down){
-                ly -= 20;
+                ly -= 10;
                 sleep(250);
             }
             if(gamepad1.dpad_up){
-                ly += 20;
+                ly += 10;
                 sleep(250);
             }
             if(gamepad1.dpad_left){
-                lx -= 20;
+                lx -= 10;
                 sleep(250);
             }
             if(gamepad1.dpad_right){
-                lx += 20;
+                lx += 10;
                 sleep(250);
             }
 
