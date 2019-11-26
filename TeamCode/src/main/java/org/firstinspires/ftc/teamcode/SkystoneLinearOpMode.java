@@ -1317,9 +1317,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 midRed = red(bm.getPixel(860,250));
                 rightRed = red(bm.getPixel(780,250));
             }else{ //GET PIXELS FOR BLUE LATER
-                leftRed = red(bm.getPixel(1150,250));
-                midRed = red(bm.getPixel(860,250));
-                rightRed = red(bm.getPixel(780,250));
+                leftRed = red(bm.getPixel(850,200));
+                midRed = red(bm.getPixel(490,250));
+                rightRed = red(bm.getPixel(200,250));
             }
 
             ArrayList<Integer> pixels = new ArrayList<>();

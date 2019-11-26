@@ -54,7 +54,7 @@ public class bitmapCoords extends SkystoneLinearOpMode {
                 sleep(250);
             }
 
-            detectSkystoneOnePix(getBitmap(), true, rx, ry, lx, ly);
+            detectSkystoneOnePix(getBitmap(), false);
         }
     }
 }
