@@ -16,7 +16,7 @@ public class foundationBlue2 extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        strafeAdjust(0.6, 30, true);//Strafe in front of foundation
+        strafeAdjust(0.6, 50, true);//Strafe in front of foundation
 
         driveDistance(-0.6, 50);    //Drive to foundation
 
@@ -24,22 +24,22 @@ public class foundationBlue2 extends SkystoneLinearOpMode {
 
         sleep(1500);
 
-        driveDistance(1, 72);     //Drag foundation to build site
+        turnPID(-15,0.6, 0, 2, 2000);   //angle robot toward wall
 
-        turnPID(90, 0.6, 0, 2, 2000);   //Rotate robot (w/ foundation) toward the wall
+        driveDistance(0.6, 20);     //Drag foundation to wall at an angle
 
-        driveDistance(-0.6, 6);     //Push foundation against the wall
+        turnPID(0, 0.6, 0, 2, 2000);   //set robot to face directly away from the wall
+
+        driveDistance(0.6, 50);     //Pull foundation into building site
 
         foundationD(false);     //Release foundation
 
-        driveDistance(0.6, 6);      //Move from foundation
+        sleep(1000);
 
-        turnPID(0, 0.6, 0, 2, 2000);   //Align to zero
+        strafeDistance(0.25, 70, false);      //strafe away from foundation
 
-        driveDistance(0.6, 12);     //Toward wall (forward)
+        turnPID(90, 0.6, 0, 2, 2000);   //Align with parking spot
 
-        turnPID(-90,0.6,0,2,2000);      //Turn toward alliance bridge
-
-        driveDistance(0.6, 45);     //Drive under alliance bridge
+        driveDistance(0.6, 12);     //Drive to the parking spot (forward)
     }
 }

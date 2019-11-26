@@ -88,6 +88,10 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 intakeL.setPower(gamepad2.right_trigger);
                 intakeR.setPower(gamepad2.right_trigger);
             }
+            if(Math.abs(gamepad2.left_trigger) > 0.05){
+                intakeL.setPower(-gamepad2.left_trigger);
+                intakeR.setPower(-gamepad2.left_trigger);
+            }
 
             //CLAW MOVEMENT
             if (gamepad2.x){
@@ -102,8 +106,9 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             if (gamepad1.right_bumper && fTime + 500 < time.milliseconds()){
                 foundation = !foundation;
                 fTime = time.milliseconds();
+                foundationD(foundation);
             }
-            foundationD(foundation);
+
 
             //ARM MOVEMENT
             if (gamepad2.right_bumper && aTime + 500 < time.milliseconds()){
