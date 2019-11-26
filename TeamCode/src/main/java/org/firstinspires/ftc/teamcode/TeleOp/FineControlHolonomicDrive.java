@@ -65,12 +65,12 @@ public class FineControlHolonomicDrive extends SkystoneLinearOpMode {
                 arm.setPower(0);
             }
 
-            //CLAW ROTATE
+            /*//CLAW ROTATE
             if (gamepad2.dpad_left){
                 rotate.setPosition(1);
             }else if(gamepad2.dpad_right){
                 rotate.setPosition(0);
-            }
+            }*/
 
             //HOLONOMIC DRIVE
             if (Math.abs(gamepad1.left_stick_y) > 0.05) {

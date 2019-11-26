@@ -58,7 +58,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public DcMotor arm;
     public Servo claw;
     //public RevColorSensorV3 sensorColor;
-    public Servo rotate;
     public Servo foundationR;
     public Servo foundationL;
 
@@ -162,7 +161,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         arm = map.dcMotor.get("arm");
         lift = map.dcMotor.get("lift");
         claw = map.servo.get("claw");
-        rotate = map.servo.get("rotate");
         foundationL = map.servo.get("fL");
         foundationR = map.servo.get("fR");
         //sensorColor = map.get(RevColorSensorV3.class, "color");
