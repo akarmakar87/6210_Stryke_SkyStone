@@ -189,7 +189,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         if (auto) {
             resetEncoders();
-            foundationD(false);
+            foundationD(true);
             BNO055IMU.Parameters bparameters = new BNO055IMU.Parameters();
             bparameters.mode = BNO055IMU.SensorMode.IMU;
             bparameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -950,7 +950,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
         resetTime();
-        while (opModeIsActive() && Math.abs(error) > 0.7 && currTime < timeOut){
+        while (opModeIsActive() && Math.abs(error) > 0.5 && currTime < timeOut){
             prevError = error;
             error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
             prevTime = currTime;
@@ -959,9 +959,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
 
             if (power > 0)
-                setMotorPowers(Range.clip(power, 0.2, 0.7), -Range.clip(power, 0.3, 0.7));
+                setMotorPowers(Range.clip(power, 0.2, 0.7), -Range.clip(power, 0.2, 0.7));
             else
-                setMotorPowers(-Range.clip(power, 0.2, 0.7), Range.clip(power, 0.3, 0.7));
+                setMotorPowers(-Range.clip(power, 0.2, 0.7), Range.clip(power, 0.2, 0.7));
 
             telemetry.addData("tAngle: ", tAngle)
                     .addData("kP:", error * kP)
