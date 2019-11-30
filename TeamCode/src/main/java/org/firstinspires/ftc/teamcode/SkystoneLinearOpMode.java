@@ -433,7 +433,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             rb /= 2;
         }
 
-        double min = 0.25;
+        double min = 0.2;
 
         if (lf < 0)
             LF.setPower(Range.clip(lf, -1, -min));
@@ -604,6 +604,28 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
         stopMotors();
     }
+
+    public void driveAdjust(double power, double distance, int timeout){
+
+        Orientation d = imu.getAngularOrientation();
+        double total = distance * encoderToInches;
+        double remaining, finalPower = power, origHeading = getYaw(), error = 0;
+        ElapsedTime t = new ElapsedTime();
+        t.reset();
+        resetEncoders();
+
+        while (opModeIsActive()&& !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < 10) {
+            remaining = total - getEncoderAvg();
+
+            error = Math.abs(origHeading-getYaw());
+            if(error > 180){
+                error = error;
+            }
+            finalPower = (remaining/total) * power;
+
+        }
+    }
+
 
     public void strafeDistance(double power, double distance, boolean right) throws InterruptedException{
         resetEncoders();
@@ -839,6 +861,21 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
+    public void grabStone(int pos){
+        switch(pos){
+            case -1:
+                foundationL.setPosition(0);
+                break;
+            case 0:
+                foundationL.setPosition(0);
+                break;
+            case 1:
+                foundationR.setPosition(1);
+                break;
+        }
+        sleep(2000);
+    }
+
     public void setArmPosition(int position) {
         arm.setTargetPosition(position);
         int c = arm.getCurrentPosition();
@@ -900,6 +937,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             foundationL.setPosition(0);
             foundationR.setPosition(1);
         }
+        sleep(2000);
     }
 
     public void setArm(int target, double pwr){
@@ -940,7 +978,54 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
 
-        double kP = P / 90;
+        double kP = P;
+        double kI = I;
+        double kD = D;
+
+        prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
+
+        power = dT = prevTime = currTime = 0.0;
+
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        while (opModeIsActive() && Math.abs(error) > 1 && currTime < timeOut){
+            prevError = error;
+            error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+            prevTime = currTime;
+            currTime = time.milliseconds();
+            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
+            power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
+
+            if(error > 180){
+                power *= -1;
+            }
+
+            if (power > 0)
+                setMotorPowers(Range.clip(power, 0.2, 0.7), -Range.clip(power, 0.2, 0.7));
+            else
+                setMotorPowers(-Range.clip(power, 0.2, 0.7), Range.clip(power, 0.2, 0.7));
+
+            telemetry.addData("tAngle: ", tAngle)
+                    .addData("currAngle: ", getYaw())
+                    .addData("kP:", error * kP)
+                    .addData("kI:", error * dT * kI)
+                    .addData("kD:", (error - prevError)/dT * kD)
+                    .addData("power", power)
+                    .addData("error: ", error)
+                    .addData("currTime: ", currTime);
+            telemetry.update();
+        }
+        stopMotors();
+    }
+
+    public void turnPIDtest(double tAngle, double P, double I, double D, double timeOut){
+
+        double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
+
+        ArrayList<Double> amps = new ArrayList<>();
+        ArrayList<Double> times = new ArrayList<>();
+
+        double kP = P;
         double kI = I;
         double kD = D;
 
@@ -953,17 +1038,27 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         while (opModeIsActive() && Math.abs(error) > 0.5 && currTime < timeOut){
             prevError = error;
             error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+            if(error > 180){
+                error = -(360-error);
+            }
             prevTime = currTime;
             currTime = time.milliseconds();
             dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
-            power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
 
-            if (power > 0)
-                setMotorPowers(Range.clip(power, 0.2, 0.7), -Range.clip(power, 0.2, 0.7));
-            else
-                setMotorPowers(-Range.clip(power, 0.2, 0.7), Range.clip(power, 0.2, 0.7));
+
+            if(power > 0){
+                power = Range.clip(power, 0.2,1);
+            }else if (power < 0){
+                power = Range.clip(power, -1,-0.2);
+            }
+
+            setMotorPowers(power,-power);
+
+            amps.add(Math.abs(error));
+            times.add(currTime);
 
             telemetry.addData("tAngle: ", tAngle)
+                    .addData("currAngle: ", getYaw())
                     .addData("kP:", error * kP)
                     .addData("kI:", error * dT * kI)
                     .addData("kD:", (error - prevError)/dT * kD)
@@ -973,6 +1068,21 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             telemetry.update();
         }
         stopMotors();
+
+       /** ArrayList<Double> maxes = new ArrayList<>();
+        ArrayList<Double> maxTimes = new ArrayList<>();
+
+        for(int a = 1; a < amps.size()-1; a++){
+            if(amps.get(a) > amps.get(a-1) && amps.get(a) > amps.get(a+1)){
+                maxes.add(amps.get(a));
+                maxTimes.add(times.get(a));
+            }
+        }
+
+        telemetry.addData("maxes: ", maxes.toString());
+        telemetry.addData("times: ", maxTimes.toString());
+        telemetry.update();
+        sleep(10000);**/
     }
 
     public void turnPIDAsha(double tAngle, double maxPower, double I, double D, double timeOut){
@@ -1336,6 +1446,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             telemetry.addData("Reds Detected: ", pixels);
             telemetry.addData("stonepos: ", stonepos);
             telemetry.update();
+            sleep(1000);
         }else{
             //change it to whatever is closest
             telemetry.addData("Bitmap null:", "Default center");
@@ -1505,32 +1616,37 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
-    public int adjustForSkystone(int pos) throws InterruptedException{
-        int amt = 0;
-        switch(pos){
+    public double adjustForSkystone(int pos, boolean red) throws InterruptedException{
+        switch(pos) {
             case -1:
-                //adjust values
-                //driveDistance(0.5, 8);
-                amt = 8;
-                break;
-            case  0:
-                //add stuff?
-                break;
-            case  1:
-                //adjust values
-                //driveDistance(-0.5, 8);
-                amt = -8;
-                break;
+                driveDistance(-0.4, 2);
+                return 2;
+            case 0:
+                driveDistance(0.4, 8);
+                return -8;
+            case 1:
+                driveDistance(0.4, 2);
+                return -2;
         }
-        return amt;
+        return 2;//default
     }
 
     //ROBOT ORIENTATION METHODS
 
     public double getYaw() {
         angles = imu.getAngularOrientation();
-        return angles.firstAngle;
+
+        double angle = angles.firstAngle;
+
+        if(angle >= 0){
+            return angle;
+        }else if (angle < 0){
+            return 360 + angle;
+        }
+        return angle;
     }
+
+
 
     public double getRobotX() {
         return translation.get(0) / mmPerInch;
