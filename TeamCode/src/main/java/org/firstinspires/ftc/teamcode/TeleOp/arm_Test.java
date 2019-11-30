@@ -18,7 +18,7 @@ public class arm_Test extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        rotate.setPosition(0.5);
+        //rotate.setPosition(0.5);
         //setArmPosition(100);
         //sleep(3000);
         /*setArmPosition(false);

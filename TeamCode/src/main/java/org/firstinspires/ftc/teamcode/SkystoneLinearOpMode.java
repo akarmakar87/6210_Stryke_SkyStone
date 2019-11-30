@@ -27,6 +27,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,7 +58,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public DcMotor arm;
     public Servo claw;
     //public RevColorSensorV3 sensorColor;
-    public Servo rotate;
     public Servo foundationR;
     public Servo foundationL;
 
@@ -161,7 +161,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         arm = map.dcMotor.get("arm");
         lift = map.dcMotor.get("lift");
         claw = map.servo.get("claw");
-        rotate = map.servo.get("rotate");
         foundationL = map.servo.get("fL");
         foundationR = map.servo.get("fR");
         //sensorColor = map.get(RevColorSensorV3.class, "color");
@@ -190,7 +189,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         if (auto) {
             resetEncoders();
-            foundationD(false);
+            foundationD(true);
             BNO055IMU.Parameters bparameters = new BNO055IMU.Parameters();
             bparameters.mode = BNO055IMU.SensorMode.IMU;
             bparameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -434,7 +433,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             rb /= 2;
         }
 
-        double min = 0.25;
+        double min = 0.2;
 
         if (lf < 0)
             LF.setPower(Range.clip(lf, -1, -min));
@@ -605,6 +604,28 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
         stopMotors();
     }
+
+    public void driveAdjust(double power, double distance, int timeout){
+
+        Orientation d = imu.getAngularOrientation();
+        double total = distance * encoderToInches;
+        double remaining, finalPower = power, origHeading = getYaw(), error = 0;
+        ElapsedTime t = new ElapsedTime();
+        t.reset();
+        resetEncoders();
+
+        while (opModeIsActive()&& !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < 10) {
+            remaining = total - getEncoderAvg();
+
+            error = Math.abs(origHeading-getYaw());
+            if(error > 180){
+                error = error;
+            }
+            finalPower = (remaining/total) * power;
+
+        }
+    }
+
 
     public void strafeDistance(double power, double distance, boolean right) throws InterruptedException{
         resetEncoders();
@@ -840,6 +861,21 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
+    public void grabStone(int pos){
+        switch(pos){
+            case -1:
+                foundationL.setPosition(0);
+                break;
+            case 0:
+                foundationL.setPosition(0);
+                break;
+            case 1:
+                foundationR.setPosition(1);
+                break;
+        }
+        sleep(2000);
+    }
+
     public void setArmPosition(int position) {
         arm.setTargetPosition(position);
         int c = arm.getCurrentPosition();
@@ -901,6 +937,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             foundationL.setPosition(0);
             foundationR.setPosition(1);
         }
+        sleep(2000);
     }
 
     public void setArm(int target, double pwr){
@@ -941,7 +978,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
 
-        double kP = P / 90;
+        double kP = P;
         double kI = I;
         double kD = D;
 
@@ -951,7 +988,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
         resetTime();
-        while (opModeIsActive() && Math.abs(error) > 0.7 && currTime < timeOut){
+        while (opModeIsActive() && Math.abs(error) > 1 && currTime < timeOut){
             prevError = error;
             error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
             prevTime = currTime;
@@ -959,12 +996,17 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
             power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
 
+            if(error > 180){
+                power *= -1;
+            }
+
             if (power > 0)
-                setMotorPowers(Range.clip(power, 0.2, 0.7), -Range.clip(power, 0.3, 0.7));
+                setMotorPowers(Range.clip(power, 0.2, 0.7), -Range.clip(power, 0.2, 0.7));
             else
-                setMotorPowers(-Range.clip(power, 0.2, 0.7), Range.clip(power, 0.3, 0.7));
+                setMotorPowers(-Range.clip(power, 0.2, 0.7), Range.clip(power, 0.2, 0.7));
 
             telemetry.addData("tAngle: ", tAngle)
+                    .addData("currAngle: ", getYaw())
                     .addData("kP:", error * kP)
                     .addData("kI:", error * dT * kI)
                     .addData("kD:", (error - prevError)/dT * kD)
@@ -974,6 +1016,73 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             telemetry.update();
         }
         stopMotors();
+    }
+
+    public void turnPIDtest(double tAngle, double P, double I, double D, double timeOut){
+
+        double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
+
+        ArrayList<Double> amps = new ArrayList<>();
+        ArrayList<Double> times = new ArrayList<>();
+
+        double kP = P;
+        double kI = I;
+        double kD = D;
+
+        prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
+
+        power = dT = prevTime = currTime = 0.0;
+
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        while (opModeIsActive() && Math.abs(error) > 0.5 && currTime < timeOut){
+            prevError = error;
+            error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+            if(error > 180){
+                error = -(360-error);
+            }
+            prevTime = currTime;
+            currTime = time.milliseconds();
+            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
+
+
+            if(power > 0){
+                power = Range.clip(power, 0.2,1);
+            }else if (power < 0){
+                power = Range.clip(power, -1,-0.2);
+            }
+
+            setMotorPowers(power,-power);
+
+            amps.add(Math.abs(error));
+            times.add(currTime);
+
+            telemetry.addData("tAngle: ", tAngle)
+                    .addData("currAngle: ", getYaw())
+                    .addData("kP:", error * kP)
+                    .addData("kI:", error * dT * kI)
+                    .addData("kD:", (error - prevError)/dT * kD)
+                    .addData("power", power)
+                    .addData("error: ", error)
+                    .addData("currTime: ", currTime);
+            telemetry.update();
+        }
+        stopMotors();
+
+       /** ArrayList<Double> maxes = new ArrayList<>();
+        ArrayList<Double> maxTimes = new ArrayList<>();
+
+        for(int a = 1; a < amps.size()-1; a++){
+            if(amps.get(a) > amps.get(a-1) && amps.get(a) > amps.get(a+1)){
+                maxes.add(amps.get(a));
+                maxTimes.add(times.get(a));
+            }
+        }
+
+        telemetry.addData("maxes: ", maxes.toString());
+        telemetry.addData("times: ", maxTimes.toString());
+        telemetry.update();
+        sleep(10000);**/
     }
 
     public void turnPIDAsha(double tAngle, double maxPower, double I, double D, double timeOut){
@@ -1285,8 +1394,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             telemetry.addData("ry: ", ry);
             telemetry.addData("lx: ", lx);
             telemetry.addData("ly: ", ly);
-            telemetry.addData("bitmap width:", bm.getWidth()); //640
-            telemetry.addData("bitmap height:", bm.getHeight()); //480 across I think?
+            telemetry.addData("bitmap width:", bm.getWidth()); //1280
+            telemetry.addData("bitmap height:", bm.getHeight()); //720
             telemetry.addData("left pix red: ", leftPix);
             telemetry.addData("right pix red: ", rightPix);
             telemetry.addData("stonepos: ", stonepos);
@@ -1294,6 +1403,53 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }else{
             //change it to whatever is closest
             telemetry.addData("Bitmap null:", "Default center(?)");
+            telemetry.update();
+        }
+
+        return stonepos;
+    }
+
+    public int detectSkystoneOnePix(Bitmap bm, boolean red) throws InterruptedException {
+
+        //set threshold for yellow or not yellow?
+        int stonepos = 0;
+        int leftRed, midRed, rightRed;
+
+        if (bm != null) {
+
+            //figure out proper threshold
+
+            if(red){
+                //USE ALL THREE OR JUST TWO?
+                leftRed = red(bm.getPixel(1150,250));
+                midRed = red(bm.getPixel(860,250));
+                rightRed = red(bm.getPixel(780,250));
+            }else{ //GET PIXELS FOR BLUE LATER
+                leftRed = red(bm.getPixel(850,200));
+                midRed = red(bm.getPixel(490,250));
+                rightRed = red(bm.getPixel(200,250));
+            }
+
+            ArrayList<Integer> pixels = new ArrayList<>();
+            pixels.add(leftRed);
+            pixels.add(midRed);
+            pixels.add(rightRed);
+
+            if(Collections.min(pixels) == leftRed){
+                stonepos = -1;
+            }else if(Collections.min(pixels) == midRed){
+                stonepos = 0;
+            }else if (Collections.min(pixels) == rightRed){
+                stonepos = 1;
+            }
+
+            telemetry.addData("Reds Detected: ", pixels);
+            telemetry.addData("stonepos: ", stonepos);
+            telemetry.update();
+            sleep(1000);
+        }else{
+            //change it to whatever is closest
+            telemetry.addData("Bitmap null:", "Default center");
             telemetry.update();
         }
 
@@ -1460,32 +1616,37 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
-    public int adjustForSkystone(int pos) throws InterruptedException{
-        int amt = 0;
-        switch(pos){
+    public double adjustForSkystone(int pos, boolean red) throws InterruptedException{
+        switch(pos) {
             case -1:
-                //adjust values
-                //driveDistance(0.5, 8);
-                amt = 8;
-                break;
-            case  0:
-                //add stuff?
-                break;
-            case  1:
-                //adjust values
-                //driveDistance(-0.5, 8);
-                amt = -8;
-                break;
+                driveDistance(-0.4, 2);
+                return 2;
+            case 0:
+                driveDistance(0.4, 8);
+                return -8;
+            case 1:
+                driveDistance(0.4, 2);
+                return -2;
         }
-        return amt;
+        return 2;//default
     }
 
     //ROBOT ORIENTATION METHODS
 
     public double getYaw() {
         angles = imu.getAngularOrientation();
-        return angles.firstAngle;
+
+        double angle = angles.firstAngle;
+
+        if(angle >= 0){
+            return angle;
+        }else if (angle < 0){
+            return 360 + angle;
+        }
+        return angle;
     }
+
+
 
     public double getRobotX() {
         return translation.get(0) / mmPerInch;
