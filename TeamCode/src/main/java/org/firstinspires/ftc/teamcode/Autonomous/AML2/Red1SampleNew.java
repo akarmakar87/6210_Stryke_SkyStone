@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous.AML2;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Blue1SampleNew", group = "auto")
+@Autonomous(name="Red1SampleNew", group = "auto")
 
 //@Disabled
-public class Blue1SampleNew extends SkystoneLinearOpMode{
+public class Red1SampleNew extends SkystoneLinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -22,14 +21,13 @@ public class Blue1SampleNew extends SkystoneLinearOpMode{
 
         waitForStart();
 
-        pos = detectSkystoneOnePix(getBitmap(),false); //DETECT SKYSTONE
+        pos = detectSkystoneOnePix(getBitmap(),true); //DETECT SKYSTONE
 
-        adjust = adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
+        adjust = adjustForSkystone(pos, true); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
 
         sleep(500);
 
         turnPID(273, 0.6/273, 0.004, 1, 5000); //TURN 90 TO FACE STONES
-        //turnPIDtest(270,0.5/90,0,1,4000);
 
         //driveDistance(0.5,15); //MOVE BACK TO LINE UP AGAINST WALL
         sleep(500);
@@ -43,8 +41,8 @@ public class Blue1SampleNew extends SkystoneLinearOpMode{
         sleep(500);
 
         turnPID(180, 0.7/180, 0.004, 1, 5000); //TURN 90 TO FACE PARK
-        sleep(500);
 
+        sleep(500);
 
         //turnPIDtest(180,0.5/90,0,1,5000);
 
