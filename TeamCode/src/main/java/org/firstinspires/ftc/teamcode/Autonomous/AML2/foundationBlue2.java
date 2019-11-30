@@ -26,7 +26,7 @@ public class foundationBlue2 extends SkystoneLinearOpMode {
 
         turnPID(-15,0.6, 0, 2, 2000);   //angle robot toward wall
 
-        driveDistance(0.6, 20);     //Drag foundation to wall at an angle
+        /*driveDistance(0.6, 20);     //Drag foundation to wall at an angle
 
         turnPID(0, 0.6, 0, 2, 2000);   //set robot to face directly away from the wall
 
@@ -41,5 +41,6 @@ public class foundationBlue2 extends SkystoneLinearOpMode {
         turnPID(90, 0.6, 0, 2, 2000);   //Align with parking spot
 
         driveDistance(0.6, 12);     //Drive to the parking spot (forward)
+        */
     }
 }
