@@ -16,31 +16,42 @@ public class foundationBlue2 extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        strafeAdjust(0.6, 50, true);//Strafe in front of foundation
+        driveDistance(-0.4, 20);    //align with foundation
 
-        driveDistance(-0.6, 50);    //Drive to foundation
+        turnPID(274, 0.7/270, 0.004, 1, 5000);   //turn toward foundation
 
-        foundationD(true);  //Grab foundation
+        driveDistance(-0.4, 39);    //Drive to foundation
 
-        sleep(1500);
-
-        turnPID(-15,0.6, 0, 2, 2000);   //angle robot toward wall
-
-        /*driveDistance(0.6, 20);     //Drag foundation to wall at an angle
-
-        turnPID(0, 0.6, 0, 2, 2000);   //set robot to face directly away from the wall
-
-        driveDistance(0.6, 50);     //Pull foundation into building site
-
-        foundationD(false);     //Release foundation
+        foundationD(false);  //Grab foundation
 
         sleep(1000);
 
-        strafeDistance(0.25, 70, false);      //strafe away from foundation
+        setMotorPowers(0.2, 0.5);
+        sleep(500);
+        stopMotors();
 
-        turnPID(90, 0.6, 0, 2, 2000);   //Align with parking spot
+        //turnPID(265,0.7/195, 0.004, 1, 2000);   //angle robot toward wall
 
-        driveDistance(0.6, 12);     //Drive to the parking spot (forward)
-        */
+        //driveDistance(0.4, 20);     //Drag foundation to wall at an angle
+
+        //turnPID(180, 0.7/180, 0.004, 1, 2000);   //set robot to face directly away from the wall
+
+        setMotorPowers(0.6, 0.2);
+        sleep(500);
+        stopMotors();
+
+        driveDistance(1, 32);     //Pull foundation into building site
+
+        //strafeAdjust(0.4, 30, false);
+
+        turnPID(360, 0.7/90, 0.004, 1, 5000);
+
+        driveDistance(-0.8,15);
+
+        foundationD(true);     //Release foundation
+
+        sleep(1000);
+
+        driveDistance(0.4, 75);     //Drive to the parking spot (forward)
     }
 }

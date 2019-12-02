@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Blue1SampleNew", group = "auto")
+@Autonomous(name="Blue1SampleNew", group = "auto") // RED SIDE
 
 //@Disabled
 public class Blue1SampleNew extends SkystoneLinearOpMode{
@@ -19,6 +19,7 @@ public class Blue1SampleNew extends SkystoneLinearOpMode{
 
         int pos = 0;
         double adjust = 0.0;
+        double longAdjust = 0.0;
 
         waitForStart();
 
@@ -26,52 +27,65 @@ public class Blue1SampleNew extends SkystoneLinearOpMode{
 
         adjust = adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
 
-        sleep(500);
+        longAdjust = forLongAdjust(pos,false) + 100;
 
-        turnPID(273, 0.6/273, 0.004, 1, 5000); //TURN 90 TO FACE STONES
+        sleep(75);
+
+        turnPID(273, 0.7/273, 0.004, 1, 5000); //TURN 90 TO FACE STONES
         //turnPIDtest(270,0.5/90,0,1,4000);
 
-        //driveDistance(0.5,15); //MOVE BACK TO LINE UP AGAINST WALL
-        sleep(500);
+        //driveDistance(0.2,5); //MOVE BACK TO LINE UP AGAINST WALL
+        sleep(75);
 
-        driveDistance(-0.4,48); //GO TO STONES
+        driveAdjust(270,-0.5,43, 7); //GO TO STONES
 
         grabStone(pos); //GRAB SKYSTONE
 
-        driveDistance(0.5,20); //MOVE BACKWARD
+        driveAdjust(270,0.7,13, 7); //MOVE BACKWARD
 
-        sleep(500);
+        sleep(75);
 
-        turnPID(180, 0.7/180, 0.004, 1, 5000); //TURN 90 TO FACE PARK
-        sleep(500);
+        turnPID(180, 0.8/180, 0.004, 1, 5000); //TURN 90 TO FACE PARK
 
+        sleep(75);
 
         //turnPIDtest(180,0.5/90,0,1,5000);
 
-        driveDistance(-0.5, 11+adjust); //CROSS PARK LINE (adjust distance)
+        driveAdjust(180,-0.4, 68+adjust, 7); //CROSS PARK LINE (adjust distance)
 
         foundationD(true); //RELEASE BLOCK
 
-        driveDistance(0.5, 53+adjust); //second stone (adjust distance) (35 = 11+24)
+        //turnPID(180, 0.7/180, 0.004, 1, 5000);
 
-        sleep(500);
+        //driveDistance(0.2, 105+adjust); //second stone (adjust distance) (35 = 11+24)
 
-        turnPID(270, 0.6/270, 0.004, 1, 5000); //TURN 90 TO FACE STONES
+        //driveDistance(0.6, 108+adjust);
+        driveAdjust(180,0.7, longAdjust,7);
+
+        sleep(75);
+
+        turnPID(270, 0.7/270, 0.004, 1, 5000); //TURN 90 TO FACE STONES
         //turnPIDtest(270,0.5/90,0,1,5000);
 
-        driveDistance(-0.5,28); //MOVE forward
+        sleep(75);
+
+        driveAdjust(270,-0.6,19, 7); //MOVE forward
 
         grabStone(pos); //GRAB SKYSTONE
 
-        driveDistance(0.5,20); //MOVE back
+        driveAdjust(270,0.7,16, 7); //MOVE back
 
-        turnPID(180, 0.7/90, 0.004, 1, 5000); //TURN 90 TO FACE PARK
+        sleep(75);
 
-        sleep(500);
+        turnPID(185, 0.7/90, 0.004, 1, 5000); //TURN 90 TO FACE PARK
 
-        driveDistance(-0.5, 53+adjust); //second stone (adjust distance) (35 = 11+24)
+        sleep(75);
+
+        driveAdjust(180,-0.8, longAdjust, 7); //second stone (adjust distance) (35 = 11+24)
 
         foundationD(true); //RELEASE BLOCK
+
+        driveAdjust(180,0.6,15, 7); //MOVE back
 
         }
 
