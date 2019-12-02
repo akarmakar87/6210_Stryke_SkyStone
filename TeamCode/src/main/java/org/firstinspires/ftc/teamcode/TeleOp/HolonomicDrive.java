@@ -85,12 +85,18 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
             //INTAKE
             if(Math.abs(gamepad2.right_trigger) > 0.05){
-                intakeL.setPower(gamepad2.right_trigger);
-                intakeR.setPower(gamepad2.right_trigger);
+                intakeL.setPower(-gamepad2.right_trigger);
+                intakeR.setPower(-gamepad2.right_trigger);
             }
-            if(Math.abs(gamepad2.left_trigger) > 0.05){
-                intakeL.setPower(-gamepad2.left_trigger);
-                intakeR.setPower(-gamepad2.left_trigger);
+            else{
+                if(Math.abs(gamepad2.left_trigger) > 0.05){
+                    intakeL.setPower(gamepad2.left_trigger);
+                    intakeR.setPower(gamepad2.left_trigger);
+                }
+                else{
+                    intakeL.setPower(0);
+                    intakeR.setPower(0);
+                }
             }
 
             //CLAW MOVEMENT
@@ -119,7 +125,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             if (aControl){
                 arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 if (Math.abs(gamepad2.right_stick_y) > 0.05){
-                    armPower = Range.clip(gamepad2.right_stick_y, -0.2, 0.2);
+                    armPower = Range.clip(gamepad2.right_stick_y, -0.4, 0.45);
                     arm.setPower(-armPower);
                 }else{
                     arm.setPower(0);
@@ -224,6 +230,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             telemetry.addData("lift encoder", lift.getCurrentPosition());
             telemetry.addData("lift power", liftPower);
             telemetry.addData("claw position", claw.getPosition());
+            telemetry.addData("arm Control", aControl);
             //telemetry.addData("rotate position", rotate.getPosition());
             telemetry.update();
         }
