@@ -616,12 +616,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         while (opModeIsActive()&& !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < 10){
             remaining = total - getEncoderAvg();
             if(t.milliseconds() - prevTime >= 100){
+                prevTime = t.milliseconds();
                 finalPower += 0.075;
             }
             //put in range clip if necessary
             finalPower = Range.clip(finalPower,0.2, power);
             setEachMotorPowers(finalPower,finalPower,finalPower,finalPower,false);
-            prevTime = t.milliseconds();
+
         }
         stopMotors();
     }
@@ -912,7 +913,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
-    public void grabStone(int pos){
+    public void grabStone(int pos, boolean back){
         switch(pos){
             case -1:
                 foundationL.setPosition(0);
@@ -921,7 +922,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 foundationL.setPosition(0);
                 break;
             case 1:
-                foundationR.setPosition(1);
+                if (back)
+                    foundationR.setPosition(1);
+                else
+                    foundationL.setPosition(0);
                 break;
         }
         sleep(1000);
@@ -1679,8 +1683,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 driveDistance(0.4, 10);
                 return -10;
             case 1:
-                driveDistance(0.4, 4);
-                return -4;
+                driveDistance(0.4, 2);
+                return -2;
         }
         return 2;//default
     }
@@ -1688,11 +1692,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public double forLongAdjust(int pos, boolean red) throws InterruptedException{
         switch(pos) {
             case -1:
-                return 10;
+                return 13;
             case 0:
-                return 4;
+                return 3;
             case 1:
-                return 6;
+                return -13;
         }
         return 2;//default
     }
