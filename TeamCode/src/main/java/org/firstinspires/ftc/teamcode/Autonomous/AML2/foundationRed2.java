@@ -42,7 +42,7 @@ public class foundationRed2 extends SkystoneLinearOpMode {
         sleep(500);
         stopMotors();
         */
-        
+
         driveDistance(1, 40);     //Pull foundation into building site
 
         //strafeAdjust(0.4, 30, false);
