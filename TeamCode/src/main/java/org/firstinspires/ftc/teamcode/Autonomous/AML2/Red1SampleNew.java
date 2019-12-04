@@ -34,7 +34,7 @@ public class Red1SampleNew extends SkystoneLinearOpMode{
 
         driveDistance(-0.4,48); //GO TO STONES
 
-        grabStone(pos, false); //GRAB SKYSTONE
+        grabStone(pos); //GRAB SKYSTONE
 
         driveDistance(0.5,20); //MOVE BACKWARD
 
@@ -59,7 +59,7 @@ public class Red1SampleNew extends SkystoneLinearOpMode{
 
         driveDistance(-0.5,28); //MOVE forward
 
-        grabStone(pos, false); //GRAB SKYSTONE
+        grabStone(pos); //GRAB SKYSTONE
 
         driveDistance(0.5,20); //MOVE back
 
