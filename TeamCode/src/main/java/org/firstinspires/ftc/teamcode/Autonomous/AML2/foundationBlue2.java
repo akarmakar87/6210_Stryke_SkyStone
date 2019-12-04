@@ -44,7 +44,7 @@ public class foundationBlue2 extends SkystoneLinearOpMode {
 
         //strafeAdjust(0.4, 30, false);
 
-        turnPID(360, 0.7/90, 0.004, 1, 5000);
+        turnPID(360, 0.7/90, 0.004, 1, 5000);   //Turn foundation towards wall
 
         foundationD(true);     //Release foundation
 
