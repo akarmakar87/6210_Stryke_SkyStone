@@ -109,7 +109,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 claw.setPosition(0.0); //CLOSE CLAW
             }
 
-            if (gamepad1.right_bumper && fTime + 500 < time.milliseconds()){
+            if (gamepad1.right_bumper && fTime + 250 < time.milliseconds()){
                 foundation = !foundation;
                 fTime = time.milliseconds();
                 foundationD(foundation);
@@ -196,28 +196,28 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 strafePower = gamepad1.left_trigger * 0.75;
                 setStrafePowers(strafePower, false);
             }else if (halfSpeed){
-                lfPower = ((yAxis+xAxis-zAxis)/2);
-                rfPower = ((yAxis-xAxis+zAxis)/2);
-                lbPower = ((yAxis-xAxis-zAxis)/2);
-                rbPower = ((yAxis+xAxis+zAxis)/2);
+                lfPower = ((-yAxis+xAxis-zAxis)/2);
+                rfPower = ((-yAxis-xAxis+zAxis)/2);
+                lbPower = ((-yAxis-xAxis-zAxis)/2);
+                rbPower = ((-yAxis+xAxis+zAxis)/2);
 
-                LF.setPower(Range.clip(lfPower, -0.5, 0.5));
-                RF.setPower(Range.clip(rfPower, -0.5, 0.5));
-                LB.setPower(Range.clip(lbPower, -0.5, 0.5));
-                RB.setPower(Range.clip(rbPower, -0.5, 0.5));
+                LF.setPower(-Range.clip(lfPower, -0.5, 0.5));
+                RF.setPower(-Range.clip(rfPower, -0.5, 0.5));
+                LB.setPower(-Range.clip(lbPower, -0.5, 0.5));
+                RB.setPower(-Range.clip(rbPower, -0.5, 0.5));
             }else {
-                lfPower = yAxis + xAxis - zAxis;
-                rfPower = yAxis - xAxis + zAxis;
-                lbPower = yAxis - xAxis - zAxis;
-                rbPower = yAxis + xAxis + zAxis;
+                lfPower = -yAxis + xAxis - zAxis;
+                rfPower = -yAxis - xAxis + zAxis;
+                lbPower = -yAxis - xAxis - zAxis;
+                rbPower = -yAxis + xAxis + zAxis;
 
-                LF.setPower(Range.clip(lfPower, -1, 1));
-                RF.setPower(Range.clip(rfPower, -1, 1));
-                LB.setPower(Range.clip(lbPower, -1, 1));
-                RB.setPower(Range.clip(rbPower, -1, 1));
+                LF.setPower(-Range.clip(lfPower, -1, 1));
+                RF.setPower(-Range.clip(rfPower, -1, 1));
+                LB.setPower(-Range.clip(lbPower, -1, 1));
+                RB.setPower(-Range.clip(rbPower, -1, 1));
             }
 
-            telemetry.addData("Y Axis", yAxis);
+            /*telemetry.addData("Y Axis", yAxis);
             telemetry.addData("X Axis", xAxis);
             telemetry.addData("Z Axis", zAxis);
             telemetry.addData("LF Power", lfPower);
@@ -231,7 +231,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             telemetry.addData("lift power", liftPower);
             telemetry.addData("claw position", claw.getPosition());
             telemetry.addData("arm Control", aControl);
-            //telemetry.addData("rotate position", rotate.getPosition());
+            //telemetry.addData("rotate position", rotate.getPosition());*/
             telemetry.update();
         }
     }

@@ -46,12 +46,14 @@ public class foundationBlue2 extends SkystoneLinearOpMode {
 
         turnPID(360, 0.7/90, 0.004, 1, 5000);
 
-        driveDistance(-0.8,15);
-
         foundationD(true);     //Release foundation
 
-        sleep(1000);
+        sleep(500);
 
-        driveDistance(0.4, 75);     //Drive to the parking spot (forward)
+        driveDistance(-0.8,20);
+
+        turnPID(350, 0.7/180, 0.004, 1, 5000);
+
+        driveDistance(0.4, 70);     //Drive to the parking spot (forward)
     }
 }

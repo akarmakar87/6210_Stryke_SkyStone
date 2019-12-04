@@ -1688,7 +1688,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public double forLongAdjust(int pos, boolean red) throws InterruptedException{
         switch(pos) {
             case -1:
-                return 10;
+                return 15;
             case 0:
                 return 4;
             case 1:
