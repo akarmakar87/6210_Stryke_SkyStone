@@ -58,7 +58,7 @@ public class Blue1SampleNew extends SkystoneLinearOpMode{
         turnPID(270, 0.7/270, 0.004, 1, 5000); //TURN 90 TO FACE STONES
         //turnPIDtest(270,0.5/90,0,1,5000);
 
-        driveAdjust(270,-0.6,19, 7); //MOVE forward
+        driveAdjust(270,-0.6,23, 7); //MOVE forward
 
         grabStone(pos); //GRAB SKYSTONE
 

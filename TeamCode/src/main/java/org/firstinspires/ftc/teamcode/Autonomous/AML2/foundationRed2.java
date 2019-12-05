@@ -47,7 +47,11 @@ public class foundationRed2 extends SkystoneLinearOpMode {
 
         //strafeAdjust(0.4, 30, false);
 
-        turnPID(360, 0.7/90, 0.004, 1, 5000);
+        turnPID(360, 0.7/90, 0.004, 1, 7000);
+
+        setMotorPowers(0.0,0.7);
+        sleep(2000);
+        stopMotors();
 
         foundationD(true);     //Release foundation
 

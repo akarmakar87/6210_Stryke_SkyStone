@@ -117,7 +117,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
 
             //ARM MOVEMENT
-            if (gamepad2.right_bumper && aTime + 500 < time.milliseconds()){
+           /* if (gamepad2.right_bumper && aTime + 500 < time.milliseconds()){
                 aControl = !aControl;
                 aTime = time.milliseconds();
                 apos = arm.getCurrentPosition();
@@ -141,7 +141,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                     apos -= 10;
                 }
                 arm.setTargetPosition(apos);
-            }
+            }*/
 
 
             /*//CLAW ROTATE
