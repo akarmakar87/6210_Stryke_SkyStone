@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous.AML1;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.vuforia.CameraDevice;
 
 

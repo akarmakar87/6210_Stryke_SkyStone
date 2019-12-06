@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="driveGyro", group = "auto")
 
-//@Disabled
+@Disabled
 public class driveGyro extends SkystoneLinearOpMode{
 
     @Override

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="PID Test", group = "auto")
 
-//@Disabled
+@Disabled
 public class PIDconstantTest extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

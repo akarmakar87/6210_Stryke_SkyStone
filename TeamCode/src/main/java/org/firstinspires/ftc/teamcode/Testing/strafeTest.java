@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Strafe Test", group="auto")
-//@Disabled
+@Disabled
 public class strafeTest extends SkystoneLinearOpMode {
 
     @Override

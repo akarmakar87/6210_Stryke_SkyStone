@@ -5,10 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Blue1SampleNew", group = "auto") // RED SIDE
+@Autonomous(name="RedSample", group = "auto") // RED SIDE
 
 //@Disabled
-public class Blue1SampleNew extends SkystoneLinearOpMode{
+public class RedSample extends SkystoneLinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -36,7 +36,7 @@ public class Blue1SampleNew extends SkystoneLinearOpMode{
 
         driveAdjust(270,-0.5,46, 7); //GO TO STONES
 
-        grabStone(pos); //GRAB SKYSTONE
+        grabStone(pos,false); //GRAB SKYSTONE
 
         driveAdjust(270,0.9,13, 7); //MOVE BACKWARD
 
@@ -60,13 +60,13 @@ public class Blue1SampleNew extends SkystoneLinearOpMode{
 
         driveAdjust(270,-0.6,23, 7); //MOVE forward
 
-        grabStone(pos); //GRAB SKYSTONE
+        grabStone(pos, true); //GRAB SKYSTONE
 
         driveAdjust(270,0.9,16, 7); //MOVE back
 
         turnPID(185, 0.7/90, 0.004, 1, 5000); //TURN 90 TO FACE PARK
 
-        driveAdjust(180,-0.6, longAdjust - 5, 7); //second stone (adjust distance) (35 = 11+24)
+        driveAdjust(180,-0.6, longAdjust - 1, 7); //second stone (adjust distance) (35 = 11+24)
 
         foundationD(true); //RELEASE BLOCK
 

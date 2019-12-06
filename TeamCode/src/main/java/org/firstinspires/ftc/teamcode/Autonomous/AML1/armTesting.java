@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="arm testing", group = "auto")
 
-//@Disabled
+@Disabled
 public class armTesting extends SkystoneLinearOpMode{
 
     @Override

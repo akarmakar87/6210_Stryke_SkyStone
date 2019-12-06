@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @TeleOp(name="bitmapTeleOpTest", group="auto")
-//@Disabled
+@Disabled
 public class bitmapCoords extends SkystoneLinearOpMode {
 
     @Override
