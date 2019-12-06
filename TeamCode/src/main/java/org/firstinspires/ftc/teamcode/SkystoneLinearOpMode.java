@@ -1677,8 +1677,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public double adjustForSkystone(int pos, boolean red) throws InterruptedException{
         switch(pos) {
             case -1:
-                driveDistance(-0.4, 4);
-                return 4;
+                driveDistance(-0.4, 2);
+                return 2;
             case 0:
                 driveDistance(0.4, 10);
                 return -10;

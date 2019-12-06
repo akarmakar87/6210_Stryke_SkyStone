@@ -55,7 +55,10 @@ public class RedSample extends SkystoneLinearOpMode{
         //driveDistance(0.6, 108+adjust);
         driveAdjust(180,0.6, longAdjust,7);
 
-        turnPID(270, 0.7/270, 0.004, 1, 5000); //TURN 90 TO FACE STONES
+        if(pos == -1)
+            turnPID(280, 0.7/275, 0.004, 1, 5000); //TURN 90 TO FACE STONES
+        else
+            turnPID(270,0.7/270, 0.004, 1,5000);
         //turnPIDtest(270,0.5/90,0,1,5000);
 
         driveAdjust(270,-0.6,23, 7); //MOVE forward
@@ -64,13 +67,13 @@ public class RedSample extends SkystoneLinearOpMode{
 
         driveAdjust(270,0.9,16, 7); //MOVE back
 
-        turnPID(185, 0.7/90, 0.004, 1, 5000); //TURN 90 TO FACE PARK
+        turnPID(188, 0.7/90, 0.004, 1, 5000); //TURN 90 TO FACE PARK
 
         driveAdjust(180,-0.6, longAdjust - 1, 7); //second stone (adjust distance) (35 = 11+24)
 
         foundationD(true); //RELEASE BLOCK
 
-        driveAdjust(180,0.9,15, 7); //MOVE back
+        driveAdjust(180,0.9,20, 7); //MOVE back
 
         }
 
