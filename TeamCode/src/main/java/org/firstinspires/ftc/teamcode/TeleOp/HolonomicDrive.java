@@ -21,7 +21,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
         double xAxis = 0, yAxis = 0, zAxis = 0, position = 0.5;
         double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0, liftPower = 0;
         long htime = 0;
-        boolean lControl = false, aControl = true, foundation = false;
+        boolean lControl = true, aControl = true, foundation = false;
         double lTime = 0, aTime = 0, fTime = 0;
 
         //For more controlled movement when moving the foundation
@@ -47,12 +47,12 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }
             //MANUAL LIFT CONTROLS
             if (lControl = true) {
-                arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 if (gamepad2.right_trigger > 0.05) {
-                    liftPower = Range.clip(gamepad2.right_trigger, 0, 0.5);
+                    liftPower = -Range.clip(gamepad2.right_trigger, 0, 0.5);
                     lift.setPower(liftPower); //LIFT DOWN
                 } else if (gamepad2.left_trigger > 0.05) {
-                    liftPower = -Range.clip(gamepad2.right_trigger, 0, 0.5);
+                    liftPower = Range.clip(gamepad2.left_trigger, 0, 0.5);
                     lift.setPower(liftPower); //LIFT UP
                 } else {
                     liftPower = 0;
@@ -84,14 +84,14 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             }*/
 
             //INTAKE
-            if(Math.abs(gamepad2.right_trigger) > 0.05){
-                intakeL.setPower(-gamepad2.right_trigger);
-                intakeR.setPower(-gamepad2.right_trigger);
+            if(gamepad2.right_bumper){
+                intakeL.setPower(-1);
+                intakeR.setPower(-1);
             }
             else{
-                if(Math.abs(gamepad2.left_trigger) > 0.05){
-                    intakeL.setPower(gamepad2.left_trigger);
-                    intakeR.setPower(gamepad2.left_trigger);
+                if(gamepad2.left_bumper){
+                    intakeL.setPower(1);
+                    intakeR.setPower(1);
                 }
                 else{
                     intakeL.setPower(0);
@@ -101,12 +101,10 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
             //CLAW MOVEMENT
             if (gamepad2.x){
-                //setClawPosition(true); //OPEN CLAW
-                claw.setPosition(1.0);
+                claw.setPosition(0.0);    //CLOSE CLAW
             }
             if (gamepad2.y){
-                //pos -= 0.1;
-                claw.setPosition(0.0); //CLOSE CLAW
+                claw.setPosition(1.0);    //OPEN CLAW
             }
 
             if (gamepad1.right_bumper && fTime + 250 < time.milliseconds()){
@@ -117,22 +115,22 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
 
             //ARM MOVEMENT
-           /* if (gamepad2.right_bumper && aTime + 500 < time.milliseconds()){
+            /*if (gamepad2.dpad_right && aTime + 500 < time.milliseconds()){
                 aControl = !aControl;
                 aTime = time.milliseconds();
                 apos = arm.getCurrentPosition();
-            }
+            }*/
             if (aControl){
                 arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 if (Math.abs(gamepad2.right_stick_y) > 0.05){
-                    armPower = Range.clip(gamepad2.right_stick_y, -0.4, 0.45);
+                    armPower = Range.clip(gamepad2.right_stick_y, -1, 1);
                     arm.setPower(-armPower);
                 }else{
                     arm.setPower(0);
                 }
             }
             else{
-                arm.setPower(0.3);
+                arm.setPower(0.4);
                 arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 if (gamepad2.dpad_up){
                     apos += 10;
@@ -141,7 +139,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                     apos -= 10;
                 }
                 arm.setTargetPosition(apos);
-            }*/
+            }
 
 
             /*//CLAW ROTATE

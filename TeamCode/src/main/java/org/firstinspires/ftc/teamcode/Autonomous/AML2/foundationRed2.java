@@ -57,11 +57,11 @@ public class foundationRed2 extends SkystoneLinearOpMode {
 
         sleep(1000);
 
-        driveDistance(-0.8,22);
+        driveDistance(-0.8,20);
 
         turnPID(270, 0.9/90, 0.004, 1, 8000);
 
-        driveDistance(-0.5, 8);
+        driveDistance(-0.5, 9);
 
         turnPID(360, 0.7/90, .004, 1, 3000);
 
