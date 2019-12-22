@@ -171,7 +171,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         LB.setDirection(DcMotorSimple.Direction.FORWARD);
         arm.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeR.setDirection(DcMotorSimple.Direction.FORWARD);
-        intakeL.setDirection(DcMotorSimple.Direction.REVERSE);
+        intakeL.setDirection(DcMotorSimple.Direction.FORWARD);
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
 
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -1692,7 +1692,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public double forLongAdjust(int pos, boolean red) throws InterruptedException{
         switch(pos) {
             case -1:
-                return 13;
+                return 15;
             case 0:
                 return 0;
             case 1:
