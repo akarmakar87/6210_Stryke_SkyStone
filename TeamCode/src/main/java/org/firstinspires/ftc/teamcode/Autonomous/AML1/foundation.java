@@ -46,7 +46,7 @@ public class foundation extends SkystoneLinearOpMode {
         }
 
         else{
-            strafeAdjust(0.5, 10, false);//Strafe in front of foundation
+            //strafeAdjust(0.5, 10, false);//Strafe in front of foundation
 
             driveDistance(-0.5, 45);    //Drive to foundation
 

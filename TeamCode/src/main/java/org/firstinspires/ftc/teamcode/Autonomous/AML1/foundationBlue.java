@@ -18,7 +18,7 @@ public class foundationBlue extends SkystoneLinearOpMode {
         waitForStart();
 
         //strafeAdjust(0.6, 30, false); <--ORIGINAL
-        strafeAdjust(0.6, 30, true);//Strafe in front of foundation
+        //strafeAdjust(0.6, 30, true);//Strafe in front of foundation
 
         //driveDistance(-0.6, 48);    <--ORIGINAL
         driveDistance(-0.6, 50);    //Drive to foundation

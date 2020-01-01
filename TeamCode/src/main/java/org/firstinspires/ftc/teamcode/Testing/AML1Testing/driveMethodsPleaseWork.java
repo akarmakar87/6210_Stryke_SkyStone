@@ -28,6 +28,6 @@ public class driveMethodsPleaseWork extends SkystoneLinearOpMode {
 
         sleep(500);
 
-        strafeAdjust(0.5, 10, true);
+        //strafeAdjust(0.5, 10, true);
     }
 }

@@ -16,7 +16,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        init(hardwareMap, false);
+        init(hardwareMap, true);
         int lpos = 0, apos = 0;
         double xAxis = 0, yAxis = 0, zAxis = 0, position = 0.5;
         double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0, liftPower = 0;
@@ -217,13 +217,13 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
             /*telemetry.addData("Y Axis", yAxis);
             telemetry.addData("X Axis", xAxis);
-            telemetry.addData("Z Axis", zAxis);
-            telemetry.addData("LF Power", lfPower);
-            telemetry.addData("RF Power", rfPower);
-            telemetry.addData("LB Power", lbPower);
-            telemetry.addData("RB Power", rbPower);
+            telemetry.addData("Z Axis", zAxis);*/
+            telemetry.addData("LF Power", LF.getPower() + " " + LF.getCurrentPosition());
+            telemetry.addData("RF Power", RF.getPower() + " " + RF.getCurrentPosition());
+            telemetry.addData("LB Power", LB.getPower() + " " + LB.getCurrentPosition());
+            telemetry.addData("RB Power", RB.getPower() + " " + RB.getCurrentPosition());
             telemetry.addData("strafe Power", strafePower);
-            telemetry.addData("arm Power", armPower);
+            /*telemetry.addData("arm Power", armPower);
             telemetry.addData("arm encoder", arm.getCurrentPosition());
             telemetry.addData("lift encoder", lift.getCurrentPosition());
             telemetry.addData("lift power", liftPower);

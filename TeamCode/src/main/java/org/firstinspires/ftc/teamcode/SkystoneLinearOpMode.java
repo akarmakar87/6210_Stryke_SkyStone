@@ -81,7 +81,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     //Motor revolutions = COUNTS_PER_MOTOR_REV
     //gear up ratio = 2:1   (ratio beyond motor)
     //wheel diameter = WHEEL_DIAMETER_INCHES
-    static final double     COUNTS_PER_MOTOR_REV    = 1120 ;    // REV Motor Encoder (1120 for 40:1) (560 for 20:1)
+    static final double     COUNTS_PER_MOTOR_REV    = 560 ;    // REV Motor Encoder (1120 for 40:1) (560 for 20:1)
     static final double     DRIVE_GEAR_REDUCTION    = 0.5 ;   // This is < 1.0 if geared UP   (ratio is 2:1)
     static final double     WHEEL_DIAMETER_INCHES   = 2 * (3 + (15 / 16)) ;     // For figuring circumference
 
@@ -165,10 +165,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         foundationR = map.servo.get("fR");
         //sensorColor = map.get(RevColorSensorV3.class, "color");
 
-        LF.setDirection(DcMotorSimple.Direction.FORWARD);
-        RF.setDirection(DcMotorSimple.Direction.REVERSE);
-        RB.setDirection(DcMotorSimple.Direction.REVERSE);
-        LB.setDirection(DcMotorSimple.Direction.FORWARD);
+        LF.setDirection(DcMotorSimple.Direction.REVERSE);
+        RF.setDirection(DcMotorSimple.Direction.FORWARD);//r
+        RB.setDirection(DcMotorSimple.Direction.FORWARD);//r
+        LB.setDirection(DcMotorSimple.Direction.REVERSE);
         arm.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeR.setDirection(DcMotorSimple.Direction.FORWARD);
         intakeL.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -433,7 +433,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             rb /= 2;
         }
 
-        double min = 0.2;
+        double min = 0.25;
 
         if (lf < 0)
             LF.setPower(Range.clip(lf, -1, -min));
@@ -472,14 +472,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public void setStrafePowers(double power, boolean right){
         if (right){
             LF.setPower(-power);
-            RF.setPower(power);
+            RF.setPower(-power);
             LB.setPower(power);
-            RB.setPower(-power);
+            RB.setPower(power);
         }else {
             LF.setPower(power);
-            RF.setPower(-power);
+            RF.setPower(power);
             LB.setPower(-power);
-            RB.setPower(power);
+            RB.setPower(-power);
         }
     }
 
@@ -540,8 +540,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public int getEncoderAvg(){
-        //divided by three for now because RB encoder returns 0
-        int avg = (Math.abs(LF.getCurrentPosition()) + Math.abs(RF.getCurrentPosition()) + Math.abs(LB.getCurrentPosition()) + Math.abs(RB.getCurrentPosition()))/3;
+        //divided by three for now because RF encoder returns wack values
+        int avg = (Math.abs(LF.getCurrentPosition()) + Math.abs(LB.getCurrentPosition()) + Math.abs(RB.getCurrentPosition()))/3;
         //MAKE SURE ALL ENCODERS WORK BEFORE DIVIDING BY 4 OR PUT IN A CONDITION TO DETERMINE IF AN ENCODER VALUE IS WEIRD, AND DIVIDE ACCORDINGLY
         return avg;
     }
@@ -601,6 +601,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             finalPower = (remaining/total) * power;
             //put in range clip if necessary
             setEachMotorPowers(finalPower,finalPower,finalPower,finalPower,false);
+            telemetry.addData("target:", distance*encoderToInches);
+            telemetry.addData("avg:", getEncoderAvg());
+            telemetry.addData("LF Power", LF.getPower() + " " + LF.getCurrentPosition());
+            telemetry.addData("RF Power", RF.getPower() + " " + RF.getCurrentPosition());
+            telemetry.addData("LB Power", LB.getPower() + " " + LB.getCurrentPosition());
+            telemetry.addData("RB Power", RB.getPower() + " " + RB.getCurrentPosition());
+            telemetry.update();
         }
         stopMotors();
     }
@@ -679,7 +686,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
 
-    public void strafeDistance(double power, double distance, boolean right) throws InterruptedException{
+    /*public void strafeDistance(double power, double distance, boolean right) throws InterruptedException{
         resetEncoders();
         double minP = 0.25;
         double actualP = minP;
@@ -687,22 +694,49 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         double cTime = runtime.milliseconds();
         while (opModeIsActive() && getEncoderAvg() < distance * 55 && !isStopRequested()){
             sTime = runtime.milliseconds();
-            if(actualP < power && cTime + 200 >= sTime){
+            if(actualP < power && cTime + 200 >= sTime) {
                 actualP += .05;
                 cTime = runtime.milliseconds();
-                Range.clip(actualP,0, power);
-            }
-            if (right){
-                LF.setPower(actualP);
+                Range.clip(actualP, 0, power);
+            }*//*
+            if (!right){
+                LF.setPower(-actualP);
                 RF.setPower(-actualP);
-                LB.setPower(-actualP);
+                LB.setPower(actualP);
                 RB.setPower(actualP);
             }else {
-                LF.setPower(-actualP);
+                LF.setPower(actualP);
                 RF.setPower(actualP);
-                LB.setPower(actualP);
+                LB.setPower(-actualP);
                 RB.setPower(-actualP);
             }
+            telemetry.addData("target:", distance*55);
+            telemetry.addData("avg:", getEncoderAvg());
+            telemetry.addData("LF Power", LF.getPower() + " " + LF.getCurrentPosition());
+            telemetry.addData("RF Power", RF.getPower() + " " + RF.getCurrentPosition());
+            telemetry.addData("LB Power", LB.getPower() + " " + LB.getCurrentPosition());
+            telemetry.addData("RB Power", RB.getPower() + " " + RB.getCurrentPosition());
+            telemetry.update();
+        }
+        stopMotors();
+    }*/
+
+    public void strafeDistance(double power, double distance, boolean right) throws InterruptedException{
+        resetEncoders();
+        while (opModeIsActive() && getEncoderAvg() < distance * 55 && !isStopRequested()){
+
+            if (right){
+                setEachMotorPowers(-power,-power,power,power,false);
+            }else {
+                setEachMotorPowers(power,power,-power,-power,false);
+            }
+            telemetry.addData("target:", distance*55);
+            telemetry.addData("avg:", getEncoderAvg());
+            telemetry.addData("LF Power", LF.getPower() + " " + LF.getCurrentPosition());
+            telemetry.addData("RF Power", RF.getPower() + " " + RF.getCurrentPosition());
+            telemetry.addData("LB Power", LB.getPower() + " " + LB.getCurrentPosition());
+            telemetry.addData("RB Power", RB.getPower() + " " + RB.getCurrentPosition());
+            telemetry.update();
         }
         stopMotors();
     }
@@ -733,8 +767,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
      */
 
-    public void strafeAdjust(double power, double distance, boolean right) throws InterruptedException{
-        double setHeading = getYaw();
+    public void strafeAdjust(double power, double distance, double tHeading, boolean right) throws InterruptedException{
+       /** double setHeading = getYaw();
         double error = 0;
         double correction = 0;
         double fwdPower = 0, backPower = 0;
@@ -763,6 +797,49 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 LB.setPower(fwdPower);
                 RB.setPower(-backPower);
             }
+        }
+        stopMotors();**/
+
+        double total = distance * encoderToInches;
+        double remaining, finalPower = power, error;
+        ElapsedTime t = new ElapsedTime();
+        t.reset();
+        resetEncoders();
+
+        while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < 10) {
+            remaining = total - getEncoderAvg();
+            error = getYaw()-tHeading;
+            if(error > 180){
+                error = -(360-error);
+            }
+            //finalPower = (remaining / total) * power;
+
+            //setEachMotorPowers(LF,RF,LB,RB,halfspeed);
+            if (right) {
+                if (error > 0) {
+                    setEachMotorPowers(-finalPower,0.8*-finalPower,finalPower,finalPower,false); //check
+                } else if (error < 0) {
+                    setEachMotorPowers(-finalPower,-finalPower,finalPower,0.8*finalPower,false); //check
+                } else {
+                    setEachMotorPowers(-finalPower,-finalPower,finalPower,finalPower,false); //check
+                }
+            } else {
+                if (error > 0) {
+                    setEachMotorPowers(finalPower,finalPower,0.8*-finalPower,-finalPower,false); //check
+                } else if (error < 0) {
+                    setEachMotorPowers(0.8*finalPower,finalPower,-finalPower,-finalPower,false); //check
+                } else {
+                    setEachMotorPowers(finalPower,finalPower,-finalPower,-finalPower,false); //check
+                }
+            }
+            telemetry.addData("target:", distance*55);
+            telemetry.addData("avg:", getEncoderAvg());
+            telemetry.addData("LF:", LF.getPower());
+            telemetry.addData("LB:", LB.getPower());
+            telemetry.addData("RF:", RF.getPower());
+            telemetry.addData("RB:", RB.getPower());
+            telemetry.addData("error", error);
+            telemetry.update();
         }
         stopMotors();
     }
@@ -1716,7 +1793,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         return angle;
     }
 
-
+    public double get180Yaw() {
+        angles = imu.getAngularOrientation();
+        return angles.firstAngle;
+    }
 
     public double getRobotX() {
         return translation.get(0) / mmPerInch;
