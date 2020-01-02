@@ -433,7 +433,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             rb /= 2;
         }
 
-        double min = 0.25;
+        double min = 0.2;
 
         if (lf < 0)
             LF.setPower(Range.clip(lf, -1, -min));
@@ -723,7 +723,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void strafeDistance(double power, double distance, boolean right) throws InterruptedException{
         resetEncoders();
-        while (opModeIsActive() && getEncoderAvg() < distance * 55 && !isStopRequested()){
+        while (opModeIsActive() && getEncoderAvg() < distance * 100 && !isStopRequested()){
 
             if (right){
                 setEachMotorPowers(-power,-power,power,power,false);
@@ -768,43 +768,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
      */
 
     public void strafeAdjust(double power, double distance, double tHeading, boolean right) throws InterruptedException{
-       /** double setHeading = getYaw();
-        double error = 0;
-        double correction = 0;
-        double fwdPower = 0, backPower = 0;
-        resetEncoders();
-
-        while (opModeIsActive()&& !isStopRequested() && getEncoderAvg() < distance * encoderToInches){
-            error = getYaw() - setHeading;
-            //Right now, getYaw() returns -180 to +180
-            if(Math.abs(error) > 1){
-                correction = error * 0.1;
-                fwdPower -= correction;
-                backPower += correction;
-            }else{
-                fwdPower = power;
-                backPower = power;
-            }
-
-            if (right){ //FLIPPED RIGHT AND LEFT
-                LF.setPower(fwdPower);
-                RF.setPower(-backPower);
-                LB.setPower(-backPower);
-                RB.setPower(fwdPower);
-            }else {
-                LF.setPower(-backPower);
-                RF.setPower(fwdPower);
-                LB.setPower(fwdPower);
-                RB.setPower(-backPower);
-            }
-        }
-        stopMotors();**/
 
         double total = distance * encoderToInches;
         double remaining, finalPower = power, error;
         ElapsedTime t = new ElapsedTime();
         t.reset();
         resetEncoders();
+
 
         while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < 10) {
             remaining = total - getEncoderAvg();
@@ -815,19 +785,20 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             //finalPower = (remaining / total) * power;
 
             //setEachMotorPowers(LF,RF,LB,RB,halfspeed);
+            double p = 0.2;
             if (right) {
-                if (error > 0) {
-                    setEachMotorPowers(-finalPower,0.8*-finalPower,finalPower,finalPower,false); //check
-                } else if (error < 0) {
-                    setEachMotorPowers(-finalPower,-finalPower,finalPower,0.8*finalPower,false); //check
+                if (error > 1) {
+                    setEachMotorPowers(-finalPower,-finalPower,finalPower,p*finalPower,false); //check
+                } else if (error < -1) {
+                    setEachMotorPowers(-finalPower,p*-finalPower,finalPower,finalPower,false); //check
                 } else {
                     setEachMotorPowers(-finalPower,-finalPower,finalPower,finalPower,false); //check
                 }
             } else {
-                if (error > 0) {
-                    setEachMotorPowers(finalPower,finalPower,0.8*-finalPower,-finalPower,false); //check
-                } else if (error < 0) {
-                    setEachMotorPowers(0.8*finalPower,finalPower,-finalPower,-finalPower,false); //check
+                if (error > 1) {
+                    setEachMotorPowers(finalPower,finalPower,p*-finalPower,-finalPower,false); //check
+                } else if (error < -1) {
+                    setEachMotorPowers(p*finalPower,finalPower,-finalPower,-finalPower,false); //check
                 } else {
                     setEachMotorPowers(finalPower,finalPower,-finalPower,-finalPower,false); //check
                 }

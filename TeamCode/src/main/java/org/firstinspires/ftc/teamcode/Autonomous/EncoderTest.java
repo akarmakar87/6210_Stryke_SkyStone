@@ -27,13 +27,24 @@ public class EncoderTest extends SkystoneLinearOpMode{
 
         //strafeDistance(0.3, 10,  true);
 
+        //sleep(1000);
+
+        /*strafeAdjust(0.5, 60,  0,true);
+
         sleep(1000);
 
-        strafeAdjust(0.4, 40,  0,true);
+        strafeAdjust(0.5, 60,  0,false);
+
+        sleep(1000);*/
+
+        strafeAdjust(0.4, 50,  0,true);
+
+        sleep(2000);
+
+        strafeAdjust(0.4, 50,  0,false);
 
         sleep(1000);
 
-        strafeAdjust(0.4, 40,  0,false);
 
 
     }
