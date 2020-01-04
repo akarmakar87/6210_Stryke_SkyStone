@@ -3,9 +3,12 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Bitmap;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -15,10 +18,12 @@ import com.vuforia.Image;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorREV2mDistance;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -57,7 +62,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public DcMotor lift;
     public DcMotor arm;
     public Servo claw;
-    //public RevColorSensorV3 sensorColor;
+    //public RevColorSensorV3 colorSensor;
+    //public DistanceSensor distanceSensor;
     public Servo foundationR;
     public Servo foundationL;
 
@@ -163,7 +169,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         claw = map.servo.get("claw");
         foundationL = map.servo.get("fL");
         foundationR = map.servo.get("fR");
-        //sensorColor = map.get(RevColorSensorV3.class, "color");
+        //distanceSensor = map.get(DistanceSensor.class, "distanceSensor");
 
         LF.setDirection(DcMotorSimple.Direction.REVERSE);
         RF.setDirection(DcMotorSimple.Direction.FORWARD);//r
@@ -769,14 +775,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void strafeAdjust(double power, double distance, double tHeading, boolean right) throws InterruptedException{
 
-        double total = distance * encoderToInches;
+        double total = distance * encoderToInches * 2.7;
         double remaining, finalPower = power, error;
         ElapsedTime t = new ElapsedTime();
         t.reset();
         resetEncoders();
 
 
-        while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < 10) {
+        while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < total && t.seconds() < 10) {
             remaining = total - getEncoderAvg();
             error = getYaw()-tHeading;
             if(error > 180){
@@ -1085,34 +1091,34 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         double kI = I;
         double kD = D;
 
-        prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
+        prevError = error = tAngle - get180Yaw(); //INITIALIZE THESE VARIABLES
 
         power = dT = prevTime = currTime = 0.0;
 
         ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
         resetTime();
-        while (opModeIsActive() && Math.abs(error) > .7 && currTime < timeOut){
+        while (opModeIsActive() && Math.abs(error) > 0.7/* && currTime < timeOut*/){
             prevError = error;
-            error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
-            if(error > 180){
+            error = tAngle - get180Yaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+            /*if(error > 180 || error < -180){
                 error = -(360-error);
-            }
+            }*/
             prevTime = currTime;
             currTime = time.milliseconds();
             dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
             power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
 
-           /** if(error > 180){
+            /*if(error > 180){
                 power *= -1;
-            }**/
+            }*/
 
-            if (power > 0)
-                setMotorPowers(Range.clip(power, 0.2, 0.7), -Range.clip(power, 0.2, 0.7));
+            if (power < 0)
+                setMotorPowers(Range.clip(power, 0.2, 1), -Range.clip(power, 0.2, 0.6));
             else
-                setMotorPowers(-Range.clip(power, 0.2, 0.7), Range.clip(power, 0.2, 0.7));
+                setMotorPowers(-Range.clip(power, 0.2, 1), Range.clip(power, 0.2, 0.6));
 
             telemetry.addData("tAngle: ", tAngle)
-                    .addData("currAngle: ", getYaw())
+                    .addData("currAngle: ", get180Yaw())
                     .addData("kP:", error * kP)
                     .addData("kI:", error * dT * kI)
                     .addData("kD:", (error - prevError)/dT * kD)
@@ -1319,6 +1325,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             return false;
         }
     }
+
 
     public Bitmap getBitmap() throws InterruptedException {
         Bitmap bm = null;
@@ -1531,9 +1538,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 midRed = red(bm.getPixel(860,250));
                 rightRed = red(bm.getPixel(780,250));
             }else{ //GET PIXELS FOR BLUE LATER
-                leftRed = red(bm.getPixel(850,200));
+                leftRed = red(bm.getPixel(850,250));
                 midRed = red(bm.getPixel(490,250));
-                rightRed = red(bm.getPixel(200,250));
+                rightRed = red(bm.getPixel(300,250)); //originally x was 200 but no detecting correctly
             }
 
             ArrayList<Integer> pixels = new ArrayList<>();
@@ -1838,6 +1845,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         tfod.deactivate(); //is both deactivate and shutdown necessary?
         tfod.shutdown();
     }
+
+    /*public void getDistance(){
+        telemetry.addData("distance from sensor: ", distanceSensor.getDistance(DistanceUnit.INCH));
+        telemetry.update();
+    }*/
 
     //UNUSED METHODS
 
