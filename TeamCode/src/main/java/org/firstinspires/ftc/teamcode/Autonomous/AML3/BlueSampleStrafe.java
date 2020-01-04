@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.Autonomous.AML2;
+package org.firstinspires.ftc.teamcode.Autonomous.AML3;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="RedSampleStrafe", group = "auto") // RED SIDE
+@Autonomous(name="BlueSampleStrafe", group = "auto") // RED SIDE
 
 //@Disabled
-public class RedSampleStrafe extends SkystoneLinearOpMode{
+public class BlueSampleStrafe extends SkystoneLinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -28,13 +28,13 @@ public class RedSampleStrafe extends SkystoneLinearOpMode{
 
         longAdjust = forLongAdjust(pos,false) + 100;
 
-        turnPID(273, 0.7/273, 0.004, 1, 5000); //TURN 90 TO FACE STONES
+        turnPID(90, 0.7/90, 0, 0, 5000); //TURN 90 TO FACE STONES
 
-        driveAdjust(270,-0.5,46, 7); //GO TO STONES
+       /* driveAdjust(270,-0.5,46, 7); //GO TO STONES
 
         grabStone(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(270,0.9,13, 7); //MOVE BACKWARD
+        driveAdjust(270,0.9,13, 7); //MOVE BACKWARD*/
 
         /*
         driveAdjust(270,-0.5,46, 7); //GO TO STONES

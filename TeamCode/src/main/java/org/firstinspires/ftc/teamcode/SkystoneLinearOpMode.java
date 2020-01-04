@@ -655,11 +655,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
             if (power > 0) {
                 if (error > 1) {
-                    rp = 0.8*finalPower;
-                    lp = finalPower;
-                } else if (error < -1) {
                     rp = finalPower;
-                    lp = finalPower * 0.8;
+                    lp = 0.8*finalPower;
+                } else if (error < -1) {
+                    rp = finalPower*0.8;
+                    lp = finalPower;
                 } else {
                     rp = finalPower;
                     lp = finalPower;
@@ -668,11 +668,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 lp = Range.clip(lp, 0.2,1);
             } else {
                 if (error > 1) {
+                    rp = finalPower*0.8;
+                    lp = finalPower;
+                } else if (error < -1) {
                     rp = finalPower;
                     lp = 0.8*finalPower;
-                } else if (error < -1) {
-                    rp = 0.8*finalPower;
-                    lp = finalPower;
                 } else {
                     rp = finalPower;
                     lp = finalPower;
@@ -791,7 +791,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             //finalPower = (remaining / total) * power;
 
             //setEachMotorPowers(LF,RF,LB,RB,halfspeed);
-            double p = 0.2;
+            double p = 0.8;
             if (right) {
                 if (error > 1) {
                     setEachMotorPowers(-finalPower,-finalPower,finalPower,p*finalPower,false); //check
@@ -1085,6 +1085,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void turnPID(double tAngle, double P, double I, double D, double timeOut){
 
+        //- is right, + is left
         double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
 
         double kP = P;
@@ -1732,14 +1733,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public double adjustForSkystone(int pos, boolean red) throws InterruptedException{
         switch(pos) {
             case -1:
-                driveDistance(-0.4, 2);
-                return 2;
-            case 0:
-                driveDistance(0.4, 10);
-                return -10;
-            case 1:
                 driveDistance(0.4, 2);
                 return -2;
+            case 0:
+                driveDistance(-0.4, 10);
+                return 10;
+            case 1:
+                driveDistance(-0.4, 2);
+                return 2;
         }
         return 2;//default
     }

@@ -49,9 +49,11 @@ public class EncoderTest extends SkystoneLinearOpMode{
         //sleep(1000);
         //strafeAdjust(0.5,40,0,true);
 
-        turnPID(-90, 0.6/360,0.001,2,3000);
+        //turnPID(-90, 0.6/360,0.001,2,3000);
 
+        //driveAdjust(0,-0.5,40, 7); //MOVE BACKWARD
 
+        strafeAdjust(0.5,70,0,true);
 
     }
 
