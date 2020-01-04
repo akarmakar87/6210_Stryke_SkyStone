@@ -44,7 +44,7 @@ public class foundationBlue3inside extends SkystoneLinearOpMode {
 
         turnPID(-90, 0.9/90, 0.004, 1, 8000);
 
-        driveDistance(0.5, 25);
+        driveDistance(0.5, 5);
 
         turnPID(0, 0.7/90, .004, 1, 3000);
 

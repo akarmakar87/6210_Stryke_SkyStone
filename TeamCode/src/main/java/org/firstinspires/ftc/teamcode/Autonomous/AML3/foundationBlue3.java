@@ -48,6 +48,6 @@ public class foundationBlue3 extends SkystoneLinearOpMode {
 
         turnPID(0, 0.7/90, .004, 1, 3000);
 
-        driveDistance(-0.4, 65);     //Drive to the parking spot (forward)
+        driveDistance(-0.4, 65);     //Drive to the parking spot (backward)
     }
 }
