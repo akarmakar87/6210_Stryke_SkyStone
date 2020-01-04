@@ -16,13 +16,13 @@ public class foundationRed2 extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        driveDistance(0.4, 15);    //align with foundation
+        driveDistance(0.4, 30);    //align with foundation
 
         //turnPID(90, 0.7/90, 0.004, 1, 8000);   //turn toward foundation
 
-        turnPID(94, 0.7/90, 0.004, 1, 5000); //TURN 90 TO FACE STONES
+        turnPID(94, 0.7/90, 0.004, 1, 5000); //
 
-        driveDistance(-0.6, 41);    //Drive to foundation
+        driveDistance(0.6, 60);    //Drive to foundation
 
         foundationD(false);  //Grab foundation
 
@@ -43,13 +43,13 @@ public class foundationRed2 extends SkystoneLinearOpMode {
         stopMotors();
         */
 
-        driveDistance(1, 65);     //Pull foundation into building site
+        driveDistance(-1, 65);     //Pull foundation into building site
 
         //strafeAdjust(0.4, 30, false);
 
         //turnPID(360, 0.7/90, 0.004, 1, 7000);
 
-        setMotorPowers(-0.8, 0.8);
+        setMotorPowers(0.8, -0.8);
         sleep(1500);
         stopMotors();
 
@@ -57,7 +57,7 @@ public class foundationRed2 extends SkystoneLinearOpMode {
 
         sleep(1000);
 
-        driveDistance(-0.8,20);
+        driveDistance(0.8,20);
 
         turnPID(270, 0.9/90, 0.004, 1, 8000);
 
