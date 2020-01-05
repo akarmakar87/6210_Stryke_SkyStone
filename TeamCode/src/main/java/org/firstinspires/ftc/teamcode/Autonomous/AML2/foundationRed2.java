@@ -22,7 +22,7 @@ public class foundationRed2 extends SkystoneLinearOpMode {
 
         turnPID(94, 0.7/90, 0.004, 1, 5000); //
 
-        driveDistance(0.6, 60);    //Drive to foundation
+        driveDistance(0.6, 53);    //Drive to foundation
 
         foundationD(false);  //Grab foundation
 

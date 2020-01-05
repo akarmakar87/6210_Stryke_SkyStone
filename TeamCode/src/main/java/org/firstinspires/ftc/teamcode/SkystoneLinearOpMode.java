@@ -791,7 +791,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             //finalPower = (remaining / total) * power;
 
             //setEachMotorPowers(LF,RF,LB,RB,halfspeed);
-            double p = 0.8;
+            double p = 0.5;
             if (right) {
                 if (error > 1) {
                     setEachMotorPowers(-finalPower,-finalPower,finalPower,p*finalPower,false); //check
@@ -1101,17 +1101,17 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         while (opModeIsActive() && Math.abs(error) > 0.7/* && currTime < timeOut*/){
             prevError = error;
             error = tAngle - get180Yaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
-            /*if(error > 180 || error < -180){
-                error = -(360-error);
-            }*/
+
+            if(error > 180){
+                error = -(error-180);
+            }else  if(error < -180){
+                error = -(error+180);
+            }
+
             prevTime = currTime;
             currTime = time.milliseconds();
             dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
             power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
-
-            /*if(error > 180){
-                power *= -1;
-            }*/
 
             if (power < 0)
                 setMotorPowers(Range.clip(power, 0.2, 1), -Range.clip(power, 0.2, 0.6));
@@ -1733,14 +1733,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public double adjustForSkystone(int pos, boolean red) throws InterruptedException{
         switch(pos) {
             case -1:
-                driveDistance(0.4, 2);
-                return -2;
+                driveDistance(0.4, 3);
+                return 3;
             case 0:
-                driveDistance(-0.4, 10);
-                return 10;
+                driveDistance(-0.4, 14);
+                return 14;
             case 1:
-                driveDistance(-0.4, 2);
-                return 2;
+                driveDistance(-0.4, 3);
+                return 3;
         }
         return 2;//default
     }
@@ -1752,7 +1752,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             case 0:
                 return 0;
             case 1:
-                return -13;
+                return -10;
         }
         return 2;//default
     }

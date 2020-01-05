@@ -28,16 +28,48 @@ public class RedSampleStrafe extends SkystoneLinearOpMode{
 
         longAdjust = forLongAdjust(pos,false) + 100;
 
+        strafeAdjust(0.4,2,0,true);
+
         turnPID(-90, 0.6/360,0.001,2,3000);
 
-        driveAdjust(-90,0.5,46, 7); //GO TO STONES
+        driveAdjust(270,0.5,60, 7); //GO TO STONES
 
         grabStone(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(270,-0.9,13, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.5,12, 7); //MOVE BACKWARD
 
-        strafeAdjust(0.5,70,-90,true);
+        //strafeAdjust(0.6,55,-90,true);
+        turnPID(180, 0.6/360,0.001,2,3000);
 
+        driveAdjust(180, 0.6, longAdjust, 3000); // MOVE OTHER SIDE
+
+        foundationD(true); // drop stone
+
+        //strafeAdjust(0.6,20,-90,false);
+
+        driveAdjust(180, -0.6, 20, 3000); // MOVE BACK TO STONE SIDE
+
+        // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
+        /*
+        turnPID(-90, 0.6/360,0.001,2,3000);
+
+        driveAdjust(270, 0.5, 10, 5); //GO TO STONES
+
+        grabStone(pos, false);
+
+        driveAdjust(270,-0.5,12, 7); //MOVE BACKWARD
+
+        turnPID(180, 0.6/360,0.001,2,3000);
+
+        driveAdjust(180, 0.6, longAdjust, 3000); // MOVE OTHER SIDE
+
+        foundationD(true); // drop stone
+
+        //strafeAdjust(0.6,20,-90,false);
+
+        driveAdjust(180, -0.6, 20, 3000); // MOVE BACK TO STONE SIDE
+        */
+        // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ old stuff
         /*
 
         turnPID(180, 0.8/180, 0.004, 1, 5000); //TURN 90 TO FACE PARK
