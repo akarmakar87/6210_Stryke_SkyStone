@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="inside park right", group = "auto")
+@Autonomous(name="inside park right side", group = "auto")
 
 //@Disabled
 public class outsidePark_right extends SkystoneLinearOpMode {
@@ -16,10 +16,10 @@ public class outsidePark_right extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        driveDistance(-0.4, 25);    //align with parking spot
+        driveDistance(0.4, 25);    //align with parking spot
 
-        turnPID(90, 0.7/270, 0.004, 1, 5000);   //turn toward parking spot
+        turnPID(-90, 0.7/270, 0.004, 1, 5000);   //turn toward parking spot
 
-        driveDistance(-0.4, 10);    //park
+        driveDistance(0.4, 10);    //park
     }
 }

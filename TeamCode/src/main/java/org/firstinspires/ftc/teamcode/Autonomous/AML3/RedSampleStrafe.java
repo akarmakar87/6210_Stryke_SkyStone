@@ -32,45 +32,52 @@ public class RedSampleStrafe extends SkystoneLinearOpMode{
 
         turnPID(-90, 0.6/360,0.001,2,3000);
 
-        driveAdjust(270,0.5,60, 7); //GO TO STONES
+        driveAdjust(270,0.5,59, 7); //GO TO STONES
 
         grabStone(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(270,-0.5,12, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.8,13, 7); //MOVE BACKWARD
 
         //strafeAdjust(0.6,55,-90,true);
-        turnPID(180, 0.6/360,0.001,2,3000);
+        turnPID(175, 0.6/360,0.001,2,4000);
 
-        driveAdjust(180, 0.6, longAdjust, 3000); // MOVE OTHER SIDE
+        driveAdjust(178, 0.8, longAdjust, 4); // MOVE OTHER SIDE
 
         foundationD(true); // drop stone
 
         //strafeAdjust(0.6,20,-90,false);
 
-        driveAdjust(180, -0.6, 20, 3000); // MOVE BACK TO STONE SIDE
+        turnPID(180, 0.6/360,0.001,2,3000); // autocorrect angle to account for stone friction
 
         // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
-        /*
-        turnPID(-90, 0.6/360,0.001,2,3000);
 
-        driveAdjust(270, 0.5, 10, 5); //GO TO STONES
+        driveAdjust(180, -0.8, longAdjust + 31, 3); // MOVE BACK TO STONE SIDE
+
+        turnPID(-90, 0.5/360,0.001,2,4000);
+
+        driveAdjust(270, 0.5, 20, 5); //GO TO STONES
 
         grabStone(pos, false);
 
-        driveAdjust(270,-0.5,12, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.5,10, 7); //MOVE BACKWARD
 
-        turnPID(180, 0.6/360,0.001,2,3000);
+        turnPID(178, 0.6/360,0.001,2,5000);
 
-        driveAdjust(180, 0.6, longAdjust, 3000); // MOVE OTHER SIDE
+        driveAdjust(178, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
 
+        foundationD(true);
+
+        driveAdjust(180, -0.8, 30, 2); //park
+
+        //+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ old stuffing
+        /*
         foundationD(true); // drop stone
 
-        //strafeAdjust(0.6,20,-90,false);
+        turnPID(180, 0.6/360,0.001,2,3000); // autocorrect angle to account for stone friction
+
+        strafeAdjust(0.6,20,-90,false);
 
         driveAdjust(180, -0.6, 20, 3000); // MOVE BACK TO STONE SIDE
-        */
-        // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ old stuff
-        /*
 
         turnPID(180, 0.8/180, 0.004, 1, 5000); //TURN 90 TO FACE PARK
 

@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous.AML2;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Foundation Red2", group = "auto")
 
-//@Disabled
+@Disabled
 public class foundationRed2 extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

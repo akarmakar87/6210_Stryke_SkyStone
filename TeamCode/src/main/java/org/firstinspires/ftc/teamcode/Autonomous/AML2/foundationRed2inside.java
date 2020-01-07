@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Foundation Red2(inside park)", group = "auto")
 
-//Disabled
+@Disabled
 public class foundationRed2inside extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

@@ -22,63 +22,52 @@ public class BlueSampleStrafe extends SkystoneLinearOpMode{
 
         waitForStart();
 
-        pos = detectSkystoneOnePix(getBitmap(),false); //DETECT SKYSTONE
+        pos = detectSkystoneOnePix(getBitmap(),true); //DETECT SKYSTONE
 
-        adjust = adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
+        adjust = adjustForSkystone(pos, true); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
 
-        longAdjust = forLongAdjust(pos,false) + 100;
+        longAdjust = forLongAdjust(pos,true) + 100;
 
-        turnPID(90, 0.7/90, 0, 0, 5000); //TURN 90 TO FACE STONES
+        strafeAdjust(0.4,2,0,true);
 
-       /* driveAdjust(270,-0.5,46, 7); //GO TO STONES
+        turnPID(90, 0.6/360,0.001,2,3000);
 
-        grabStone(pos,false); //GRAB SKYSTONE
-
-        driveAdjust(270,0.9,13, 7); //MOVE BACKWARD*/
-
-        /*
-        driveAdjust(270,-0.5,46, 7); //GO TO STONES
+        driveAdjust(90,0.5,59, 7); //GO TO STONES
 
         grabStone(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(270,0.9,13, 7); //MOVE BACKWARD
+        driveAdjust(90,-0.8,13, 7); //MOVE BACKWARD
 
-        turnPID(180, 0.8/180, 0.004, 1, 5000); //TURN 90 TO FACE PARK
+        //strafeAdjust(0.6,55,-90,true);
+        turnPID(-175, 0.6/360,0.001,2,4000);
 
-        //turnPIDtest(180,0.5/90,0,1,5000);
+        driveAdjust(182, 0.8, longAdjust, 4); // MOVE OTHER SIDE
 
-        driveAdjust(180,-0.4, 68+adjust, 7); //CROSS PARK LINE (adjust distance)
+        foundationD(true); // drop stone
 
-        foundationD(true); //RELEASE BLOCK
+        //strafeAdjust(0.6,20,-90,false);
 
-        //turnPID(180, 0.7/180, 0.004, 1, 5000);
+        turnPID(180, 0.6/360,0.001,2,3000); // autocorrect angle to account for stone friction
 
-        //driveDistance(0.2, 105+adjust); //second stone (adjust distance) (35 = 11+24)
+        // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
 
-        //driveDistance(0.6, 108+adjust);
-        driveAdjust(180,0.6, longAdjust,7);
+        driveAdjust(180, -0.8, longAdjust + 31, 3); // MOVE BACK TO STONE SIDE
 
-        if(pos == -1)
-            turnPID(280, 0.7/275, 0.004, 1, 5000); //TURN 90 TO FACE STONES
-        else
-            turnPID(270,0.7/270, 0.004, 1,5000);
-        //turnPIDtest(270,0.5/90,0,1,5000);
+        turnPID(90, 0.5/360,0.001,2,4000);
 
-        driveAdjust(270,-0.6,23, 7); //MOVE forward
+        driveAdjust(90, 0.5, 20, 5); //GO TO STONES
 
-        grabStone(pos, true); //GRAB SKYSTONE
+        grabStone(pos, false);
 
-        driveAdjust(270,0.9,16, 7); //MOVE back
+        driveAdjust(90,-0.5,10, 7); //MOVE BACKWARD
 
-        turnPID(188, 0.7/90, 0.004, 1, 5000); //TURN 90 TO FACE PARK
+        turnPID(-178, 0.6/360,0.001,2,5000);
 
-        driveAdjust(180,-0.6, longAdjust - 1, 7); //second stone (adjust distance) (35 = 11+24)
+        driveAdjust(182, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
 
-        foundationD(true); //RELEASE BLOCK
+        foundationD(true);
 
-        driveAdjust(180,0.9,20, 7); //MOVE back
-
-         */
+        driveAdjust(180, -0.8, 30, 2); //park
 
         }
 
