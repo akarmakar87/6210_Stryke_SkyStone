@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="cancel test", group = "auto")
 
-//@Disabled
+@Disabled
 public class CancelMotorTest extends SkystoneLinearOpMode{
 
     @Override

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="vtest", group="teleop")
-//@Disabled
+@Disabled
 public class testVuforia extends SkystoneLinearOpMode {
 
     @Override

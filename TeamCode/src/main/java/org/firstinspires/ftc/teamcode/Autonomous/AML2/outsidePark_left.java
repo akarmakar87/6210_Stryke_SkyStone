@@ -17,10 +17,10 @@ public class outsidePark_left extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        driveDistance(0.4, 25);    //align with parking spot
+        driveDistance(0.5, 60);    //align with parking spot
 
-        turnPID(90, 0.7/270, 0.004, 1, 5000);   //turn toward parking spot
+        turnPID(-90, 0.7/90, 0.004, 1, 5000);   //turn toward parking spot
 
-        driveDistance(0.4, 10);    //park
+        driveDistance(0.5, 25);    //park
     }
 }

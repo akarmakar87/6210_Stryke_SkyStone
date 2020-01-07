@@ -1097,7 +1097,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             foundationL.setPosition(0);
             foundationR.setPosition(1);
         }
-        sleep(1000);
     }
 
     public void setArm(int target, double pwr){
