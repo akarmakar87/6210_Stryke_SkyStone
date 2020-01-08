@@ -1097,7 +1097,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             foundationL.setPosition(0);
             foundationR.setPosition(1);
         }
-        sleep(1000);
     }
 
     public void setArm(int target, double pwr){
@@ -1586,13 +1585,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
             if(red){
                 //USE ALL THREE OR JUST TWO?
-                leftRed = red(bm.getPixel(1150,250));
-                midRed = red(bm.getPixel(860,250));
-                rightRed = red(bm.getPixel(780,250));
+                leftRed = red(bm.getPixel(1150,220)); //originally 250
+                midRed = red(bm.getPixel(860,220));
+                rightRed = red(bm.getPixel(780,220));
             }else{ //GET PIXELS FOR BLUE LATER
-                leftRed = red(bm.getPixel(850,250));
-                midRed = red(bm.getPixel(490,250));
-                rightRed = red(bm.getPixel(300,250)); //originally x was 200 but no detecting correctly
+                leftRed = red(bm.getPixel(850,220));
+                midRed = red(bm.getPixel(470,220));//orig 490
+                rightRed = red(bm.getPixel(300,220)); //originally x was 200 but no detecting correctly
             }
 
             ArrayList<Integer> pixels = new ArrayList<>();

@@ -18,7 +18,7 @@ public class foundationBlue3 extends SkystoneLinearOpMode {
 
         driveDistance(0.4, 33);    //align with foundation
 
-        turnPID(-90, 0.7/90, 0.004, 1, 8000);   //turn toward foundation
+        turnPID(-90, 0.7/90, 0.004, 1, 5000);   //turn toward foundation
 
         driveDistance(0.6, 52);    //Drive to foundation
 
@@ -28,9 +28,9 @@ public class foundationBlue3 extends SkystoneLinearOpMode {
 
         //driveDistance(-1, 77);     //Pull foundation into building site
 
-        driveAdjust(-90, -1, 77, 6);
+        driveAdjust(-90, -1, 77, 4);
 
-        turnPID(0, 0.7/90, 0.004, 1, 7000);
+        turnPID(0, 0.7/90, 0.004, 1, 4000);
 
         /*setMotorPowers(0.8, -0.8);
         sleep(1500);
@@ -44,7 +44,7 @@ public class foundationBlue3 extends SkystoneLinearOpMode {
 
         //driveDistance(-0.5,5);
 
-        turnPID(90, 0.7/90, 0.004, 1, 8000);
+        turnPID(90, 0.7/90, 0.004, 1, 4000);
 
         driveDistance(0.5, 25);
 

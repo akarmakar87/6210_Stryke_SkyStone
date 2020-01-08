@@ -9,9 +9,9 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 import java.util.concurrent.TimeUnit;
 
-@TeleOp(name="HolonomicDrive", group="teleop")
+@TeleOp(name="TankDrive", group="teleop")
 //@Disabled
-public class HolonomicDrive extends SkystoneLinearOpMode {
+public class TankDrive extends SkystoneLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -161,26 +161,6 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 rotate.setPosition(0.5);
             }*/
 
-            //HOLONOMIC DRIVE
-            if (Math.abs(gamepad1.left_stick_y) > 0.05) {
-                yAxis = gamepad1.left_stick_y;
-            }
-            else{
-                yAxis = 0;
-            }
-            if (Math.abs(gamepad1.left_stick_x) > 0.05) {
-                xAxis = -gamepad1.left_stick_x;
-            }
-            else{
-                xAxis = 0;
-            }
-            if (Math.abs(gamepad1.right_stick_x) > 0.05) {
-                zAxis = -gamepad1.right_stick_x;
-            }
-            else{
-                zAxis = 0;
-            }
-
             //HALFSPEED (toggle)
             if (gamepad1.x) {
                 htime = time.now(TimeUnit.SECONDS);
@@ -194,20 +174,20 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 strafePower = gamepad1.left_trigger * 0.75;
                 setStrafePowers(strafePower, false);
             }else if (halfSpeed){
-                lfPower = ((-yAxis+xAxis-zAxis)/2);
-                rfPower = ((-yAxis-xAxis+zAxis)/2);
-                lbPower = ((-yAxis-xAxis-zAxis)/2);
-                rbPower = ((-yAxis+xAxis+zAxis)/2);
+                lfPower = -gamepad1.left_stick_y/2;
+                rfPower = -gamepad1.right_stick_y/2;
+                lbPower = -gamepad1.left_stick_y/2;
+                rbPower = -gamepad1.right_stick_y/2;
 
                 LF.setPower(Range.clip(lfPower, -0.5, 0.5));
                 RF.setPower(Range.clip(rfPower, -0.5, 0.5));
                 LB.setPower(Range.clip(lbPower, -0.5, 0.5));
                 RB.setPower(Range.clip(rbPower, -0.5, 0.5));
             }else {
-                lfPower = -yAxis + xAxis - zAxis;
-                rfPower = -yAxis - xAxis + zAxis;
-                lbPower = -yAxis - xAxis - zAxis;
-                rbPower = -yAxis + xAxis + zAxis;
+                lfPower = -gamepad1.left_stick_y;
+                rfPower = -gamepad1.right_stick_y;
+                lbPower = -gamepad1.left_stick_y;
+                rbPower = -gamepad1.right_stick_y;
 
                 LF.setPower(Range.clip(lfPower, -1, 1));
                 RF.setPower(Range.clip(rfPower, -1, 1));
