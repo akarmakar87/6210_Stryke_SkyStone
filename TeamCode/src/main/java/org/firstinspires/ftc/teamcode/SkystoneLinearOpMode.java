@@ -691,6 +691,57 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stopMotors();
     }
 
+    public void driveAdjustS(double tHeading, double power, double distance, int timeout){
+
+        double total = distance * encoderToInches;
+        double remaining, finalPower = power, origHeading = tHeading, error = 0, lp, rp;
+        ElapsedTime t = new ElapsedTime();
+        t.reset();
+        resetEncoders();
+
+        while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < 10) {
+            remaining = total - getEncoderAvg();
+            error = origHeading - getYaw();
+            finalPower = (remaining / total) * power;
+
+            if (power > 0) {
+                if (error > 1) {
+                    rp = finalPower*1.2;
+                    lp = 0.8*finalPower;
+                } else if (error < -1) {
+                    rp = finalPower*0.8;
+                    lp = finalPower*1.2;
+                } else {
+                    rp = finalPower;
+                    lp = finalPower;
+                }
+                rp = Range.clip(rp,0.2,1);
+                lp = Range.clip(lp, 0.2,1);
+            } else {
+                if (error > 1) {
+                    rp = finalPower*0.8;
+                    lp = finalPower*1.2;
+                } else if (error < -1) {
+                    rp = finalPower*1.2;
+                    lp = 0.8*finalPower;
+                } else {
+                    rp = finalPower;
+                    lp = finalPower;
+                }
+                rp = Range.clip(rp,-1,-0.2);
+                lp = Range.clip(lp, -1,-0.2);
+            }
+            setMotorPowers(lp,rp);
+            telemetry.addData("left power: ", lp);
+            telemetry.addData("right power: ", rp);
+            telemetry.addData("error", error);
+            telemetry.update();
+
+        }
+
+        stopMotors();
+    }
+
 
     /*public void strafeDistance(double power, double distance, boolean right) throws InterruptedException{
         resetEncoders();
@@ -1752,7 +1803,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             case 0:
                 return 0;
             case 1:
-                return -7;
+                return -8;
         }
         return 2;//default
     }

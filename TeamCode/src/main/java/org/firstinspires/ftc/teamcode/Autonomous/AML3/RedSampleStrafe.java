@@ -32,16 +32,23 @@ public class RedSampleStrafe extends SkystoneLinearOpMode{
 
         turnPID(-90, 0.6/360,0.001,2,3000);
 
-        driveAdjust(270,0.5,59, 7); //GO TO STONES
+        driveAdjust(270,0.4,59, 7); //GO TO STONES
 
         grabStone(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(270,-0.8,13, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.8,12, 7); //MOVE BACKWARD
 
         //strafeAdjust(0.6,55,-90,true);
-        turnPID(175, 0.6/360,0.001,2,4000);
 
-        driveAdjust(178, 0.8, longAdjust, 4); // MOVE OTHER SIDE
+        if (pos == 1){
+            turnPID(-175, 0.6/360,0.001,2,4000);
+
+            driveAdjust(182, 0.8, longAdjust, 4); // MOVE OTHER SIDE
+        } else {
+            turnPID(175, 0.6/360,0.001,2,4000);
+
+            driveAdjust(178, 0.8, longAdjust, 4); // MOVE OTHER SIDE
+        }
 
         foundationD(true); // drop stone
 
@@ -55,15 +62,21 @@ public class RedSampleStrafe extends SkystoneLinearOpMode{
 
         turnPID(-90, 0.5/360,0.001,2,4000);
 
-        driveAdjust(270, 0.5, 20, 5); //GO TO STONES
+        driveAdjust(270, 0.5, 23, 5); //GO TO STONES
 
         grabStone(pos, false);
 
         driveAdjust(270,-0.5,10, 7); //MOVE BACKWARD
 
-        turnPID(178, 0.6/360,0.001,2,5000);
+        if (pos == 1){
+            turnPID(-178, 0.6/360,0.001,2,5000);
 
-        driveAdjust(178, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
+            driveAdjust(182, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
+        } else {
+            turnPID(178, 0.6/360,0.001,2,5000);
+
+            driveAdjust(178, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
+        }
 
         foundationD(true);
 
