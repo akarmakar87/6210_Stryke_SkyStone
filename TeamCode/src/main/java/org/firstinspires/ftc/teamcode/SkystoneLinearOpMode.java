@@ -1036,6 +1036,24 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         sleep(1000);
     }
 
+    public void grabStoneBlue(int pos, boolean back){
+        switch(pos){
+            case -1:
+                foundationL.setPosition(0);
+                break;
+            case 0:
+                foundationR.setPosition(1);
+                break;
+            case 1:
+                if (!back)
+                    foundationR.setPosition(1);
+                else
+                    foundationL.setPosition(0);
+                break;
+        }
+        sleep(1000);
+    }
+
     public void setArmPosition(int position) {
         arm.setTargetPosition(position);
         int c = arm.getCurrentPosition();
@@ -1148,7 +1166,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
         resetTime();
-        while (opModeIsActive() && Math.abs(error) > 0.7/* && currTime < timeOut*/){
+        while (opModeIsActive() && Math.abs(error) > 0.7 && currTime < timeOut){
             prevError = error;
             error = tAngle - get180Yaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
 
@@ -1583,11 +1601,12 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
             //figure out proper threshold
 
+            //actually blue
             if(red){
                 //USE ALL THREE OR JUST TWO?
                 leftRed = red(bm.getPixel(1150,220)); //originally 250
                 midRed = red(bm.getPixel(860,220));
-                rightRed = red(bm.getPixel(780,220));
+                rightRed = red(bm.getPixel(560,220));
             }else{ //GET PIXELS FOR BLUE LATER
                 leftRed = red(bm.getPixel(850,220));
                 midRed = red(bm.getPixel(470,220));//orig 490
@@ -1780,19 +1799,33 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
-    public double adjustForSkystone(int pos, boolean red) throws InterruptedException{
-        switch(pos) {
-            case -1:
-                driveDistance(0.4, 3);
-                return 3;
-            case 0:
-                driveDistance(-0.4, 14);
-                return 14;
-            case 1:
-                driveDistance(-0.4, 3);
-                return 3;
+    public void adjustForSkystone(int pos, boolean red) throws InterruptedException{
+        if(!red){
+            switch(pos) { // red
+                case -1:
+                    driveDistance(0.4, 3);
+                    break;
+                case 0:
+                    driveDistance(-0.4, 14);
+                    break;
+                case 1:
+                    driveDistance(-0.4, 3);
+                    break;
+            }
+        }else{
+            switch(pos) {
+                case -1:
+                    driveDistance(0.4, 20);
+                    break;
+                case 0:
+                    driveDistance(0.4, 34);
+                    break;
+                case 1:
+                    driveDistance(0.4, 15);
+                    break;
+            }
         }
-        return 2;//default
+        telemetry.update();
     }
 
     public double forLongAdjust(int pos, boolean red) throws InterruptedException{

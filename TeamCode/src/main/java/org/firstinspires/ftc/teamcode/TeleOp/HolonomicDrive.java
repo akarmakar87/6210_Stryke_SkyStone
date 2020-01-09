@@ -223,13 +223,13 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             telemetry.addData("LB Power", LB.getPower() + " " + LB.getCurrentPosition());
             telemetry.addData("RB Power", RB.getPower() + " " + RB.getCurrentPosition());
             telemetry.addData("strafe Power", strafePower);
-            /*telemetry.addData("arm Power", armPower);
+            telemetry.addData("arm Power", armPower);
             telemetry.addData("arm encoder", arm.getCurrentPosition());
             telemetry.addData("lift encoder", lift.getCurrentPosition());
             telemetry.addData("lift power", liftPower);
             telemetry.addData("claw position", claw.getPosition());
             telemetry.addData("arm Control", aControl);
-            //telemetry.addData("rotate position", rotate.getPosition());*/
+            /*telemetry.addData("rotate position", rotate.getPosition());*/
             telemetry.update();
         }
     }

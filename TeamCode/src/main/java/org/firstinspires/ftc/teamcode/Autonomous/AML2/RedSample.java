@@ -25,7 +25,7 @@ public class RedSample extends SkystoneLinearOpMode{
 
         pos = detectSkystoneOnePix(getBitmap(),false); //DETECT SKYSTONE
 
-        adjust = adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
+        adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
 
         longAdjust = forLongAdjust(pos,false) + 100;
 
