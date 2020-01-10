@@ -36,7 +36,7 @@ public class RedSampleStrafe extends SkystoneLinearOpMode{
 
         grabStone(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(270,-0.8,12, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.8,11, 7); //MOVE BACKWARD
 
         //strafeAdjust(0.6,55,-90,true);
 
@@ -60,6 +60,7 @@ public class RedSampleStrafe extends SkystoneLinearOpMode{
 
         driveAdjust(180, -0.8, longAdjust + 31, 3); // MOVE BACK TO STONE SIDE
 
+        sleep(250);
         turnPID(-90, 0.5/360,0.001,2,4000);
 
         driveAdjust(270, 0.5, 23, 5); //GO TO STONES

@@ -36,8 +36,9 @@ public class BlueSampleStrafe extends SkystoneLinearOpMode{
 
         grabStoneBlue(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(90,-0.8,13, 7); //MOVE BACKWARD
+        driveAdjust(90,-0.6,11, 7); //MOVE BACKWARD
 
+        sleep(250);
         if (pos == -1){
             turnPID(-5, 0.6/360,0.001,2,4000);
 
