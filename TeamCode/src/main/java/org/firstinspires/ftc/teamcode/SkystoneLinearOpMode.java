@@ -1610,6 +1610,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }else{ //GET PIXELS FOR BLUE LATER
                 leftRed = red(bm.getPixel(850,220));
                 midRed = red(bm.getPixel(470,220));//orig 490
+                midRed = red(bm.getPixel(470,220));//orig 490
                 rightRed = red(bm.getPixel(300,220)); //originally x was 200 but no detecting correctly
             }
 
