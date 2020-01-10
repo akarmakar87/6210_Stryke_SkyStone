@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="BlueSampleStrafe", group = "auto") // RED SIDE
+@Autonomous(name="BlueDoubleSkystone (TBD)", group = "auto") // BLUE SIDE
 
 //@Disabled
-public class BlueSampleStrafe extends SkystoneLinearOpMode{
+public class BlueDoubleSkystone extends SkystoneLinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -76,6 +76,7 @@ public class BlueSampleStrafe extends SkystoneLinearOpMode{
         driveAdjust(180, -0.8, 30, 2); //park
         */
 
-        }
-
+        telemetry.addData("auto:", "complete");
+        telemetry.update();
+    }
 }

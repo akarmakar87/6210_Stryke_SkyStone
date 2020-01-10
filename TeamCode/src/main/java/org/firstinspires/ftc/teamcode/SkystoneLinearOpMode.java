@@ -839,9 +839,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             if(error > 180){
                 error = -(360-error);
             }
-            //finalPower = (remaining / total) * power;
 
-            //setEachMotorPowers(LF,RF,LB,RB,halfspeed);
             double p = 0.5;
             if (right) {
                 if (error > 1) {
@@ -1609,7 +1607,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 rightRed = red(bm.getPixel(560,220));
             }else{ //GET PIXELS FOR BLUE LATER
                 leftRed = red(bm.getPixel(850,220));
-                midRed = red(bm.getPixel(470,220));//orig 490
                 midRed = red(bm.getPixel(470,220));//orig 490
                 rightRed = red(bm.getPixel(300,220)); //originally x was 200 but no detecting correctly
             }
