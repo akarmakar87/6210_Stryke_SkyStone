@@ -40,7 +40,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
         while (opModeIsActive() && !isStopRequested()) {
             //LIFT CONTROLS TOGGLE      --FOR USE AND REVISION ONCE USING LIFT
-            if (gamepad2.y && lTime + 500 < time.milliseconds()){
+            if (gamepad2.b && lTime + 500 < time.milliseconds()){
                 lControl = !lControl;
                 lTime = time.milliseconds();
                 lpos = lift.getCurrentPosition();
@@ -61,11 +61,11 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             //POSITION LIFT CONTROLS
             if (lControl = false) {
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift.setPower(0.5);
+                lift.setPower(0.7);
                 if (gamepad2.dpad_up) {
-                    lpos += 10; //LIFT UP
+                    lpos -= 50; //LIFT UP
                 } else if (gamepad2.dpad_down) {
-                    lpos -= 10; //LIFT DOWN
+                    lpos += 50; //LIFT DOWN
                 }
                 lift.setTargetPosition(lpos);
             }
@@ -98,6 +98,11 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 }
             }
 
+            if(gamepad2.a)
+            {
+                intakeL.setPower(1);
+                intakeR.setPower(-1);
+            }
             //CLAW MOVEMENT
             if (gamepad2.x){
                 claw.setPosition(0.0);    //CLOSE CLAW
@@ -114,15 +119,15 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
 
             //ARM MOVEMENT
-            /*if (gamepad2.dpad_right && aTime + 500 < time.milliseconds()){
+            if (gamepad2.dpad_right && aTime + 500 < time.milliseconds()){
                 aControl = !aControl;
                 aTime = time.milliseconds();
                 apos = arm.getCurrentPosition();
-            }*/
+            }
             if (aControl){
                 arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 if (Math.abs(gamepad2.right_stick_y) > 0.05){
-                    armPower = Range.clip(gamepad2.right_stick_y, -1, 1);
+                    armPower = Range.clip(gamepad2.right_stick_y, -0.8, 0.8);
                     arm.setPower(-armPower);
                 }else{
                     arm.setPower(0);
@@ -182,7 +187,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
 
             //HALFSPEED (toggle)
             if (gamepad1.x && htime + 500 <= time.milliseconds()) {
-                htime = time.now(TimeUnit.SECONDS);
+                htime = time.now(TimeUnit.MILLISECONDS);
                 halfSpeed = !halfSpeed;
             }
 
@@ -226,6 +231,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
             telemetry.addData("arm encoder", arm.getCurrentPosition());
             telemetry.addData("lift encoder", lift.getCurrentPosition());
             telemetry.addData("lift target position", lpos);
+            telemetry.addData("halfspeed", halfSpeed);
             /*telemetry.addData("lift power", liftPower);
             telemetry.addData("claw position", claw.getPosition());
             telemetry.addData("arm Control", aControl);
