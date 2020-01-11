@@ -30,7 +30,7 @@ public class BlueSingleSkystone extends SkystoneLinearOpMode{
 
         strafeAdjust(0.4,2,0,true);
 
-        turnPID(-90, 0.6/360,0.001,2,3000);
+        turnPID(-90, 0.6/360,0.001,2,4000);
 
         driveAdjust(270,0.5,59, 7); //GO TO STONES
 
@@ -38,21 +38,27 @@ public class BlueSingleSkystone extends SkystoneLinearOpMode{
 
         driveAdjust(90,-0.6,11, 7); //MOVE BACKWARD
 
-        sleep(250);
+        sleep(500);
 
         if (pos == -1){
-            turnPID(-5, 0.6/360,0.001,2,4000);
+            turnPID(-5, 0.5/360,0.001,2,4000);
 
             driveAdjust(2, 0.8, longAdjust, 4); // MOVE OTHER SIDE
-        } else {
-            turnPID(5, 0.6/360,0.001,2,4000);
+        } else if (pos == 1){
+            turnPID(5, 0.6,0,0,4000);
 
-            driveAdjust(358, 0.8, longAdjust, 4); // MOVE OTHER SIDE
+            driveAdjust(2, 0.8, longAdjust+20, 4); // MOVE OTHER SIDE
+        }else{
+            turnPID(5, 0.5/360,0.001,2,4000);
+
+            driveAdjust(2, 0.8, longAdjust, 4); // MOVE OTHER SIDE
         }
 
         foundationD(true); // drop stone
 
         driveAdjust(90,-0.8,20, 7); //MOVE BACKWARD
+
+        strafeAdjust(0.4,10,0,true);
 
         telemetry.addData("auto:", "complete");
         telemetry.update();

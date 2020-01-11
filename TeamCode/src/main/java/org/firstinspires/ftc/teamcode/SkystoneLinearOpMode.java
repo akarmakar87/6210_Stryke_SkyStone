@@ -1807,7 +1807,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     driveDistance(-0.4, 14);
                     break;
                 case 1:
-                    driveDistance(-0.4, 3);
+                    driveDistance(-0.4, 4);
                     break;
             }
         }else{
@@ -1819,7 +1819,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     driveDistance(0.4, 34);
                     break;
                 case 1:
-                    driveDistance(0.4, 15);
+                    driveDistance(0.4, 12);
                     break;
             }
         }
@@ -1833,7 +1833,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             case 0:
                 return 5;
             case 1:
-                return -1;
+                return 10;
         }
         return 2;//default
     }

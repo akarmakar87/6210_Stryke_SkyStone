@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="RedDoubleSkystone", group = "auto") // RED SIDE
+@Autonomous(name="RedSingleSkystone", group = "auto") // RED SIDE
 
 //@Disabled
 public class RedSingleSkystone extends SkystoneLinearOpMode{
@@ -57,6 +57,8 @@ public class RedSingleSkystone extends SkystoneLinearOpMode{
         turnPID(180, 0.6/360,0.001,2,3000); // autocorrect angle to account for stone friction
 
         driveAdjust(180, -0.8, 30, 2); //park
+
+        strafeAdjust(0.6,13,0,false);
 
         telemetry.addData("auto:", "complete");
         telemetry.update();

@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous.AML3;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="RedDoubleSkystone", group = "auto") // RED SIDE
 
-//@Disabled
+@Disabled
 public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
     @Override
@@ -72,7 +73,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
         if (pos == 1){
             turnPID(-178, 0.6/360,0.001,2,5000);
 
-            driveAdjust(182, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
+            driveAdjust(182, 1, longAdjust + 50, 3000); // MOVE OTHER SIDE
         } else {
             turnPID(178, 0.6/360,0.001,2,5000);
 
