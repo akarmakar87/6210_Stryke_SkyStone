@@ -198,20 +198,30 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 strafePower = gamepad1.left_trigger * 0.75;
                 setStrafePowers(strafePower, false);
             }else if (halfSpeed){
-                lfPower = ((-yAxis+xAxis-zAxis)/2);
+                /*lfPower = ((-yAxis+xAxis-zAxis)/2);
                 rfPower = ((-yAxis-xAxis+zAxis)/2);
                 lbPower = ((-yAxis-xAxis-zAxis)/2);
-                rbPower = ((-yAxis+xAxis+zAxis)/2);
+                rbPower = ((-yAxis+xAxis+zAxis)/2);*/
+
+                lfPower = ((-yAxis-zAxis)/2);
+                rfPower = ((-yAxis+zAxis)/2);
+                lbPower = ((-yAxis-zAxis)/2);
+                rbPower = ((-yAxis+zAxis)/2);
 
                 LF.setPower(Range.clip(lfPower, -0.5, 0.5));
                 RF.setPower(Range.clip(rfPower, -0.5, 0.5));
                 LB.setPower(Range.clip(lbPower, -0.5, 0.5));
                 RB.setPower(Range.clip(rbPower, -0.5, 0.5));
             }else {
-                lfPower = -yAxis + xAxis - zAxis;
+                /*lfPower = -yAxis + xAxis - zAxis;
                 rfPower = -yAxis - xAxis + zAxis;
                 lbPower = -yAxis - xAxis - zAxis;
-                rbPower = -yAxis + xAxis + zAxis;
+                rbPower = -yAxis + xAxis + zAxis;*/
+
+                lfPower = -yAxis - zAxis;
+                rfPower = -yAxis + zAxis;
+                lbPower = -yAxis - zAxis;
+                rbPower = -yAxis + zAxis;
 
                 LF.setPower(Range.clip(lfPower, -1, 1));
                 RF.setPower(Range.clip(rfPower, -1, 1));

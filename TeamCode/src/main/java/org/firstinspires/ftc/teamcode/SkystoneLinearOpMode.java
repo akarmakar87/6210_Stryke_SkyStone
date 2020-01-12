@@ -1819,7 +1819,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     driveDistance(0.4, 34);
                     break;
                 case 1:
-                    driveDistance(0.4, 12);
+                    driveDistance(0.4, 10);
                     break;
             }
         }
