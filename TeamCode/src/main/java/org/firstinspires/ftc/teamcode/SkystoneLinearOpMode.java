@@ -594,6 +594,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         idle();*/
     }
 
+
+
     public void driveDistance(double power, double distance) throws InterruptedException{
 
         double total = distance * encoderToInches;
@@ -1115,13 +1117,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
-    public void setArm(int target, double pwr){
+    /*public void setArm(int target, double pwr){
         double endPos = target; //GET VALUE RANGE IN TELEOP : 0 - ?
         double startPos = arm.getCurrentPosition();
         double power = 0;
 
-        //while (opModeIsActive()&& !isStopRequested() && Math.abs(target-arm.getCurrentPosition()) > 3){ //3 TICKS MARGIN OF ERROR
-            /*if(arm.getCurrentPosition() < target){
+        while (opModeIsActive()&& !isStopRequested() && Math.abs(target-arm.getCurrentPosition()) > 3){ //3 TICKS MARGIN OF ERROR
+            if(arm.getCurrentPosition() < target){
                 if(arm.getCurrentPosition() < 220){ //VALUE OF HIGHEST POINT
                     power = -0.3;
                 }else{
@@ -1133,7 +1135,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 }else{
                     power = 0.3;
                 }
-            }*/
+            }
 
             power = pwr;
             arm.setTargetPosition(target);
@@ -1145,8 +1147,44 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 telemetry.update();
              //   sleep(250);
             }
-    }
+    }*/
 
+    //ARM MOVEMENT
+
+    public void armSetPositition(int targetValue, double armPwr){
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setTargetPosition(targetValue);
+        arm.setPower(Range.clip(armPwr, 0, 1));
+
+    }
+    /*public void armPID(double value, double P, double I, double D, double timeOut) {
+
+        double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
+
+        double kP = P;
+        double kI = I;
+        double kD = D;
+
+        prevError = error = value - getEncoderAvg(); //INITIALIZE THESE VARIABLES
+
+        power = dT = prevTime = currTime = 0.0;
+
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        while (opModeIsActive() && Math.abs(error) > 0.7 && currTime < timeOut){
+            prevError = error;
+
+            error = value - getEncoderAvg();
+
+            prevTime = currTime;
+            currTime = time.milliseconds();
+            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
+            power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
+
+            arm.setPower(Range.clip(power, 0.2, 1));
+        }
+    }
+    */
     //TURN METHODS
 
     public void turnPID(double tAngle, double P, double I, double D, double timeOut){
@@ -2189,6 +2227,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
      }
      }**/
+
+
 
     @Override
     public void runOpMode() throws InterruptedException {

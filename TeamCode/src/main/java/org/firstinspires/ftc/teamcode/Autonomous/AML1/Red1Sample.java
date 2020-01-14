@@ -57,7 +57,7 @@ public class Red1Sample extends SkystoneLinearOpMode{
 
         driveDistance(0.5, 25);
 
-        setArm(-600,-0.3); //PUT ARM DOWN
+        //setArm(-600,-0.3); //PUT ARM DOWN
 
         arm.setPower(0);
 
@@ -69,7 +69,7 @@ public class Red1Sample extends SkystoneLinearOpMode{
 
         sleep(250); //WAIT FOR CLAW TO CLOSE
 
-        setArm(-550,0.3); //LIFT ARM
+        //setArm(-550,0.3); //LIFT ARM
 
         driveDistance(-0.3, 14); //MOVE BACKWARDS A BIT
 
