@@ -1151,12 +1151,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     //ARM MOVEMENT
 
-    public void armSetPositition(int targetValue, double armPwr){
+    /*public void armSetPositition(int targetValue, double armPwr){
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setTargetPosition(targetValue);
         arm.setPower(Range.clip(armPwr, 0, 1));
+        while(arm.isBusy())
+        {
 
-    }
+        }
+        arm.setPower(0);
+    }*/
     /*public void armPID(double value, double P, double I, double D, double timeOut) {
 
         double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES

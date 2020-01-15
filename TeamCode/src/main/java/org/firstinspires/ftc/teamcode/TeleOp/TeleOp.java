@@ -24,7 +24,8 @@ public class TeleOp extends SkystoneLinearOpMode {
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
-        boolean goArm = false; //IN ROBOT
+        boolean goArm = false;
+        boolean changeMode = true;
         resetEncoders();
         resetArm();
 
@@ -58,8 +59,8 @@ public class TeleOp extends SkystoneLinearOpMode {
 
             //Calculating power for each motor
             lfPower = xAxis - yAxis - zAxis;
-            rfPower = xAxis - yAxis + zAxis;
-            lbPower = xAxis - yAxis - zAxis;
+            rfPower = -xAxis - yAxis + zAxis;
+            lbPower = -xAxis - yAxis - zAxis;
             rbPower = xAxis - yAxis + zAxis;
 
             //Checking if halfspeed is toggled
@@ -169,36 +170,53 @@ public class TeleOp extends SkystoneLinearOpMode {
 
             }
             //Automatic
-            /*//Toggle
+            //Toggle
+            /*if (Math.abs(gamepad2.right_stick_y) > 0.05){
+                changeMode = true;
+                arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
             if (gamepad2.b && toggleTime < time.milliseconds() - 250)
             {
+                changeMode = false;
+
                 goArm = !goArm;
+
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                arm.setPower(Range.clip(1, 0, 1));
+
                 toggleTime = time.milliseconds();
             }
 
-            //Down
-            if (goArm)
+            //DEPLOYED
+            if (goArm && !changeMode)
             {
-                armSetPositition(1, .9);
+                arm.setTargetPosition(400);
             }
-            //Up
-            else if (!goArm)
+            //NOT DEPLOYED
+            else if (!goArm && !changeMode)
             {
-                armSetPositition(1, .9);
+                arm.setTargetPosition(0);
             }
-             */
+            */
 
 
             //Lift Controls
             //Manuel
             if (gamepad2.right_trigger > 0.05) {
-                liftPower = Range.clip(gamepad2.right_trigger, 0, 0.5);  //LIFT UP
+                liftPower = Range.clip(gamepad2.right_trigger, 0, 0.7);  //LIFT UP
             } else if (gamepad2.left_trigger > 0.05) {
-                liftPower = -Range.clip(gamepad2.left_trigger, 0, 0.5);  //LIFT DOWN
+                liftPower = -Range.clip(gamepad2.left_trigger, 0, 0.7);  //LIFT DOWN
             } else {
                 liftPower = 0;
             }
+            lift.setPower(liftPower);
             //Automatic...
+            telemetry.addData("Lift Position", lift.getCurrentPosition());
+            telemetry.addData("Arm Position", arm.getCurrentPosition());
+            telemetry.addData("Halfspeed", halfSpeed);
+            telemetry.update();
+
         }
     }
 }
