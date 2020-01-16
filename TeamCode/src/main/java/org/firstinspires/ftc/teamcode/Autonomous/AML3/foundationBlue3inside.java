@@ -42,7 +42,7 @@ public class foundationBlue3inside extends SkystoneLinearOpMode {
 
         sleep(1000);
 
-        driveDistance(0.8,20);
+        driveAdjust(0,0.7, 30, 2);  //Push foundation into build site
 
         //driveDistance(-0.5,5);
 

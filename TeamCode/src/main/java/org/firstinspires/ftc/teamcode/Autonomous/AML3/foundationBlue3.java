@@ -42,15 +42,15 @@ public class foundationBlue3 extends SkystoneLinearOpMode {
 
         sleep(1000);
 
-        driveDistance(0.8,20);
+        driveAdjust(0,0.7, 30, 2);  //Push foundation into build site
 
         //driveDistance(-0.5,5);
 
-        turnPID(90, 0.7/90, 0.004, 1, 4000);
+        turnPID(90, 0.7/90, 0.004, 1, 4000);    //Turn parallel to bridge
 
-        driveDistance(0.5, 25);
+        driveDistance(0.5, 25); //Align with parking spot
 
-        turnPID(0, 0.7/90, .004, 1, 3000);
+        turnPID(0, 0.7/90, .004, 1, 3000);  //Turn toward parking spot
 
         driveDistance(-0.4, 75);     //Drive to the parking spot (backward)
     }

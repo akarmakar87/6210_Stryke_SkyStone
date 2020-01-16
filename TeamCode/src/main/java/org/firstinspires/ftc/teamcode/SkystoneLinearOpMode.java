@@ -650,7 +650,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         t.reset();
         resetEncoders();
 
-        while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < 10) {
+        while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < timeout) {
             remaining = total - getEncoderAvg();
             error = origHeading - getYaw();
             finalPower = (remaining / total) * power;
