@@ -16,11 +16,11 @@ public class TeleOp extends SkystoneLinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         init(hardwareMap, true);
-        int lpos = 0, apos = 0;
+        int lpos = 0, apos = 0, liftHeight = 0;
         double xAxis = 0, yAxis = 0, zAxis = 0;
         double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0, liftPower = 0;
         boolean lControl = true, aControl = true, foundation = false;
-        double lTime = 0, aTime = 0, fTime = 0, htime = 0, toggleTime = 0, min = 0, max = 0, pow = 0;
+        double lTime = 0, aTime = 0, fTime = 0, htime = 0, toggleTime = 0, deployTime = 0, min = 0, max = 0, pow = 0;
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
@@ -171,39 +171,43 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
             //Automatic
             //Toggle
-            /*if (Math.abs(gamepad2.right_stick_y) > 0.05){
+            if (Math.abs(gamepad2.right_stick_y) > 0.05){
+                if(!changeMode){
+                    arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                }
                 changeMode = true;
-                arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                goArm = false;
             }
             if (gamepad2.b && toggleTime < time.milliseconds() - 250)
             {
                 changeMode = false;
 
-                goArm = !goArm;
+                goArm = true;
 
                 arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-                arm.setPower(Range.clip(1, 0, 1));
+                arm.setPower(Range.clip(0.6, 0, 1));
 
                 toggleTime = time.milliseconds();
+
+                deployTime = time.milliseconds();
             }
 
-            //DEPLOYED
+            //DEPLOY ARM
             if (goArm && !changeMode)
             {
-                arm.setTargetPosition(400);
+                if(deployTime < time.milliseconds() - 1000)
+                {
+                    intakeL.setPower(1);
+                    intakeR.setPower(-1);
+                }
+                arm.setTargetPosition(-540);
             }
-            //NOT DEPLOYED
-            else if (!goArm && !changeMode)
-            {
-                arm.setTargetPosition(0);
-            }
-            */
-
 
             //Lift Controls
             //Manuel
             if (gamepad2.right_trigger > 0.05) {
+                lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 liftPower = Range.clip(gamepad2.right_trigger, 0, 0.7);  //LIFT UP
             } else if (gamepad2.left_trigger > 0.05) {
                 liftPower = -Range.clip(gamepad2.left_trigger, 0, 0.7);  //LIFT DOWN
@@ -212,10 +216,41 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
             lift.setPower(liftPower);
             //Automatic...
+            /* if (gamepad2.dpad_up) {
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                double currPos = lift.getCurrentPosition();//get current position
+                int tarPos = ((int)currPos/10) + 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
+                lift.setPower(0.5);
+                lift.setTargetPosition(tarPos * 10); //Make lift go to position
+            }
+            if (gamepad2.dpad_down) {
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                double currPos = lift.getCurrentPosition();//get current position
+                int tarPos = ((int)currPos/10) - 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
+                lift.setPower(0.5);
+                lift.setTargetPosition(tarPos * 10); //Make lift go to position
+            }
+
+            //SAVE LIFT HEIGHT
+            if (gamepad2.dpad_left)
+            {
+                liftHeight = lift.getCurrentPosition();
+            }
+
+            if (gamepad2.dpad_right)
+            {
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setTargetPosition(liftHeight + 200); //Last recorded block height + one block up
+                lift.setPower(0.7);
+            }*/
+
+
             telemetry.addData("Lift Position", lift.getCurrentPosition());
             telemetry.addData("Arm Position", arm.getCurrentPosition());
             telemetry.addData("Halfspeed", halfSpeed);
             telemetry.update();
+
+
 
         }
     }
