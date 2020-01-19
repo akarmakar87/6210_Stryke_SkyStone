@@ -161,7 +161,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                 }
                 armPower = Range.clip(pow, min, max);
                 arm.setPower(armPower);
-            } else {
+            } else if(changeMode){
                 arm.setPower(0);
             }
             //Stay Still
@@ -173,7 +173,8 @@ public class TeleOp extends SkystoneLinearOpMode {
             //Toggle
             if (Math.abs(gamepad2.right_stick_y) > 0.05){
                 if(!changeMode){
-                    arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    arm.setPower(armPower);
                 }
                 changeMode = true;
                 goArm = false;
@@ -182,26 +183,29 @@ public class TeleOp extends SkystoneLinearOpMode {
             {
                 changeMode = false;
 
-                goArm = true;
-
-                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                arm.setPower(Range.clip(0.6, 0, 1));
-
                 toggleTime = time.milliseconds();
 
                 deployTime = time.milliseconds();
+
+                goArm = true;
+
+                arm.setTargetPosition(-540);
+
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
 
             //DEPLOY ARM
             if (goArm && !changeMode)
             {
-                if(deployTime < time.milliseconds() - 1000)
+                if(deployTime > time.milliseconds() - 1000)
                 {
                     intakeL.setPower(1);
                     intakeR.setPower(-1);
                 }
-                arm.setTargetPosition(-540);
+
+                arm.setPower(0.8);
+
+
             }
 
             //Lift Controls
@@ -216,7 +220,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
             lift.setPower(liftPower);
             //Automatic...
-            /* if (gamepad2.dpad_up) {
+            if (gamepad2.dpad_up) {
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 double currPos = lift.getCurrentPosition();//get current position
                 int tarPos = ((int)currPos/10) + 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
@@ -242,12 +246,14 @@ public class TeleOp extends SkystoneLinearOpMode {
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lift.setTargetPosition(liftHeight + 200); //Last recorded block height + one block up
                 lift.setPower(0.7);
-            }*/
+            }
 
 
             telemetry.addData("Lift Position", lift.getCurrentPosition());
             telemetry.addData("Arm Position", arm.getCurrentPosition());
             telemetry.addData("Halfspeed", halfSpeed);
+            telemetry.addData("Arm Speed", armPower);
+            telemetry.addData("Mode change", changeMode);
             telemetry.update();
 
 

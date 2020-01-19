@@ -1222,9 +1222,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
 
             if (power < 0)
-                setMotorPowers(Range.clip(power, 0.2, 1), -Range.clip(power, 0.2, 0.6));
+                setMotorPowers(Range.clip(-power, 0.2, 0.5), Range.clip(power, -0.5, -0.2));
             else
-                setMotorPowers(-Range.clip(power, 0.2, 1), Range.clip(power, 0.2, 0.6));
+                setMotorPowers(Range.clip(power, -0.5, -0.2), Range.clip(-power, 0.2, 0.5));
 
             telemetry.addData("tAngle: ", tAngle)
                     .addData("currAngle: ", get180Yaw())
@@ -1232,6 +1232,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     .addData("kI:", error * dT * kI)
                     .addData("kD:", (error - prevError)/dT * kD)
                     .addData("power", power)
+                    .addData("ACTUAL POWER:",LF.getPower())
                     .addData("error: ", error)
                     .addData("currTime: ", currTime);
             telemetry.update();
@@ -1644,13 +1645,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             //actually blue
             if(red){
                 //USE ALL THREE OR JUST TWO?
-                leftRed = red(bm.getPixel(1150,220)); //originally 250
-                midRed = red(bm.getPixel(860,220));
-                rightRed = red(bm.getPixel(560,220));
+                leftRed = red(bm.getPixel(1150, 310)); //originally 250
+                midRed = red(bm.getPixel(860,310));
+                rightRed = red(bm.getPixel(560,310));
             }else{ //GET PIXELS FOR BLUE LATER
-                leftRed = red(bm.getPixel(850,220));
-                midRed = red(bm.getPixel(470,220));//orig 490
-                rightRed = red(bm.getPixel(300,220)); //originally x was 200 but no detecting correctly
+                //actually red
+                leftRed = red(bm.getPixel(850,310));
+                midRed = red(bm.getPixel(470,310));//orig 490
+                rightRed = red(bm.getPixel(300,310)); //originally x was 200 but no detecting correctly
             }
 
             ArrayList<Integer> pixels = new ArrayList<>();
@@ -1846,10 +1848,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     driveDistance(0.4, 3);
                     break;
                 case 0:
-                    driveDistance(-0.4, 14);
+                    driveDistance(-0.4, 13);
                     break;
                 case 1:
-                    driveDistance(-0.4, 4);
+                    driveDistance(-0.4, 3);
                     break;
             }
         }else{

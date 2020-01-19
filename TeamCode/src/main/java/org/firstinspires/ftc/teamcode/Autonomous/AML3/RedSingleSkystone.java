@@ -58,7 +58,7 @@ public class RedSingleSkystone extends SkystoneLinearOpMode{
 
         driveAdjust(180, -0.8, 30, 2); //park
 
-        strafeAdjust(0.6,13,0,false);
+        strafeAdjust(.6,9,180,false);
 
         telemetry.addData("auto:", "complete");
         telemetry.update();

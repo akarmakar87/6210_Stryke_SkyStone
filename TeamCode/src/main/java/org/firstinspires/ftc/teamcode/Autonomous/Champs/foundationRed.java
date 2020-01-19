@@ -16,13 +16,13 @@ public class foundationRed extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        turnPID(90, 0.6/360,0.001,2,4000);
+        /*turnPID(90, 0.6/360,0.001,2,4000);
 
         turnPID(-45, 0.6/360,0.001,2,4000);
 
         turnPID(90, 0.6/360,0.001,2,4000);
 
-        turnPID(-45, 0.3/360,0.001,2,4000);
+        turnPID(-45, 0.3/360,0.001,2,4000);*/
 
         driveDistance(0.4, 40);    //align with foundation
 
