@@ -245,7 +245,10 @@ public class TeleOp extends SkystoneLinearOpMode {
             {
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lift.setTargetPosition(liftHeight + 200); //Last recorded block height + one block up
-                lift.setPower(0.7);
+                lift.setPower(0.8);
+                if(!lift.isBusy()){
+                    liftHeight = lift.getCurrentPosition();
+                }
             }
 
 
@@ -254,6 +257,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             telemetry.addData("Halfspeed", halfSpeed);
             telemetry.addData("Arm Speed", armPower);
             telemetry.addData("Mode change", changeMode);
+            telemetry.addData("Lift Height", liftHeight);
             telemetry.update();
 
 
