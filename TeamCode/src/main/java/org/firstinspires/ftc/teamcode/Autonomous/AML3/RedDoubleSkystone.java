@@ -1,14 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous.AML3;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="RedDoubleSkystone", group = "auto") // RED SIDE DOUBLE
+@Autonomous(name="RedSampleStrafe", group = "auto") // RED SIDE
 
 //@Disabled
-public class RedDoubleSkystone extends SkystoneLinearOpMode{
+public class RedSampleStrafe extends SkystoneLinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -25,7 +24,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         pos = detectSkystoneOnePix(getBitmap(),false); //DETECT SKYSTONE
 
-        adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
+        adjust = adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
 
         longAdjust = forLongAdjust(pos,false) + 100;
 
@@ -33,11 +32,11 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         turnPID(-90, 0.6/360,0.001,2,3000);
 
-        driveAdjust(270,0.5,59, 7); //GO TO STONES
+        driveAdjust(270,0.4,59, 7); //GO TO STONES
 
         grabStone(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(270,-0.8,11, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.8,12, 7); //MOVE BACKWARD
 
         //strafeAdjust(0.6,55,-90,true);
 
@@ -55,57 +54,33 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         //strafeAdjust(0.6,20,-90,false);
 
-        turnPID(180, 0.6/360,0.001,2,1500); // autocorrect angle to account for stone friction
+        turnPID(180, 0.6/360,0.001,2,3000); // autocorrect angle to account for stone friction
 
         // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
 
-        // MOVE BACK TO STONE SIDE
-        switch (pos) {
-            case -1:
-                driveAdjust(180, -0.8, longAdjust + 38, 3);
-                break;
-            case 0:
-                driveAdjust(180, -0.8, longAdjust + 35, 3);
-                break;
-            case 1:
-                driveAdjust(180, -0.8, longAdjust + 31, 3);
-                break;
-        }
-        //driveAdjust(180, -0.8, longAdjust + 31, 3);
+        driveAdjust(180, -0.8, longAdjust + 31, 3); // MOVE BACK TO STONE SIDE
 
-        sleep(250);
-        //turnPID(-90, 0.5/360,0.001,2,4000);
-        turnPID(-90, 0.6/360,0.001,2,3000);
+        turnPID(-90, 0.5/360,0.001,2,4000);
 
-        if (pos == -1) strafeAdjust(0.4,2,90,false); // strafe
-
-        driveAdjust(270, 0.6, 25, 5); //GO TO STONES
+        driveAdjust(270, 0.5, 23, 5); //GO TO STONES
 
         grabStone(pos, false);
 
-        driveAdjust(270,-0.6,12, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.5,10, 7); //MOVE BACKWARD
 
-        // MOVE TO OTHER SIDE
-        switch (pos) {
-            case -1:
-                turnPID(177, 0.6/360,0.001,2,3000);
-                driveAdjust(177, 1, longAdjust + 53, 3000); // MOVE OTHER SIDE
-                break;
-            case 0:
-                turnPID(177, 0.6/360,0.001,2,3000);
-                driveAdjust(177, 1, longAdjust + 50, 3000); // MOVE OTHER SIDE
-                break;
-            case 1:
-                turnPID(-178, 0.6/360,0.001,2,3000);
-                driveAdjust(182, 1, longAdjust + 40, 3000); // MOVE OTHER SIDE
-                break;
+        if (pos == 1){
+            turnPID(-175, 0.6/360,0.001,2,5000);
+
+            driveAdjust(182, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
+        } else {
+            turnPID(175, 0.6/360,0.001,2,5000);
+
+            driveAdjust(178, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
         }
 
         foundationD(true);
 
         driveAdjust(180, -0.8, 30, 2); //park
-
-        strafeAdjust(.6,9,180,false);
 
         //+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ old stuffing
         /*
@@ -154,7 +129,6 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
          */
 
-        telemetry.addData("auto:", "complete");
-        telemetry.update();
-    }
+        }
+
 }
