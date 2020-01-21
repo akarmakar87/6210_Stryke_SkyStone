@@ -170,7 +170,7 @@ public class TeleOp extends SkystoneLinearOpMode {
 
             }
             //Automatic
-            //Toggle
+            //Arm (automatic to manuel) Toggle
             if (Math.abs(gamepad2.right_stick_y) > 0.05){
                 if(!changeMode){
                     arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -220,6 +220,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
             lift.setPower(liftPower);
             //Automatic...
+            //double y = blockHieght * x + first hieght (if not equal to blockHieght)
             if (gamepad2.dpad_up) {
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 double currPos = lift.getCurrentPosition();//get current position
