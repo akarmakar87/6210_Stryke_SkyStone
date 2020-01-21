@@ -68,7 +68,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
                 driveAdjust(180, -0.8, longAdjust + 39, 3);
                 break;
             case 1:
-                driveAdjust(180, -0.8, longAdjust + 50, 3);
+                driveAdjust(180, -0.8, longAdjust + 49, 3);
                 break;
         }
         //driveAdjust(180, -0.8, longAdjust + 31, 3);
