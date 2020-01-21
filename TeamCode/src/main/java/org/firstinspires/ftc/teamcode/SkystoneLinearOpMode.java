@@ -658,9 +658,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             if (power > 0) {
                 if (error > 1) {
                     rp = finalPower;
-                    lp = 0.8*finalPower;
+                    lp = 0.6*finalPower;
                 } else if (error < -1) {
-                    rp = finalPower*0.8;
+                    rp = finalPower*0.6;
                     lp = finalPower;
                 } else {
                     rp = finalPower;
@@ -670,11 +670,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 lp = Range.clip(lp, 0.2,1);
             } else {
                 if (error > 1) {
-                    rp = finalPower*0.8;
+                    rp = finalPower*0.6;
                     lp = finalPower;
                 } else if (error < -1) {
                     rp = finalPower;
-                    lp = 0.8*finalPower;
+                    lp = 0.6*finalPower;
                 } else {
                     rp = finalPower;
                     lp = finalPower;
@@ -1021,16 +1021,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public void grabStone(int pos, boolean back){
         switch(pos){
             case -1:
-                foundationL.setPosition(0);
+                foundationL.setPosition(.2);
                 break;
             case 0:
-                foundationL.setPosition(0);
+                foundationL.setPosition(.2);
                 break;
             case 1:
                 if (!back)
-                    foundationR.setPosition(1);
+                    foundationR.setPosition(.8);
                 else
-                    foundationL.setPosition(0);
+                    foundationL.setPosition(.2);
                 break;
         }
         sleep(1000);
@@ -1115,6 +1115,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             foundationL.setPosition(0);
             foundationR.setPosition(1);
         }
+        sleep(100);
     }
 
     /*public void setArm(int target, double pwr){
@@ -1645,14 +1646,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             //actually blue
             if(red){
                 //USE ALL THREE OR JUST TWO?
-                leftRed = red(bm.getPixel(1150, 310)); //originally 250
+                leftRed = red(bm.getPixel(1150, 310)); //originally 250 310
                 midRed = red(bm.getPixel(860,310));
                 rightRed = red(bm.getPixel(560,310));
             }else{ //GET PIXELS FOR BLUE LATER
                 //actually red
-                leftRed = red(bm.getPixel(850,310));
-                midRed = red(bm.getPixel(470,310));//orig 490
-                rightRed = red(bm.getPixel(300,310)); //originally x was 200 but no detecting correctly
+                leftRed = red(bm.getPixel(850,250));
+                midRed = red(bm.getPixel(470,250));//orig 490
+                rightRed = red(bm.getPixel(300,250)); //originally x was 200 but no detecting correctly
             }
 
             ArrayList<Integer> pixels = new ArrayList<>();
@@ -1845,7 +1846,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         if(!red){
             switch(pos) { // red
                 case -1:
-                    driveDistance(0.4, 3);
+                    driveDistance(-0.4, 1);
                     break;
                 case 0:
                     driveDistance(-0.4, 13);
