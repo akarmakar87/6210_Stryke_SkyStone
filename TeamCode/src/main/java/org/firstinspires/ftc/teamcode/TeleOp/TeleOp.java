@@ -26,6 +26,7 @@ public class TeleOp extends SkystoneLinearOpMode {
         boolean halfSpeed = false;
         boolean goArm = false;
         boolean changeMode = true;
+        boolean goLift = false;
         resetEncoders();
         resetArm();
 
@@ -58,10 +59,16 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
 
             //Calculating power for each motor
+            // Real holonomic
             lfPower = xAxis - yAxis - zAxis;
+            rfPower = xAxis - yAxis + zAxis;
+            lbPower = -xAxis - yAxis - zAxis;
+            rbPower = -xAxis - yAxis + zAxis;
+
+            /*lfPower = xAxis - yAxis - zAxis;
             rfPower = -xAxis - yAxis + zAxis;
             lbPower = -xAxis - yAxis - zAxis;
-            rbPower = xAxis - yAxis + zAxis;
+            rbPower = xAxis - yAxis + zAxis;*/
 
             //Checking if halfspeed is toggled
             if (gamepad1.x && htime < time.milliseconds() - 250) {
@@ -215,7 +222,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                 liftPower = Range.clip(gamepad2.right_trigger, 0, 0.7);  //LIFT UP
             } else if (gamepad2.left_trigger > 0.05) {
                 liftPower = -Range.clip(gamepad2.left_trigger, 0, 0.7);  //LIFT DOWN
-            } else {
+            } else if (!goLift){
                 liftPower = 0;
             }
             lift.setPower(liftPower);
@@ -244,12 +251,24 @@ public class TeleOp extends SkystoneLinearOpMode {
 
             if (gamepad2.dpad_right)
             {
+                goLift = true;
+            }
+
+            if(goLift)
+            {
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift.setTargetPosition(liftHeight + 200); //Last recorded block height + one block up
+                lift.setTargetPosition(liftHeight - 1000); //Last recorded block height + one block up
                 lift.setPower(0.8);
                 if(!lift.isBusy()){
                     liftHeight = lift.getCurrentPosition();
+                    lift.setPower(0);
+                    goLift = false;
                 }
+            }
+
+            if (gamepad2.right_trigger > 0.05)
+            {
+                goLift = false;
             }
 
 

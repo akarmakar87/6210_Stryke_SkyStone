@@ -36,7 +36,7 @@ public class foundationRed3inside extends SkystoneLinearOpMode {
 
         foundationD(true);
 
-        strafeAdjust(0.7, 30, 90, false);
+        strafeAdjust(0.7, 35, 90, false);
 
         driveAdjust(90, .5, 45, 5);
 

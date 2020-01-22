@@ -173,7 +173,7 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 yAxis = 0;
             }
             if (Math.abs(gamepad1.left_stick_x) > 0.05) {
-                xAxis = -gamepad1.left_stick_x;
+                xAxis = gamepad1.left_stick_x;
             }
             else{
                 xAxis = 0;
@@ -213,15 +213,15 @@ public class HolonomicDrive extends SkystoneLinearOpMode {
                 LB.setPower(Range.clip(lbPower, -0.5, 0.5));
                 RB.setPower(Range.clip(rbPower, -0.5, 0.5));
             }else {
-                /*lfPower = -yAxis + xAxis - zAxis;
+                lfPower = -yAxis - xAxis - zAxis;
                 rfPower = -yAxis - xAxis + zAxis;
-                lbPower = -yAxis - xAxis - zAxis;
-                rbPower = -yAxis + xAxis + zAxis;*/
+                lbPower = -yAxis + xAxis - zAxis;
+                rbPower = -yAxis + xAxis + zAxis;
 
-                lfPower = -yAxis - zAxis;
+                /*lfPower = -yAxis - zAxis;
                 rfPower = -yAxis + zAxis;
                 lbPower = -yAxis - zAxis;
-                rbPower = -yAxis + zAxis;
+                rbPower = -yAxis + zAxis;*/
 
                 LF.setPower(Range.clip(lfPower, -1, 1));
                 RF.setPower(Range.clip(rfPower, -1, 1));
