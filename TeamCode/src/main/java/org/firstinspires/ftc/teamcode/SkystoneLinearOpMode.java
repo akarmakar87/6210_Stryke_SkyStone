@@ -594,6 +594,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         idle();*/
     }
 
+
+
     public void driveDistance(double power, double distance) throws InterruptedException{
 
         double total = distance * encoderToInches;
@@ -648,7 +650,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         t.reset();
         resetEncoders();
 
-        while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < 10) {
+        while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < timeout) {
             remaining = total - getEncoderAvg();
             error = origHeading - getYaw();
             finalPower = (remaining / total) * power;
@@ -656,9 +658,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             if (power > 0) {
                 if (error > 1) {
                     rp = finalPower;
-                    lp = 0.8*finalPower;
+                    lp = 0.6*finalPower;
                 } else if (error < -1) {
-                    rp = finalPower*0.8;
+                    rp = finalPower*0.6;
                     lp = finalPower;
                 } else {
                     rp = finalPower;
@@ -668,11 +670,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 lp = Range.clip(lp, 0.2,1);
             } else {
                 if (error > 1) {
-                    rp = finalPower*0.8;
+                    rp = finalPower*0.6;
                     lp = finalPower;
                 } else if (error < -1) {
                     rp = finalPower;
-                    lp = 0.8*finalPower;
+                    lp = 0.6*finalPower;
                 } else {
                     rp = finalPower;
                     lp = finalPower;
@@ -839,9 +841,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             if(error > 180){
                 error = -(360-error);
             }
-            //finalPower = (remaining / total) * power;
 
-            //setEachMotorPowers(LF,RF,LB,RB,halfspeed);
             double p = 0.5;
             if (right) {
                 if (error > 1) {
@@ -1021,10 +1021,28 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public void grabStone(int pos, boolean back){
         switch(pos){
             case -1:
+                foundationL.setPosition(.2);
+                break;
+            case 0:
+                foundationL.setPosition(.2);
+                break;
+            case 1:
+                if (!back)
+                    foundationR.setPosition(.8);
+                else
+                    foundationL.setPosition(.2);
+                break;
+        }
+        sleep(1000);
+    }
+
+    public void grabStoneBlue(int pos, boolean back){
+        switch(pos){
+            case -1:
                 foundationL.setPosition(0);
                 break;
             case 0:
-                foundationL.setPosition(0);
+                foundationR.setPosition(1);
                 break;
             case 1:
                 if (!back)
@@ -1097,15 +1115,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             foundationL.setPosition(0);
             foundationR.setPosition(1);
         }
+        sleep(100);
     }
 
-    public void setArm(int target, double pwr){
+    /*public void setArm(int target, double pwr){
         double endPos = target; //GET VALUE RANGE IN TELEOP : 0 - ?
         double startPos = arm.getCurrentPosition();
         double power = 0;
 
-        //while (opModeIsActive()&& !isStopRequested() && Math.abs(target-arm.getCurrentPosition()) > 3){ //3 TICKS MARGIN OF ERROR
-            /*if(arm.getCurrentPosition() < target){
+        while (opModeIsActive()&& !isStopRequested() && Math.abs(target-arm.getCurrentPosition()) > 3){ //3 TICKS MARGIN OF ERROR
+            if(arm.getCurrentPosition() < target){
                 if(arm.getCurrentPosition() < 220){ //VALUE OF HIGHEST POINT
                     power = -0.3;
                 }else{
@@ -1117,7 +1136,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 }else{
                     power = 0.3;
                 }
-            }*/
+            }
 
             power = pwr;
             arm.setTargetPosition(target);
@@ -1129,8 +1148,48 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 telemetry.update();
              //   sleep(250);
             }
-    }
+    }*/
 
+    //ARM MOVEMENT
+
+    /*public void armSetPositition(int targetValue, double armPwr){
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setTargetPosition(targetValue);
+        arm.setPower(Range.clip(armPwr, 0, 1));
+        while(arm.isBusy())
+        {
+
+        }
+        arm.setPower(0);
+    }*/
+    /*public void armPID(double value, double P, double I, double D, double timeOut) {
+
+        double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
+
+        double kP = P;
+        double kI = I;
+        double kD = D;
+
+        prevError = error = value - getEncoderAvg(); //INITIALIZE THESE VARIABLES
+
+        power = dT = prevTime = currTime = 0.0;
+
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        while (opModeIsActive() && Math.abs(error) > 0.7 && currTime < timeOut){
+            prevError = error;
+
+            error = value - getEncoderAvg();
+
+            prevTime = currTime;
+            currTime = time.milliseconds();
+            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
+            power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
+
+            arm.setPower(Range.clip(power, 0.2, 1));
+        }
+    }
+    */
     //TURN METHODS
 
     public void turnPID(double tAngle, double P, double I, double D, double timeOut){
@@ -1148,7 +1207,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
         resetTime();
-        while (opModeIsActive() && Math.abs(error) > 0.7/* && currTime < timeOut*/){
+        while (opModeIsActive() && Math.abs(error) > 0.7 && currTime < timeOut){
             prevError = error;
             error = tAngle - get180Yaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
 
@@ -1164,9 +1223,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
 
             if (power < 0)
-                setMotorPowers(Range.clip(power, 0.2, 1), -Range.clip(power, 0.2, 0.6));
+                setMotorPowers(Range.clip(-power, 0.2, 0.5), Range.clip(power, -0.5, -0.2));
             else
-                setMotorPowers(-Range.clip(power, 0.2, 1), Range.clip(power, 0.2, 0.6));
+                setMotorPowers(Range.clip(power, -0.5, -0.2), Range.clip(-power, 0.2, 0.5));
 
             telemetry.addData("tAngle: ", tAngle)
                     .addData("currAngle: ", get180Yaw())
@@ -1174,6 +1233,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     .addData("kI:", error * dT * kI)
                     .addData("kD:", (error - prevError)/dT * kD)
                     .addData("power", power)
+                    .addData("ACTUAL POWER:",LF.getPower())
                     .addData("error: ", error)
                     .addData("currTime: ", currTime);
             telemetry.update();
@@ -1583,15 +1643,17 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
             //figure out proper threshold
 
+            //actually blue
             if(red){
                 //USE ALL THREE OR JUST TWO?
-                leftRed = red(bm.getPixel(1150,220)); //originally 250
-                midRed = red(bm.getPixel(860,220));
-                rightRed = red(bm.getPixel(780,220));
+                leftRed = red(bm.getPixel(1150, 310)); //originally 250 310
+                midRed = red(bm.getPixel(860,310));
+                rightRed = red(bm.getPixel(560,310));
             }else{ //GET PIXELS FOR BLUE LATER
-                leftRed = red(bm.getPixel(850,220));
-                midRed = red(bm.getPixel(470,220));//orig 490
-                rightRed = red(bm.getPixel(300,220)); //originally x was 200 but no detecting correctly
+                //actually red
+                leftRed = red(bm.getPixel(850,250));
+                midRed = red(bm.getPixel(470,250));//orig 490
+                rightRed = red(bm.getPixel(300,250)); //originally x was 200 but no detecting correctly
             }
 
             ArrayList<Integer> pixels = new ArrayList<>();
@@ -1780,19 +1842,33 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
-    public double adjustForSkystone(int pos, boolean red) throws InterruptedException{
-        switch(pos) {
-            case -1:
-                driveDistance(0.4, 3);
-                return 3;
-            case 0:
-                driveDistance(-0.4, 14);
-                return 14;
-            case 1:
-                driveDistance(-0.4, 3);
-                return 3;
+    public void adjustForSkystone(int pos, boolean red) throws InterruptedException{
+        if(!red){
+            switch(pos) { // red
+                case -1:
+                    driveDistance(-0.4, 1);
+                    break;
+                case 0:
+                    driveDistance(-0.4, 13);
+                    break;
+                case 1:
+                    driveDistance(-0.4, 3);
+                    break;
+            }
+        }else{
+            switch(pos) {
+                case -1:
+                    driveDistance(0.4, 20);
+                    break;
+                case 0:
+                    driveDistance(0.4, 34);
+                    break;
+                case 1:
+                    driveDistance(0.4, 10);
+                    break;
+            }
         }
-        return 2;//default
+        telemetry.update();
     }
 
     public double forLongAdjust(int pos, boolean red) throws InterruptedException{
@@ -1800,9 +1876,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             case -1:
                 return 15;
             case 0:
-                return 0;
+                return 5;
             case 1:
-                return -5;
+                return 10;
         }
         return 2;//default
     }
@@ -2158,6 +2234,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
      }
      }**/
+
+
 
     @Override
     public void runOpMode() throws InterruptedException {
