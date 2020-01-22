@@ -1843,7 +1843,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public void adjustForSkystone(int pos, boolean red) throws InterruptedException{
-        if(!red){
+        if(!red){ // RED
             switch(pos) { // red
                 case -1:
                     driveDistance(-0.4, 1);
@@ -1872,13 +1872,24 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public double forLongAdjust(int pos, boolean red) throws InterruptedException{
-        switch(pos) {
-            case -1:
-                return 15;
-            case 0:
-                return 5;
-            case 1:
-                return 10;
+        if (!red) { // RED
+            switch(pos) {
+                case -1:
+                    return 15;
+                case 0:
+                    return 5;
+                case 1:
+                    return 10;
+            }
+        } else {
+            switch(pos) {
+                case -1:
+                    return 15;
+                case 0:
+                    return 5;
+                case 1:
+                    return 10;
+            }
         }
         return 2;//default
     }

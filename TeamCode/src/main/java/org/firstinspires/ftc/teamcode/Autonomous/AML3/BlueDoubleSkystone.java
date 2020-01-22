@@ -54,27 +54,52 @@ public class BlueDoubleSkystone extends SkystoneLinearOpMode{
 
         driveAdjust(90,-0.8,20, 7); //MOVE BACKWARD
 
-        //turnPID(180, 0.6/360,0.001,2,3000); // autocorrect angle to account for stone friction
-
         // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
         /*
-        driveAdjust(180, -0.8, longAdjust + 31, 3); // MOVE BACK TO STONE SIDE
+        // MOVE BACK TO STONE SIDE
+        switch (pos) {
+            case -1:
+                driveAdjust(0, -0.8, longAdjust + 38, 3);
+                break;
+            case 0:
+                driveAdjust(0, -0.8, longAdjust + 40, 3); //originally 39
+                break;
+            case 1:
+                driveAdjust(0, -0.8, longAdjust + 49, 3);
+                break;
+        }
 
-        turnPID(90, 0.5/360,0.001,2,4000);
+        turnPID(-90, 0.6/360,0.001,2,3000);
 
-        driveAdjust(90, 0.5, 20, 5); //GO TO STONES
+        if (pos == 1) strafeAdjust(0.6,3,90,true); // strafe
 
-        grabStone(pos, false);
+        driveAdjust(270, 0.6, 25, 5); //GO TO STONES
 
-        driveAdjust(90,-0.5,10, 7); //MOVE BACKWARD
+        grabStoneBlue(pos, false);
 
-        turnPID(-178, 0.6/360,0.001,2,5000);
+        driveAdjust(270,-0.6,11, 7); //MOVE BACKWARD
 
-        driveAdjust(182, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
+        // MOVE TO OTHER SIDE
+        switch (pos) {
+            case -1:
+                turnPID(175, 0.6/360,0.001,2,3000);
+                driveAdjust(173, 1, longAdjust + 53, 3000);
+                break;
+            case 0:
+                turnPID(175, 0.6/360,0.001,2,3000);
+                driveAdjust(175, 1, longAdjust + 50, 3000);
+                break;
+            case 1:
+                turnPID(-176, 0.6/360,0.001,2,3000);
+                driveAdjust(182, 1, longAdjust + 40, 3000);
+                break;
+        }
 
         foundationD(true);
 
         driveAdjust(180, -0.8, 30, 2); //park
+
+        strafeAdjust(.6,13,180,false);
         */
 
         telemetry.addData("auto:", "complete");

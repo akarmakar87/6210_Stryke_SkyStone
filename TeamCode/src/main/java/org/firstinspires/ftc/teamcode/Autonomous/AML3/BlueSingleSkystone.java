@@ -38,23 +38,18 @@ public class BlueSingleSkystone extends SkystoneLinearOpMode{
 
         driveAdjust(90,-0.6,11, 7); //MOVE BACKWARD
 
-        sleep(500);
-
+        // MOVE TO THE OTHER SIDE
         if (pos == -1){
             turnPID(-5, 0.5/360,0.001,2,4000);
-
-            driveAdjust(2, 0.8, longAdjust, 4); // MOVE OTHER SIDE
-        } else if (pos == 1){
-            turnPID(5, 0.6,0,0,4000);
-
-            driveAdjust(2, 0.8, longAdjust+20, 4); // MOVE OTHER SIDE
-        }else{
+            driveAdjust(2, 0.8, longAdjust, 4);
+        } else {
             turnPID(5, 0.5/360,0.001,2,4000);
-
-            driveAdjust(2, 0.8, longAdjust, 4); // MOVE OTHER SIDE
+            driveAdjust(2, 0.8, longAdjust, 4);
         }
 
         foundationD(true); // drop stone
+
+        turnPID(0, 0.6/360,0.001,2,3000); // AUTOCORRECT
 
         driveAdjust(90,-0.8,20, 7); //MOVE BACKWARD
 

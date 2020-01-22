@@ -52,8 +52,6 @@ public class RedSingleSkystone extends SkystoneLinearOpMode{
 
         foundationD(true); // drop stone
 
-        //strafeAdjust(0.6,20,-90,false);
-
         turnPID(180, 0.6/360,0.001,2,3000); // autocorrect angle to account for stone friction
 
         driveAdjust(180, -0.8, 30, 2); //park
