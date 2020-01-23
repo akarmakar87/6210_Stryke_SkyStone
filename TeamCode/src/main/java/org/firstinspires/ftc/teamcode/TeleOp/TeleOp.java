@@ -171,11 +171,6 @@ public class TeleOp extends SkystoneLinearOpMode {
             } else if(changeMode){
                 arm.setPower(0);
             }
-            //Stay Still
-            if (gamepad2.b && toggleTime < time.milliseconds() - 50)
-            {
-
-            }
             //Automatic
             //Arm (automatic to manuel) Toggle
             if (Math.abs(gamepad2.right_stick_y) > 0.05){
