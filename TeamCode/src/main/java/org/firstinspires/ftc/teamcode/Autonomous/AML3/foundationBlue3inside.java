@@ -16,11 +16,11 @@ public class foundationBlue3inside extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        driveDistance(0.4, 33);    //align with foundation
+        driveDistance(0.4, 20);    //align with foundation
 
-        turnPID(-90, 0.7/90, 0.004, 1, 8000);   //turn toward foundation
+        turnPID(-90, 0.6/360, 0.001, 2, 3000);   //turn toward foundation
 
-        driveDistance(0.6, 52 + 2);    //Drive to foundation
+        driveAdjust(270,0.6, 53, 4);    //Drive to foundation
 
         foundationD(false);  //Grab foundation
 
@@ -28,30 +28,28 @@ public class foundationBlue3inside extends SkystoneLinearOpMode {
 
         //driveDistance(-1, 77);     //Pull foundation into building site
 
-        driveAdjust(-90, -0.2, 5, 2);
+        driveAdjust(270, -0.2, 10, 4);
 
-        driveAdjust(-90, -0.7, 77, 6);
+        driveAdjust(270, -0.6, 65, 5);
 
-        turnPID(0, 0.7/90, 0.004, 1, 7000);
+        turnPID(0, 0.6/360, 0.001, 2, 4000);
 
-        /*setMotorPowers(0.8, -0.8);
-        sleep(1500);
-        stopMotors();*/
 
         foundationD(true);     //Release foundation
 
         sleep(1000);
 
-        driveAdjust(0,0.7, 30, 2);  //Push foundation into build site
+        //driveAdjust(0,1, 35, 3);  //Push foundation into build site
+        driveDistance(.5,35);
 
-        //driveDistance(-0.5,5);
+        strafeAdjust(0.6,10,0,true);
 
-        turnPID(-90, 0.7/90, 0.004, 1, 8000);
+        //turnPID(90, 0.6/260, 0.001, 2, 4000);    //Turn parallel to bridge
 
-        driveDistance(0.5, 30);
+        //driveDistance(0.5, 25); //Align with parking spot
 
-        turnPID(180, 0.7/90, .004, 1, 3000);
+        //turnPID(0, 0.6/360, .001, 2, 3000);  //Turn toward parking spot
 
-        driveDistance(0.4, 75);     //Drive to the parking spot (backward)
+        driveDistance(-0.4, 90);     //Drive to the parking spot (backward)
     }
 }
