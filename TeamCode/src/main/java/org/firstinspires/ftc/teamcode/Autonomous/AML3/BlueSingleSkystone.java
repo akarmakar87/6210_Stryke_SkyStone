@@ -28,32 +28,37 @@ public class BlueSingleSkystone extends SkystoneLinearOpMode{
 
         longAdjust = forLongAdjust(pos,true) + 100;
 
-        strafeAdjust(0.4,2,0,true);
+        strafeAdjust(0.6,2,0,true);
 
-        turnPID(-90, 0.6/360,0.001,2,4000);
+        turnPID(-90, 0.6/90,0.0001,2,2000);
 
-        driveAdjust(270,0.5,59, 7); //GO TO STONES
+        driveAdjust(270,0.4,61, 7); //GO TO STONES
 
         grabStoneBlue(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(90,-0.6,11, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.8,7, 7); //MOVE BACKWARD
 
-        // MOVE TO THE OTHER SIDE
+        //turnPID(0, 0.6/90,0.0001,2,2000);
+
+        //driveAdjust(0, 0.6, longAdjust, 4); // MOVE OTHER SIDE
+
         if (pos == -1){
-            turnPID(-5, 0.5/360,0.001,2,4000);
-            driveAdjust(2, 0.8, longAdjust, 4);
+            turnPID(-2, 0.6/90,0.0001,2,2000);
+
+            driveAdjust(358, 0.8, longAdjust, 4); // MOVE OTHER SIDE
         } else {
-            turnPID(5, 0.5/360,0.001,2,4000);
-            driveAdjust(2, 0.8, longAdjust, 4);
+            turnPID(2, 0.6/90,0.0001,2,2000);
+
+            driveAdjust(2, 0.8, longAdjust, 4); // MOVE OTHER SIDE
         }
 
         foundationD(true); // drop stone
 
-        turnPID(0, 0.6/360,0.001,2,3000); // AUTOCORRECT
+        turnPID(0, 0.6/90,0.0001,2,1500); // autocorrect angle to account for stone friction
 
-        driveAdjust(90,-0.8,20, 7); //MOVE BACKWARD
+        driveAdjust(0, -0.6, 25, 2); //park
 
-        strafeAdjust(0.4,10,0,true);
+        strafeAdjust(.4,14,0,true);
 
         telemetry.addData("auto:", "complete");
         telemetry.update();

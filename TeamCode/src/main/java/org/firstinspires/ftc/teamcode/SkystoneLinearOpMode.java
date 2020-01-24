@@ -654,16 +654,32 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < timeout) {
             remaining = total - getEncoderAvg();
+
             error = origHeading - getYaw();
+            if(error > 180){
+                error = -(error-360);
+            } else if (error < -180)
+                error = 360+error;
+
+            /*error = tHeading - get180Yaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+
+            if(error > 180){
+                error = -(error-180);
+            }else  if(error < -180){
+                error = -(error+180);
+            }*/
+
+
+
             finalPower = (remaining / total) * power;
 
             if (power > 0) {
                 if (error > 1) {
-                    rp = finalPower;
-                    lp = 0.6*finalPower;
-                } else if (error < -1) {
-                    rp = finalPower*0.6;
+                    rp = finalPower*1.5;
                     lp = finalPower;
+                } else if (error < -1) {
+                    rp = finalPower;
+                    lp = finalPower*1.5;
                 } else {
                     rp = finalPower;
                     lp = finalPower;
@@ -672,11 +688,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 lp = Range.clip(lp, 0.2,1);
             } else {
                 if (error > 1) {
-                    rp = finalPower*0.6;
-                    lp = finalPower;
-                } else if (error < -1) {
                     rp = finalPower;
-                    lp = 0.6*finalPower;
+                    lp = finalPower*1.5;
+                } else if (error < -1) {
+                    rp = finalPower*1.5;
+                    lp = finalPower;
                 } else {
                     rp = finalPower;
                     lp = finalPower;
@@ -688,6 +704,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             telemetry.addData("left power: ", lp);
             telemetry.addData("right power: ", rp);
             telemetry.addData("error", error);
+            telemetry.addData("current angle", getYaw());
+            telemetry.addData("target angle", tHeading);
             telemetry.update();
 
         }
@@ -841,11 +859,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < total && t.seconds() < 10) {
             remaining = total - getEncoderAvg();
             error = getYaw()-tHeading;
-            if(error > 180){
-                error = -(360-error);
-            }
+            if(error > 180) error = -(error-360);
+            //else if (error < -180)
+            //    error = error + 360;
 
-            double p = 0.5;
+            double p = 0.8;
             if (right) {
                 if (error > 1) {
                     setEachMotorPowers(-finalPower,-finalPower,finalPower,p*finalPower,false); //check
@@ -1649,9 +1667,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             //actually blue
             if(red){
                 //USE ALL THREE OR JUST TWO?
-                leftRed = red(bm.getPixel(1150, 310)); //originally 250 310
-                midRed = red(bm.getPixel(860,310));
-                rightRed = red(bm.getPixel(560,310));
+                leftRed = red(bm.getPixel(1150, 250)); //originally 250 310
+                midRed = red(bm.getPixel(860,250));
+                rightRed = red(bm.getPixel(560,250));
             }else{ //GET PIXELS FOR BLUE LATER
                 //actually red
                 leftRed = red(bm.getPixel(850,250));
@@ -1861,13 +1879,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }else{
             switch(pos) {
                 case -1:
-                    driveDistance(0.4, 20);
+                    driveDistance(0.4, 17);
                     break;
                 case 0:
-                    driveDistance(0.4, 34);
+                    driveDistance(0.4, 31);
                     break;
                 case 1:
-                    driveDistance(0.4, 10);
+                    driveDistance(0.4, 8);
                     break;
             }
         }
@@ -1887,9 +1905,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         } else {
             switch(pos) {
                 case -1:
-                    return 15;
+                    return 0;
                 case 0:
-                    return 5;
+                    return -10;
                 case 1:
                     return 10;
             }

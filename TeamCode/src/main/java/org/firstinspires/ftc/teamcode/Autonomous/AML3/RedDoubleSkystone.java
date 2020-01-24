@@ -33,13 +33,11 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         turnPID(-90, 0.6/90,0.0001,2,2000);
 
-        driveAdjust(270,0.5,61, 7); //GO TO STONES
+        driveAdjust(270,0.5,62, 7); //GO TO STONES
 
         grabStone(pos,false); //GRAB SKYSTONE
 
         driveAdjust(270,-0.8,11, 7); //MOVE BACKWARD
-
-        //strafeAdjust(0.6,55,-90,true);
 
         if (pos == 1){
             turnPID(-178, 0.6/90,0.0001,2,2000);
@@ -53,8 +51,6 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         foundationD(true); // drop stone
 
-        //strafeAdjust(0.6,20,-90,false);
-
         turnPID(180, 0.6/90,0.0001,2,1500); // autocorrect angle to account for stone friction
 
         // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
@@ -62,44 +58,44 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
         // MOVE BACK TO STONE SIDE
         switch (pos) {
             case -1:
-                driveAdjust(180, -0.8, longAdjust + 36, 3);
+                driveAdjust(180, -0.8, longAdjust + 35, 3);
                 break;
             case 0:
-                driveAdjust(180, -0.8, longAdjust + 33, 3); //originally 39
+                driveAdjust(180, -0.8, longAdjust + 37, 3);
                 break;
             case 1:
-                driveAdjust(180, -0.8, longAdjust + 43, 3);
+                driveAdjust(180, -0.8, longAdjust + 39, 3);
                 break;
         }
         //driveAdjust(180, -0.8, longAdjust + 31, 3);
 
         //sleep(250);
         //turnPID(-90, 0.5/360,0.001,2,4000);
-        turnPID(-90, 0.6/90,0.0001,2,2000);
+        turnPID(-90, 0.6/90,0.0001,2,1500);
 
-        if (pos == -1) strafeAdjust(0.6,5,90,false); // strafe
+        if (pos == -1) strafeAdjust(0.4,2,270,false); // strafe
 
-        driveAdjust(270, 0.4, 25, 5); //GO TO STONES
+        driveAdjust(270, 0.4, 23, 5); //GO TO STONES
 
         grabStone(pos, false);
 
-        driveAdjust(270,-0.6,11, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.6,12, 7); //MOVE BACKWARD
 
         // MOVE TO OTHER SIDE
         switch (pos) {
             case -1:
                 //turnPID(175, 0.6/360,0.001,2,3000);
-                turnPID(177, 0.6/90,0.0001,2,2000);
-                driveAdjust(177, 1, longAdjust + 53, 3000); // MOVE OTHER SIDE
+                turnPID(180, 0.6/90,0.0001,2,2000);
+                driveAdjust(180, 1, longAdjust + 53, 3000); // MOVE OTHER SIDE
                 break;
             case 0:
-                turnPID(177, 0.6/90,0.0001,2,2000);
-                driveAdjust(177, 1, longAdjust + 50, 3000); // MOVE OTHER SIDE
+                turnPID(180, 0.6/90,0.0001,2,2000);
+                driveAdjust(180, 1, longAdjust + 50, 3000); // MOVE OTHER SIDE
                 break;
             case 1:
                 //turnPID(-178, 0.6/360,0.001,2,3000);
-                turnPID(-177, 0.6/90,0.0001,2,2000);
-                driveAdjust(183, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
+                turnPID(-180, 0.6/90,0.0001,2,2000);
+                driveAdjust(180, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
                 break;
         }
 
