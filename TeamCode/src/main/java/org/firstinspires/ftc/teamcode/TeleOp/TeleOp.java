@@ -143,7 +143,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                 intakeR.setPower(-1);
             }
             //idle
-            else {
+            else if (changeMode){
                 intakeL.setPower(0);
                 intakeR.setPower(0);
             }
@@ -200,7 +200,7 @@ public class TeleOp extends SkystoneLinearOpMode {
 
                 goArm = true;
 
-                arm.setTargetPosition(-540);
+                arm.setTargetPosition(-540); //-830 for horizontal
 
                 arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
@@ -208,10 +208,14 @@ public class TeleOp extends SkystoneLinearOpMode {
             //DEPLOY ARM
             if (goArm && !changeMode)
             {
-                if(deployTime > time.milliseconds() - 1000)
+                if(deployTime > time.milliseconds() - 1000) //expel block for 1 second
                 {
                     intakeL.setPower(1);
                     intakeR.setPower(-1);
+                }
+                else{
+                    intakeL.setPower(0);
+                    intakeR.setPower(0);
                 }
 
                 arm.setPower(0.8);
@@ -231,7 +235,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             lift.setPower(liftPower);
             //Automatic...
             //double y = blockHieght * x + first hieght (if not equal to blockHieght)
-            if (gamepad2.dpad_up) {
+            /*if (gamepad2.dpad_up) {
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 double currPos = lift.getCurrentPosition();//get current position
                 int tarPos = ((int)currPos/10) + 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
@@ -244,7 +248,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                 int tarPos = ((int)currPos/10) - 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
                 lift.setPower(0.5);
                 lift.setTargetPosition(tarPos * 10); //Make lift go to position
-            }
+            }*/
 
             //SAVE LIFT HEIGHT
             if (gamepad2.dpad_left)
