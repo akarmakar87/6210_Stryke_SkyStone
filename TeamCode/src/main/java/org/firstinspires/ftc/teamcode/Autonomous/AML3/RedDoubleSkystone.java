@@ -31,7 +31,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         strafeAdjust(0.6,2,0,true);
 
-        turnPID(-90, 0.6/360,0.001,2,3000);
+        turnPID(-90, 0.6/90,0.0001,2,2000);
 
         driveAdjust(270,0.5,61, 7); //GO TO STONES
 
@@ -42,11 +42,11 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
         //strafeAdjust(0.6,55,-90,true);
 
         if (pos == 1){
-            turnPID(-178, 0.6/360,0.001,2,4000);
+            turnPID(-178, 0.6/90,0.0001,2,2000);
 
             driveAdjust(182, 0.8, longAdjust, 4); // MOVE OTHER SIDE
         } else {
-            turnPID(178, 0.6/360,0.001,2,4000);
+            turnPID(178, 0.6/90,0.0001,2,2000);
 
             driveAdjust(178, 0.8, longAdjust, 4); // MOVE OTHER SIDE
         }
@@ -55,31 +55,31 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         //strafeAdjust(0.6,20,-90,false);
 
-        turnPID(180, 0.6/360,0.001,2,1500); // autocorrect angle to account for stone friction
+        turnPID(180, 0.6/90,0.0001,2,1500); // autocorrect angle to account for stone friction
 
         // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
 
         // MOVE BACK TO STONE SIDE
         switch (pos) {
             case -1:
-                driveAdjust(180, -0.8, longAdjust + 38, 3);
+                driveAdjust(180, -0.8, longAdjust + 36, 3);
                 break;
             case 0:
-                driveAdjust(180, -0.8, longAdjust + 40, 3); //originally 39
+                driveAdjust(180, -0.8, longAdjust + 33, 3); //originally 39
                 break;
             case 1:
-                driveAdjust(180, -0.8, longAdjust + 49, 3);
+                driveAdjust(180, -0.8, longAdjust + 43, 3);
                 break;
         }
         //driveAdjust(180, -0.8, longAdjust + 31, 3);
 
-        sleep(250);
+        //sleep(250);
         //turnPID(-90, 0.5/360,0.001,2,4000);
-        turnPID(-90, 0.6/360,0.001,2,3000);
+        turnPID(-90, 0.6/90,0.0001,2,2000);
 
-        if (pos == -1) strafeAdjust(0.6,3,90,false); // strafe
+        if (pos == -1) strafeAdjust(0.6,5,90,false); // strafe
 
-        driveAdjust(270, 0.6, 25, 5); //GO TO STONES
+        driveAdjust(270, 0.4, 25, 5); //GO TO STONES
 
         grabStone(pos, false);
 
@@ -89,17 +89,17 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
         switch (pos) {
             case -1:
                 //turnPID(175, 0.6/360,0.001,2,3000);
-                turnPID(175, 0.6/360,0.001,2,3000);
-                driveAdjust(173, 1, longAdjust + 53, 3000); // MOVE OTHER SIDE
+                turnPID(177, 0.6/90,0.0001,2,2000);
+                driveAdjust(177, 1, longAdjust + 53, 3000); // MOVE OTHER SIDE
                 break;
             case 0:
-                turnPID(175, 0.6/360,0.001,2,3000);
-                driveAdjust(175, 1, longAdjust + 50, 3000); // MOVE OTHER SIDE
+                turnPID(177, 0.6/90,0.0001,2,2000);
+                driveAdjust(177, 1, longAdjust + 50, 3000); // MOVE OTHER SIDE
                 break;
             case 1:
                 //turnPID(-178, 0.6/360,0.001,2,3000);
-                turnPID(-176, 0.6/360,0.001,2,3000);
-                driveAdjust(182, 1, longAdjust + 40, 3000); // MOVE OTHER SIDE
+                turnPID(-177, 0.6/90,0.0001,2,2000);
+                driveAdjust(183, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
                 break;
         }
 
@@ -107,7 +107,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         driveAdjust(180, -0.8, 30, 2); //park
 
-        strafeAdjust(.6,13,180,false);
+        strafeAdjust(.6,10,180,false);
 
         telemetry.addData("auto:", "complete");
         telemetry.update();

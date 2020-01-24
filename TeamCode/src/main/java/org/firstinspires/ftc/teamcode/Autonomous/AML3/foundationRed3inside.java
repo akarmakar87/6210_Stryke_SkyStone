@@ -16,55 +16,38 @@ public class foundationRed3inside extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        driveDistance(0.4, 40);    //align with foundation
+        driveDistance(0.4, 20);    //align with foundation
 
-        strafeAdjust(0.4,2,0,false); // move away from wall
+        turnPID(90, 0.6/360, 0.001, 2, 3000);   //turn toward foundation
 
-        turnPID(90, 0.6/90,0.001,2,5000);
-
-        driveAdjust(90,0.5,50, 7); //GO TO foundation
+        driveAdjust(90,0.6, 55, 4);    //Drive to foundation
 
         foundationD(false);  //Grab foundation
 
         sleep(1000);
 
-        driveAdjust(90, -0.2, 5, 2);
+        //driveDistance(-1, 77);     //Pull foundation into building site
 
-        driveAdjust(90,-0.7, 78,4); // pull foundation into building site
+        driveAdjust(90, -0.2, 10, 4);
 
-        //driveDistance(-1, 75);     //Pull foundation into building site
+        driveAdjust(90, -0.7, 65, 5);
 
-        foundationD(true);
+        turnPID(0, 0.6/360, 0.001, 2, 4000);
 
-        strafeAdjust(0.7, 30, 90, false);
+        /*setMotorPowers(0.8, -0.8);
+        sleep(1500);
+        stopMotors();*/
 
-        driveAdjust(90, .5, 45, 5);
-
-        turnPID(0, 0.6/360,0.001,2,4000);
-
-        driveAdjust(0, -0.6, 50, 7);
-
-        /*turnPID(0, 0.9/90, 0.004, 1, 7000);
-
-        //setMotorPowers(0.8, -0.8);
-        //sleep(1500);
-        //stopMotors();
-
-        //foundationD(true);     //Release foundation
+        foundationD(true);     //Release foundation
 
         sleep(1000);
 
-        driveDistance(0.8,20);
+        driveDistance(.5,35);
 
         //driveDistance(-0.5,5);
 
-        turnPID(-90, 0.7/90, 0.004, 1, 8000);
+        strafeAdjust(0.6,12,0,false);
 
-        driveDistance(0.5, 25);
-
-        turnPID(0, 0.7/90, .004, 1, 3000);
-
-        driveDistance(-0.4, 75);     //Drive to the parking spot (backward)
-        */
+        driveDistance(-0.4, 95);     //Drive to the parking spot (backward)
     }
 }

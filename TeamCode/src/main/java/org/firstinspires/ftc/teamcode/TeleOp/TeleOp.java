@@ -26,6 +26,8 @@ public class TeleOp extends SkystoneLinearOpMode {
         boolean halfSpeed = false;
         boolean goArm = false;
         boolean changeMode = true;
+        boolean goLift = false;
+        boolean strafing = false;
         resetEncoders();
         resetArm();
 
@@ -58,10 +60,16 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
 
             //Calculating power for each motor
+            // Real holonomic
             lfPower = xAxis - yAxis - zAxis;
+            rfPower = xAxis - yAxis + zAxis;
+            lbPower = -xAxis - yAxis - zAxis;
+            rbPower = -xAxis - yAxis + zAxis;
+
+            /*lfPower = xAxis - yAxis - zAxis;
             rfPower = -xAxis - yAxis + zAxis;
             lbPower = -xAxis - yAxis - zAxis;
-            rbPower = xAxis - yAxis + zAxis;
+            rbPower = xAxis - yAxis + zAxis;*/
 
             //Checking if halfspeed is toggled
             if (gamepad1.x && htime < time.milliseconds() - 250) {
@@ -70,7 +78,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
 
             //Halfspeed controls
-            if (halfSpeed) {
+            if (halfSpeed && !strafing) {
                 lfPower /= 2;
                 rfPower /= 2;
                 lbPower /= 2;
@@ -82,7 +90,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
 
             //Normal controls
-            else {
+            else if (!strafing){
                 LF.setPower(Range.clip(lfPower, -1, 1));
                 RF.setPower(Range.clip(rfPower, -1, 1));
                 LB.setPower(Range.clip(lbPower, -1, 1));
@@ -92,14 +100,22 @@ public class TeleOp extends SkystoneLinearOpMode {
             //Auto-strafe controls
             //strafe right
             if (gamepad1.right_trigger > 0.05) {
+                strafing = true;
                 strafePower = gamepad1.right_trigger * 0.75;
                 setStrafePowers(strafePower, true);
             }
 
             //strafe left
             else if (gamepad1.left_trigger > 0.05) {
+                strafing = true;
                 strafePower = gamepad1.left_trigger * 0.75;
                 setStrafePowers(strafePower, false);
+            }
+
+            //stop strafing
+
+            else {
+                strafing = false;
             }
 
             //Hook Controls
@@ -121,15 +137,15 @@ public class TeleOp extends SkystoneLinearOpMode {
                 intakeL.setPower(1);
                 intakeR.setPower(1);
             }
-            //idle
-            else {
-                intakeL.setPower(0);
-                intakeR.setPower(0);
-            }
-            //Unstick block if stuck
-            if (gamepad2.a) {
+            //unstick block
+            else if (gamepad2.a) {
                 intakeL.setPower(1);
                 intakeR.setPower(-1);
+            }
+            //idle
+            else if (changeMode){
+                intakeL.setPower(0);
+                intakeR.setPower(0);
             }
 
             //Arm Module Controls
@@ -164,11 +180,6 @@ public class TeleOp extends SkystoneLinearOpMode {
             } else if(changeMode){
                 arm.setPower(0);
             }
-            //Stay Still
-            if (gamepad2.b && toggleTime < time.milliseconds() - 50)
-            {
-
-            }
             //Automatic
             //Arm (automatic to manuel) Toggle
             if (Math.abs(gamepad2.right_stick_y) > 0.05){
@@ -189,7 +200,7 @@ public class TeleOp extends SkystoneLinearOpMode {
 
                 goArm = true;
 
-                arm.setTargetPosition(-540);
+                arm.setTargetPosition(-540); //-830 for horizontal
 
                 arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
@@ -197,14 +208,17 @@ public class TeleOp extends SkystoneLinearOpMode {
             //DEPLOY ARM
             if (goArm && !changeMode)
             {
-                if(deployTime > time.milliseconds() - 1000)
+                if(deployTime > time.milliseconds() - 1000) //expel block for 1 second
                 {
                     intakeL.setPower(1);
                     intakeR.setPower(-1);
                 }
+                else{
+                    intakeL.setPower(0);
+                    intakeR.setPower(0);
+                }
 
                 arm.setPower(0.8);
-
 
             }
 
@@ -215,13 +229,13 @@ public class TeleOp extends SkystoneLinearOpMode {
                 liftPower = Range.clip(gamepad2.right_trigger, 0, 0.7);  //LIFT UP
             } else if (gamepad2.left_trigger > 0.05) {
                 liftPower = -Range.clip(gamepad2.left_trigger, 0, 0.7);  //LIFT DOWN
-            } else {
+            } else if (!goLift){
                 liftPower = 0;
             }
             lift.setPower(liftPower);
             //Automatic...
             //double y = blockHieght * x + first hieght (if not equal to blockHieght)
-            if (gamepad2.dpad_up) {
+            /*if (gamepad2.dpad_up) {
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 double currPos = lift.getCurrentPosition();//get current position
                 int tarPos = ((int)currPos/10) + 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
@@ -234,7 +248,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                 int tarPos = ((int)currPos/10) - 1; //find tens place and add 1 to it -----------------------------Fix values so it adjusts to the right increments (levels of skyscraper) in inches (encoders to inches)
                 lift.setPower(0.5);
                 lift.setTargetPosition(tarPos * 10); //Make lift go to position
-            }
+            }*/
 
             //SAVE LIFT HEIGHT
             if (gamepad2.dpad_left)
@@ -242,14 +256,26 @@ public class TeleOp extends SkystoneLinearOpMode {
                 liftHeight = lift.getCurrentPosition();
             }
 
-            if (gamepad2.dpad_right)
+            if (gamepad2.dpad_right) //Lift to certain position
+            {
+                goLift = true;
+            }
+
+            if(goLift)
             {
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                lift.setTargetPosition(liftHeight + 200); //Last recorded block height + one block up
+                lift.setTargetPosition(liftHeight - 1000); //Last recorded block height + one block up
                 lift.setPower(0.8);
                 if(!lift.isBusy()){
-                    liftHeight = lift.getCurrentPosition();
+                    liftHeight = lift.getCurrentPosition(); //save position
+                    lift.setPower(0);
+                    goLift = false;
                 }
+            }
+
+            if (gamepad2.right_trigger > 0.05) //stop auto lift
+            {
+                goLift = false;
             }
 
 
@@ -259,6 +285,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             telemetry.addData("Arm Speed", armPower);
             telemetry.addData("Mode change", changeMode);
             telemetry.addData("Lift Height", liftHeight);
+            telemetry.addData("strafing: ", strafing);
             telemetry.update();
 
 

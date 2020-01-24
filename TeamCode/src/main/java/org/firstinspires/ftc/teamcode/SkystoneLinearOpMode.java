@@ -643,6 +643,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public void driveAdjust(double tHeading, double power, double distance, int timeout){
+        // ORIENTATION 0 TO 360
+        // INCREASING GOING COUNTER CLOCKWISE
 
         double total = distance * encoderToInches;
         double remaining, finalPower = power, origHeading = tHeading, error = 0, lp, rp;
@@ -827,7 +829,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
      */
 
     public void strafeAdjust(double power, double distance, double tHeading, boolean right) throws InterruptedException{
-
+        // ORIENTATION 0 TO 360
+        // INCREASING GOING COUNTER CLOCKWISE
         double total = distance * encoderToInches * 2.7;
         double remaining, finalPower = power, error;
         ElapsedTime t = new ElapsedTime();
@@ -1021,16 +1024,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public void grabStone(int pos, boolean back){
         switch(pos){
             case -1:
-                foundationL.setPosition(.2);
+                foundationL.setPosition(0);
                 break;
             case 0:
-                foundationL.setPosition(.2);
+                foundationL.setPosition(0);
                 break;
             case 1:
                 if (!back)
-                    foundationR.setPosition(.8);
+                    foundationR.setPosition(1);
                 else
-                    foundationL.setPosition(.2);
+                    foundationL.setPosition(0);
                 break;
         }
         sleep(1000);
@@ -1193,7 +1196,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     //TURN METHODS
 
     public void turnPID(double tAngle, double P, double I, double D, double timeOut){
-
+        // ORIENTATION -180 TO 180
         //- is right, + is left
         double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
 
@@ -1220,12 +1223,12 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             prevTime = currTime;
             currTime = time.milliseconds();
             dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
-            power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
+            power = (error * kP) + ((error) * dT * kI) + ((error - prevError)/dT * kD);
 
             if (power < 0)
                 setMotorPowers(Range.clip(-power, 0.2, 0.5), Range.clip(power, -0.5, -0.2));
             else
-                setMotorPowers(Range.clip(power, -0.5, -0.2), Range.clip(-power, 0.2, 0.5));
+                setMotorPowers(Range.clip(-power, -0.5, -0.2), Range.clip(power, 0.2, 0.5));
 
             telemetry.addData("tAngle: ", tAngle)
                     .addData("currAngle: ", get180Yaw())
