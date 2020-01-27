@@ -42,12 +42,14 @@ public class foundationRed3inside extends SkystoneLinearOpMode {
 
         sleep(1000);
 
-        driveDistance(.5,35);
+        driveDistance(.8,35);
+
+        driveAdjust(0, -0.5, 5, 2);  //back away from foundation
 
         //driveDistance(-0.5,5);
 
         strafeAdjust(0.6,12,0,false);
 
-        driveDistance(-0.4, 95);     //Drive to the parking spot (backward)
+        driveDistance(-0.4, 85);     //Drive to the parking spot (backward)
     }
 }

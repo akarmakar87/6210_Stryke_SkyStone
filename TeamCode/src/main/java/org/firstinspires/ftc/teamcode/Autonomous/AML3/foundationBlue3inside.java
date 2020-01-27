@@ -36,10 +36,12 @@ public class foundationBlue3inside extends SkystoneLinearOpMode {
 
         sleep(1000);    //wait for release
 
-        driveDistance(.5,35);   //push foundation into wall
+        driveDistance(.8,35);   //push foundation into wall
+
+        driveAdjust(0, -0.5, 5, 2);  //back away from foundation
 
         strafeAdjust(0.6,12,0,true);    //align with parking spot (maybe switch to driveAdjust incase it gets stuck)
 
-        driveDistance(-0.4, 95);     //Drive to the parking spot (backward)
+        driveDistance(-0.4, 85);     //Drive to the parking spot (backward)
     }
 }

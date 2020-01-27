@@ -16,7 +16,7 @@ public class foundationBlue3 extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        driveDistance(0.4, 20);    //align with foundation
+        driveDistance(0.4, 15);    //align with foundation
 
         turnPID(-90, 0.6/360, 0.001, 2, 3000);   //turn toward foundation
 
@@ -36,7 +36,9 @@ public class foundationBlue3 extends SkystoneLinearOpMode {
 
         sleep(1000);    //wait for release
 
-        driveDistance(.5,35);   //Push foundation into wall (maybe switch to driveAdjust incase it gets stuck)
+        driveDistance(.8,35);   //Push foundation into wall (maybe switch to driveAdjust incase it gets stuck)
+
+        driveAdjust(0, -0.5, 5, 2);  //back away from foundation
 
         strafeAdjust(0.6,20,0,false);   //Align with parking spot
 
