@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Champs;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Foundation Red inside sample", group = "auto")
 
-//Disabled
+@Disabled
 public class foundationRedinside extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -18,23 +19,21 @@ public class foundationRedinside extends SkystoneLinearOpMode {
 
         driveDistance(0.4, 40);    //align with foundation
 
-        strafeAdjust(0.4,2,0,false); // move away from wall
+        strafeAdjust(0.4,2,0,false); //move away from wall
 
-        turnPID(90, 0.6/90,0.001,2,5000);
+        turnPID(90, 0.6/90,0.001,2,5000);   //turn toward the foundation
 
         driveAdjust(90,0.5,57 + 2, 7); //GO TO foundation
 
         foundationD(false);  //Grab foundation
 
-        sleep(1000);
+        sleep(1000);    //wait to grab foundation
 
-        driveAdjust(90, -0.2, 5, 2);
+        driveAdjust(90, -0.2, 5, 2);    //pull hooks into position
 
         driveAdjust(90,-0.7, 75,4); // pull foundation into building site
 
-        //driveDistance(-1, 75);     //Pull foundation into building site
-
-        turnPID(0, 0.9/360,0.001,2,5000);
+        turnPID(0, 0.9/360,0.001,2,5000);   //
 
         foundationD(true);
 

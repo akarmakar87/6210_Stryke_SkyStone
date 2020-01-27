@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Foundation Red3(inside park)", group = "auto")
+@Autonomous(name="Foundation Red bridge", group = "auto")
 
 //Disabled
 public class foundationRed3inside extends SkystoneLinearOpMode {
@@ -18,37 +18,29 @@ public class foundationRed3inside extends SkystoneLinearOpMode {
 
         driveDistance(0.4, 20);    //align with foundation
 
-        turnPID(90, 0.6/360, 0.001, 2, 3000);   //turn toward foundation
+        turnPID(90, 0.6/90,0.0001,2, 3000);   //turn toward foundation
 
         driveAdjust(90,0.6, 55, 4);    //Drive to foundation
 
         foundationD(false);  //Grab foundation
 
-        sleep(1000);
+        sleep(1000);    //wait to grab foundation
 
-        //driveDistance(-1, 77);     //Pull foundation into building site
+        driveAdjust(90, -0.2, 10, 4);   //pull hooks into position
 
-        driveAdjust(90, -0.2, 10, 4);
+        driveAdjust(90, -0.7, 65, 5);   //pull foundation into build site
 
-        driveAdjust(90, -0.7, 65, 5);
-
-        turnPID(0, 0.6/360, 0.001, 2, 4000);
-
-        /*setMotorPowers(0.8, -0.8);
-        sleep(1500);
-        stopMotors();*/
+        turnPID(0, 0.6/90,0.0001,2, 4000);  //turn foundation and robot toward the wall
 
         foundationD(true);     //Release foundation
 
-        sleep(1000);
+        sleep(1000);    //wait to release foundation
 
-        driveDistance(.8,35);
+        driveDistance(.8,35);   //push foundation into build site
 
         driveAdjust(0, -0.5, 5, 2);  //back away from foundation
 
-        //driveDistance(-0.5,5);
-
-        strafeAdjust(0.6,12,0,false);
+        strafeAdjust(0.6,12,0,false);   //align with parking spot
 
         driveDistance(-0.4, 85);     //Drive to the parking spot (backward)
     }

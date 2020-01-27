@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Champs;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Foundation Red", group = "auto")
 
-//@Disabled
+@Disabled
 public class foundationRed extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -15,14 +16,6 @@ public class foundationRed extends SkystoneLinearOpMode {
         init(hardwareMap, true);
 
         waitForStart();
-
-        /*turnPID(90, 0.6/360,0.001,2,4000);
-
-        turnPID(-45, 0.6/360,0.001,2,4000);
-
-        turnPID(90, 0.6/360,0.001,2,4000);
-
-        turnPID(-45, 0.3/360,0.001,2,4000);*/
 
         driveDistance(0.4, 40);    //align with foundation
 
@@ -42,8 +35,6 @@ public class foundationRed extends SkystoneLinearOpMode {
 
         driveAdjust(90,-0.7, 78,4); // pull foundation into build site
 
-        //driveDistance(-1, 75);     //Pull foundation into building site
-
         turnPID(0, 1/360, 0.004, 1, 4000);
 
         foundationD(true);
@@ -55,28 +46,5 @@ public class foundationRed extends SkystoneLinearOpMode {
         turnPID(180, 0.9/360,0.001,2,5000);
 
         driveAdjust(180, 0.7, 75, 4);
-
-        /*turnPID(0, 0.9/90, 0.004, 1, 7000);
-
-        //setMotorPowers(0.8, -0.8);
-        //sleep(1500);
-        //stopMotors();
-
-        //foundationD(true);     //Release foundation
-
-        sleep(1000);
-
-        driveDistance(0.8,20);
-
-        //driveDistance(-0.5,5);
-
-        turnPID(-90, 0.7/90, 0.004, 1, 8000);
-
-        driveDistance(0.5, 25);
-
-        turnPID(0, 0.7/90, .004, 1, 3000);
-
-        driveDistance(-0.4, 75);     //Drive to the parking spot (backward)
-        */
     }
 }
