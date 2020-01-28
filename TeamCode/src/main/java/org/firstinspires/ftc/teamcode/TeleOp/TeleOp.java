@@ -28,7 +28,6 @@ public class TeleOp extends SkystoneLinearOpMode {
         boolean changeMode = true;
         boolean goLift = false;
         boolean strafing = false;
-        boolean leave = false;
         resetEncoders();
         resetArm();
 
@@ -183,7 +182,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
             //Automatic
             //Arm (automatic to manuel) Toggle
-            if (Math.abs(gamepad2.right_stick_y) > 0.05){
+            if (Math.abs(gamepad2.right_stick_y) > 0.05){ //go back to manuel
                 if(!changeMode){
                     arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     arm.setPower(armPower);
@@ -191,44 +190,24 @@ public class TeleOp extends SkystoneLinearOpMode {
                 changeMode = true;
 
             }
-            if (gamepad2.b && toggleTime < time.milliseconds() - 250)
+            if (gamepad2.b && toggleTime < time.milliseconds() - 250) //go to up position or back inside the robot
             {
                 changeMode = false;
 
-                toggleTime = time.milliseconds();
+                toggleTime = time.milliseconds(); //this isn't really necessary but whatever
 
-                deployTime = time.milliseconds();
+                deployTime = time.milliseconds(); //for compliant unstick later
 
-                goArm = true;
-
-
+                if(arm.getCurrentPosition() > -100 ){ //if arm inside the robot
+                    goArm = true;
+                } else { //else it's outside
+                    goArm = false;
+                }
             }
 
             //DEPLOY ARM
-            if (goArm && !changeMode) //if b is pressed and manuel movement is not being used (changeMode)
+            if (goArm && !changeMode) //if inside (goArm) and manuel movement is not being used (changeMode)
             {
-                if(arm.getCurrentPosition() < -100){
-                    leave = true;
-                }else{
-                    leave = false;
-                }
-
-                if (!leave)
-                { //if not inside robot
-                    arm.setTargetPosition(0); //-830 for horizontal
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    arm.setPower(0.8);
-                    if(lift.getCurrentPosition() < 0){ //if lift is not in robot
-                        lift.setTargetPosition(0);
-                        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        lift.setPower(0.8);
-                    }
-                }
-
-                else if(leave){ //if inside robot
-
-                    arm.setTargetPosition(-540); //-830 for horizontal
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                     if(deployTime > time.milliseconds() - 1000) //expel block for 1 second
                     {
@@ -240,7 +219,25 @@ public class TeleOp extends SkystoneLinearOpMode {
                         intakeR.setPower(0);
                     }
 
-                    arm.setPower(0.8);
+                arm.setTargetPosition(-540); //-540 for up, -830 for horizontal
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                arm.setPower(0.8);
+
+            }
+
+            if(!goArm && !changeMode) //if outside of robot (goArm)
+            {
+
+                arm.setTargetPosition(0);
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                arm.setPower(0.8);
+
+                if(lift.getCurrentPosition() < 0) //if lift is outside robot
+                {
+
+                    lift.setTargetPosition(0);
+                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    lift.setPower(0.8);
 
                 }
             }
