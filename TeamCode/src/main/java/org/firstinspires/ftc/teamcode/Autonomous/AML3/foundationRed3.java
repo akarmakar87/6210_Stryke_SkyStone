@@ -16,7 +16,7 @@ public class foundationRed3 extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        driveDistance(0.4, 20);    //align with foundation
+        driveDistance(0.4, 30);    //align with foundation
 
         turnPID(90, 0.6/90,0.0001,2, 3000);   //turn toward foundation
 
@@ -28,9 +28,9 @@ public class foundationRed3 extends SkystoneLinearOpMode {
 
         driveAdjust(90, -0.2, 10, 4);   //pull hooks into place
 
-        driveAdjust(90, -0.6, 65, 5);   //pull foundation into build site
+        driveAdjust(90, -0.4, 60, 5);   //pull foundation into build site
 
-        turnPID(0, 0.6/90,0.0001,2, 4000);  //Turn the foundation and the robot toward the site
+        turnPIDF(0, 0.6/90,0.0001,2, 4000);  //Turn the foundation and the robot toward the site
 
         foundationD(true);     //Release foundation
 
@@ -42,6 +42,6 @@ public class foundationRed3 extends SkystoneLinearOpMode {
 
         strafeAdjust(0.6,20,0,true);    //align with parking spot
 
-        driveDistance(-0.4, 75);     //Drive to the parking spot (backward)
+        driveDistance(-0.4, 70);     //Drive to the parking spot (backward)
     }
 }

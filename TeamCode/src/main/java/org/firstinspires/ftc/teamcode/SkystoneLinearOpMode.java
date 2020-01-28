@@ -1215,7 +1215,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void turnPID(double tAngle, double P, double I, double D, double timeOut){
         // ORIENTATION -180 TO 180
-        //- is right, + is left
+        // - is right, + is left
         double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
 
         double kP = P;
@@ -1247,6 +1247,58 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 setMotorPowers(Range.clip(-power, 0.2, 0.5), Range.clip(power, -0.5, -0.2));
             else
                 setMotorPowers(Range.clip(-power, -0.5, -0.2), Range.clip(power, 0.2, 0.5));
+
+            telemetry.addData("tAngle: ", tAngle)
+                    .addData("currAngle: ", get180Yaw())
+                    .addData("kP:", error * kP)
+                    .addData("kI:", error * dT * kI)
+                    .addData("kD:", (error - prevError)/dT * kD)
+                    .addData("power", power)
+                    .addData("ACTUAL POWER:",LF.getPower())
+                    .addData("error: ", error)
+                    .addData("currTime: ", currTime);
+            telemetry.update();
+        }
+        stopMotors();
+    }
+
+    public void turnPIDF(double tAngle, double P, double I, double D, double timeOut){
+        // ORIENTATION -180 TO 180
+        // - is right, + is left
+        // increased minimum power in order to push foundation all the flush to the wall
+        double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
+
+        double kP = P;
+        double kI = I;
+        double kD = D;
+
+        prevError = error = tAngle - get180Yaw(); //INITIALIZE THESE VARIABLES
+
+        power = dT = prevTime = currTime = 0.0;
+
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        while (opModeIsActive() && Math.abs(error) > 0.7 && currTime < timeOut){
+            prevError = error;
+            error = tAngle - get180Yaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+
+            if(error > 180){
+                error = -(error-180);
+            }else  if(error < -180){
+                error = -(error+180);
+            }
+
+            prevTime = currTime;
+            currTime = time.milliseconds();
+            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
+            power = (error * kP) + ((error) * dT * kI) + ((error - prevError)/dT * kD);
+
+            if (power < 0)
+                setMotorPowers(Range.clip(-power, 0.3, 0.5), Range.clip(power, -0.5, -0.3));
+            else
+                setMotorPowers(Range.clip(-power, -0.5, -0.3), Range.clip(power, 0.3, 0.5));
+
+            foundationD(false);
 
             telemetry.addData("tAngle: ", tAngle)
                     .addData("currAngle: ", get180Yaw())
@@ -1885,7 +1937,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     driveDistance(0.4, 31);
                     break;
                 case 1:
-                    driveDistance(0.4, 8);
+                    driveDistance(0.4, 10);
                     break;
             }
         }

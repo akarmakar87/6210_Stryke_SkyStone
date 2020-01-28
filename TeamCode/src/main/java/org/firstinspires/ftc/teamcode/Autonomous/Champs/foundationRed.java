@@ -35,7 +35,7 @@ public class foundationRed extends SkystoneLinearOpMode {
 
         driveAdjust(90,-0.7, 78,4); // pull foundation into build site
 
-        turnPID(0, 1/360, 0.004, 1, 4000);
+        turnPIDF(0, 0.8/90, 0.0001, 2, 4000);
 
         foundationD(true);
 

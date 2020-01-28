@@ -30,7 +30,7 @@ public class foundationBlue3inside extends SkystoneLinearOpMode {
 
         driveAdjust(270, -0.6, 65, 5);  //pull foundation back
 
-        turnPID(0, 0.6/90,0.0001,2, 4000);    //turn robot & foundation
+        turnPIDF(0, 0.8/90,0.0001,2, 4000);    //turn robot & foundation
 
         foundationD(true);     //Release foundation
 

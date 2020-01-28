@@ -27,26 +27,26 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
 
-        longAdjust = forLongAdjust(pos,false) + 100;
+        longAdjust = forLongAdjust(pos,false) + 90;
 
         strafeAdjust(0.6,2,0,true);
 
         turnPID(-90, 0.6/90,0.0001,2,2000);
 
-        driveAdjust(270,0.5,62, 7); //GO TO STONES
+        driveAdjust(270,0.4,62, 7); //GO TO STONES
 
         grabStone(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(270,-0.8,11, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.8,9, 7); //MOVE BACKWARD
 
         if (pos == 1){
-            turnPID(-178, 0.6/90,0.0001,2,2000);
+            turnPID(180, 0.6/90,0.0001,2,2000);
 
-            driveAdjust(182, 0.8, longAdjust, 4); // MOVE OTHER SIDE
+            driveAdjust(180, 0.8, longAdjust, 4); // MOVE OTHER SIDE
         } else {
-            turnPID(178, 0.6/90,0.0001,2,2000);
+            turnPID(180, 0.6/90,0.0001,2,2000);
 
-            driveAdjust(178, 0.8, longAdjust, 4); // MOVE OTHER SIDE
+            driveAdjust(180, 0.8, longAdjust, 4); // MOVE OTHER SIDE
         }
 
         foundationD(true); // drop stone
@@ -61,7 +61,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
                 driveAdjust(180, -0.8, longAdjust + 35, 3);
                 break;
             case 0:
-                driveAdjust(180, -0.8, longAdjust + 37, 3);
+                driveAdjust(180, -0.8, longAdjust + 41, 3);
                 break;
             case 1:
                 driveAdjust(180, -0.8, longAdjust + 39, 3);
@@ -73,13 +73,17 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
         //turnPID(-90, 0.5/360,0.001,2,4000);
         turnPID(-90, 0.6/90,0.0001,2,1500);
 
-        if (pos == -1) strafeAdjust(0.4,2,270,false); // strafe
+        if (pos == -1) strafeAdjust(0.4,5,270,false); // strafe
 
         driveAdjust(270, 0.4, 23, 5); //GO TO STONES
 
         grabStone(pos, false);
 
-        driveAdjust(270,-0.6,12, 7); //MOVE BACKWARD
+        //MOVE BACKWARD
+        if (pos == 1)
+            driveAdjust(270,-0.6,13, 7);
+        else
+            driveAdjust(270,-0.6,15, 7);
 
         // MOVE TO OTHER SIDE
         switch (pos) {

@@ -28,6 +28,7 @@ public class TeleOp extends SkystoneLinearOpMode {
         boolean changeMode = true;
         boolean goLift = false;
         boolean strafing = false;
+        boolean leave = false;
         resetEncoders();
         resetArm();
 
@@ -188,7 +189,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                     arm.setPower(armPower);
                 }
                 changeMode = true;
-                goArm = false;
+
             }
             if (gamepad2.b && toggleTime < time.milliseconds() - 250)
             {
@@ -200,39 +201,65 @@ public class TeleOp extends SkystoneLinearOpMode {
 
                 goArm = true;
 
-                arm.setTargetPosition(-540); //-830 for horizontal
 
-                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
 
             //DEPLOY ARM
-            if (goArm && !changeMode)
+            if (goArm && !changeMode) //if b is pressed and manuel movement is not being used (changeMode)
             {
-                if(deployTime > time.milliseconds() - 1000) //expel block for 1 second
-                {
-                    intakeL.setPower(1);
-                    intakeR.setPower(-1);
-                }
-                else{
-                    intakeL.setPower(0);
-                    intakeR.setPower(0);
+                if(arm.getCurrentPosition() < -100){
+                    leave = true;
+                }else{
+                    leave = false;
                 }
 
-                arm.setPower(0.8);
+                if (!leave)
+                { //if not inside robot
+                    arm.setTargetPosition(0); //-830 for horizontal
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    arm.setPower(0.8);
+                    if(lift.getCurrentPosition() < 0){ //if lift is not in robot
+                        lift.setTargetPosition(0);
+                        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        lift.setPower(0.8);
+                    }
+                }
 
+                else if(leave){ //if inside robot
+
+                    arm.setTargetPosition(-540); //-830 for horizontal
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                    if(deployTime > time.milliseconds() - 1000) //expel block for 1 second
+                    {
+                        intakeL.setPower(1);
+                        intakeR.setPower(-1);
+                    }
+                    else{
+                        intakeL.setPower(0);
+                        intakeR.setPower(0);
+                    }
+
+                    arm.setPower(0.8);
+
+                }
             }
+
 
             //Lift Controls
             //Manuel
-            if (gamepad2.right_trigger > 0.05) {
-                lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                liftPower = Range.clip(gamepad2.right_trigger, 0, 0.7);  //LIFT UP
-            } else if (gamepad2.left_trigger > 0.05) {
-                liftPower = -Range.clip(gamepad2.left_trigger, 0, 0.7);  //LIFT DOWN
-            } else if (!goLift){
-                liftPower = 0;
+            if(!goLift && changeMode) {
+                if (gamepad2.right_trigger > 0.05) {
+                    lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                    liftPower = Range.clip(gamepad2.right_trigger, 0, 0.7);  //LIFT UP
+                } else if (gamepad2.left_trigger > 0.05) {
+                    liftPower = -Range.clip(gamepad2.left_trigger, 0, 0.7);  //LIFT DOWN
+                } else {
+                    liftPower = 0;
+                }
+
+                lift.setPower(liftPower);
             }
-            lift.setPower(liftPower);
             //Automatic...
             //double y = blockHieght * x + first hieght (if not equal to blockHieght)
             /*if (gamepad2.dpad_up) {
@@ -253,21 +280,21 @@ public class TeleOp extends SkystoneLinearOpMode {
             //SAVE LIFT HEIGHT
             if (gamepad2.dpad_left)
             {
-                liftHeight = lift.getCurrentPosition();
+                liftHeight = lift.getCurrentPosition(); //saves the current height of lift
             }
 
             if (gamepad2.dpad_right) //Lift to certain position
             {
-                goLift = true;
+                goLift = true; //start lift
             }
 
             if(goLift)
             {
-                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lift.setTargetPosition(liftHeight - 1000); //Last recorded block height + one block up
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION); //set mode for target position
                 lift.setPower(0.8);
-                if(!lift.isBusy()){
-                    liftHeight = lift.getCurrentPosition(); //save position
+                if(!lift.isBusy() || Math.abs(liftHeight) - Math.abs(lift.getCurrentPosition()) < 5 ){ //if not busy or lift height is close to target
+                    liftHeight = lift.getCurrentPosition(); //save position for next time
                     lift.setPower(0);
                     goLift = false;
                 }
@@ -276,6 +303,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             if (gamepad2.right_trigger > 0.05) //stop auto lift
             {
                 goLift = false;
+                changeMode = true;
             }
 
 
