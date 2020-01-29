@@ -7,7 +7,7 @@ import com.vuforia.CameraDevice;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="wall park", group = "auto")
+@Autonomous(name="Park Wall", group = "auto")
 
 //@Disabled
 public class park extends SkystoneLinearOpMode {

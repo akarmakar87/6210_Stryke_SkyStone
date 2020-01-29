@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Foundation Blue bridge", group = "auto")
+@Autonomous(name="Blue FoundationBridge", group = "auto")
 
 //@Disabled
 public class foundationBlue3inside extends SkystoneLinearOpMode {
@@ -20,7 +20,7 @@ public class foundationBlue3inside extends SkystoneLinearOpMode {
 
         turnPID(-90, 0.6/90,0.0001,2, 3000);   //turn toward foundation
 
-        driveAdjust(270,0.6, 54, 4);    //Drive to foundation
+        driveAdjust(270,0.6, 57, 4);    //Drive to foundation
 
         foundationD(false);  //Grab foundation
 
@@ -30,7 +30,7 @@ public class foundationBlue3inside extends SkystoneLinearOpMode {
 
         driveAdjust(270, -0.6, 65, 5);  //pull foundation back
 
-        turnPIDF(0, 0.8/90,0.0001,2, 4000);    //turn robot & foundation
+        turnPIDF(0, 0.8/90,0.0001,2, 3000);    //turn robot & foundation
 
         foundationD(true);     //Release foundation
 
@@ -40,7 +40,7 @@ public class foundationBlue3inside extends SkystoneLinearOpMode {
 
         driveAdjust(0, -0.5, 5, 2);  //back away from foundation
 
-        strafeAdjust(0.6,12,0,true);    //align with parking spot (maybe switch to driveAdjust incase it gets stuck)
+        strafeAdjust(0.4,12,0,true);    //align with parking spot (maybe switch to driveAdjust incase it gets stuck)
 
         driveDistance(-0.4, 85);     //Drive to the parking spot (backward)
     }

@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Testing;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Drive Test Methods", group = "auto")
 
-
+@Disabled
 public class driveTestMethods extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

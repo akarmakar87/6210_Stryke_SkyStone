@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="BlueDoubleSkystone (TBD)", group = "auto") // BLUE SIDE
+@Autonomous(name="Blue DoubleSkystone", group = "auto") // BLUE SIDE
 
 //
 public class BlueDoubleSkystone extends SkystoneLinearOpMode{

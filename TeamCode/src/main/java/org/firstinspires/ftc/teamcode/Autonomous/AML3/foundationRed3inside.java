@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Foundation Red bridge", group = "auto")
+@Autonomous(name="Red FoundationBridge", group = "auto")
 
 //Disabled
 public class foundationRed3inside extends SkystoneLinearOpMode {

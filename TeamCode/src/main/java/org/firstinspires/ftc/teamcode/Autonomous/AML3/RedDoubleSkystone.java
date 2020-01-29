@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="RedDoubleSkystone", group = "auto") // RED SIDE DOUBLE
+@Autonomous(name="Red DoubleSkystone", group = "auto") // RED SIDE DOUBLE
 
 //@Disabled
 public class RedDoubleSkystone extends SkystoneLinearOpMode{
@@ -27,9 +27,9 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
 
-        longAdjust = forLongAdjust(pos,false) + 90;
+        longAdjust = forLongAdjust(pos,false) + 93;
 
-        strafeAdjust(0.6,2,0,true);
+        strafeAdjust(0.4,2,0,true);
 
         turnPID(-90, 0.6/90,0.0001,2,2000);
 
@@ -61,10 +61,10 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
                 driveAdjust(180, -0.8, longAdjust + 35, 3);
                 break;
             case 0:
-                driveAdjust(180, -0.8, longAdjust + 41, 3);
+                driveAdjust(180, -0.8, longAdjust + 44, 3);
                 break;
             case 1:
-                driveAdjust(180, -0.8, longAdjust + 39, 3);
+                driveAdjust(180, -0.8, longAdjust + 43, 3);
                 break;
         }
         //driveAdjust(180, -0.8, longAdjust + 31, 3);

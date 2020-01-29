@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Foundation Red", group = "auto")
+@Autonomous(name="Red Foundation", group = "auto")
 
 //@Disabled
 public class foundationRed3 extends SkystoneLinearOpMode {
@@ -20,7 +20,7 @@ public class foundationRed3 extends SkystoneLinearOpMode {
 
         turnPID(90, 0.6/90,0.0001,2, 3000);   //turn toward foundation
 
-        driveAdjust(90,0.6, 55, 4);    //Drive to foundation
+        driveAdjust(90,0.5, 55, 4);    //Drive to foundation
 
         foundationD(false);  //Grab foundation
 
