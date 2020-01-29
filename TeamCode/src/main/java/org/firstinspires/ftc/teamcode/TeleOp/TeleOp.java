@@ -102,14 +102,14 @@ public class TeleOp extends SkystoneLinearOpMode {
             if (gamepad1.right_trigger > 0.05) {
                 strafing = true;
                 strafePower = gamepad1.right_trigger * 0.75;
-                setStrafePowers(strafePower, true);
+                setStrafePowers(strafePower, false);
             }
 
             //strafe left
             else if (gamepad1.left_trigger > 0.05) {
                 strafing = true;
                 strafePower = gamepad1.left_trigger * 0.75;
-                setStrafePowers(strafePower, false);
+                setStrafePowers(strafePower, true);
             }
 
             //stop strafing

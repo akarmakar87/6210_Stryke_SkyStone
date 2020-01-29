@@ -16,7 +16,7 @@ public class foundationRed3inside extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        driveDistance(0.4, 20);    //align with foundation
+        driveDistance(0.4, 30);    //align with foundation
 
         turnPID(90, 0.6/90,0.0001,2, 3000);   //turn toward foundation
 
@@ -28,7 +28,7 @@ public class foundationRed3inside extends SkystoneLinearOpMode {
 
         driveAdjust(90, -0.2, 10, 4);   //pull hooks into position
 
-        driveAdjust(90, -0.7, 65, 5);   //pull foundation into build site
+        driveAdjust(90, -0.7, 60, 5);   //pull foundation into build site
 
         turnPIDF(0, 0.8/90,0.0001,2, 4000);  //turn foundation and robot toward the wall
 
@@ -36,11 +36,13 @@ public class foundationRed3inside extends SkystoneLinearOpMode {
 
         sleep(1000);    //wait to release foundation
 
-        driveDistance(.8,35);   //push foundation into build site
+        driveDistance(.8,45);   //push foundation into build site
 
         driveAdjust(0, -0.5, 5, 2);  //back away from foundation
 
         strafeAdjust(0.6,12,0,false);   //align with parking spot
+
+        turnPID(0, 0.6/90,0.0001,2, 3000); //straighten out
 
         driveDistance(-0.4, 85);     //Drive to the parking spot (backward)
     }

@@ -7,7 +7,7 @@ import com.vuforia.CameraDevice;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Park", group = "auto")
+@Autonomous(name="wall park", group = "auto")
 
 //@Disabled
 public class park extends SkystoneLinearOpMode {
@@ -18,6 +18,8 @@ public class park extends SkystoneLinearOpMode {
         init(hardwareMap, true);
 
         waitForStart();
+
+        sleep(28000);
 
         driveDistance(0.5, 20);
     }
