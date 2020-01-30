@@ -41,10 +41,7 @@ public class BlueDoubleSkystone extends SkystoneLinearOpMode{
 
         turnPID(0, 0.6/90,0.0001,2,2000);
 
-        if (pos == -1)
-            driveAdjust(356, 0.5, longAdjust, 4);
-        else
-            driveAdjust(0, 0.5, longAdjust, 4); // MOVE OTHER SIDE
+        driveAdjust(0, 0.5, longAdjust, 4); // MOVE OTHER SIDE
 
         /*if (pos == -1){
             turnPID(-2, 0.6/90,0.0001,2,2000);
@@ -65,13 +62,13 @@ public class BlueDoubleSkystone extends SkystoneLinearOpMode{
         // MOVE BACK TO STONE SIDE
         switch (pos) {
             case -1:
-                driveAdjust(0, -0.8, longAdjust + 37, 3);
+                driveAdjust(0, -0.6, longAdjust + 37, 3);
                 break;
             case 0:
-                driveAdjust(0, -0.8, longAdjust + 39, 3);
+                driveAdjust(0, -0.6, longAdjust + 39, 3);
                 break;
             case 1:
-                driveAdjust(0, -0.8, longAdjust + 41, 3);
+                driveAdjust(0, -0.6, longAdjust + 41, 3);
                 break;
         }
         //driveAdjust(180, -0.8, longAdjust + 31, 3);
@@ -93,22 +90,24 @@ public class BlueDoubleSkystone extends SkystoneLinearOpMode{
             case -1:
                 //turnPID(175, 0.6/360,0.001,2,3000);
                 turnPID(0, 0.6/90,0.0001,2,2000);
-                driveAdjust(0, 1, longAdjust + 55, 3000); // MOVE OTHER SIDE
+                driveAdjust(0, .8, longAdjust + 55, 3000); // MOVE OTHER SIDE
                 break;
             case 0:
                 turnPID(0, 0.6/90,0.0001,2,2000);
-                driveAdjust(0, 1, longAdjust + 50, 3000); // MOVE OTHER SIDE
+                driveAdjust(0, .8, longAdjust + 50, 3000); // MOVE OTHER SIDE
                 break;
             case 1:
                 //turnPID(-178, 0.6/360,0.001,2,3000);
                 turnPID(0, 0.6/90,0.0001,2,2000);
-                driveAdjust(0, 1, longAdjust + 57, 3000); // MOVE OTHER SIDE
+                driveAdjust(0, .8, longAdjust + 57, 3000); // MOVE OTHER SIDE
                 break;
         }
 
         foundationD(true);
 
         driveAdjust(0, -0.8, 20, 2); //park
+
+        sleep(100);
 
         strafeAdjust(.4,8,0,true);
 

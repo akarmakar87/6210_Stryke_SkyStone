@@ -858,10 +858,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < total && t.seconds() < 10) {
             remaining = total - getEncoderAvg();
-            error = getYaw()-tHeading;
-            if(error > 180) error = -(error-360);
+            //error = getYaw()-tHeading;
+            //if(error > 180) error = -(error-360);
             //else if (error < -180)
             //    error = error + 360;
+
+            error = tHeading - getYaw();
+            if(error > 180){
+                error = -(error-360);
+            } else if (error < -180)
+                error = 360+error;
 
             double p = 0.8;
             if (right) {
@@ -1931,13 +1937,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }else{
             switch(pos) {
                 case -1:
-                    driveDistance(0.4, 17);
+                    driveDistance(0.4, 20);
                     break;
                 case 0:
                     driveDistance(0.4, 31);
                     break;
                 case 1:
-                    driveDistance(0.4, 10);
+                    driveDistance(0.4, 9);
                     break;
             }
         }

@@ -27,7 +27,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
 
-        longAdjust = forLongAdjust(pos,false) + 93;
+        longAdjust = forLongAdjust(pos,false) + 95;
 
         strafeAdjust(0.4,2,0,true);
 
@@ -94,7 +94,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
                 break;
             case 0:
                 turnPID(180, 0.6/90,0.0001,2,2000);
-                driveAdjust(180, 1, longAdjust + 50, 3000); // MOVE OTHER SIDE
+                driveAdjust(180, 1, longAdjust + 52, 3000); // MOVE OTHER SIDE
                 break;
             case 1:
                 //turnPID(-178, 0.6/360,0.001,2,3000);
