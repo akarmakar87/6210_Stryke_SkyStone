@@ -16,7 +16,7 @@ public class TeleOp extends SkystoneLinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         init(hardwareMap, true);
-        int lpos = 0, apos = 0, liftHeight = 0;
+        int lpos = 0, apos = 0, liftHeight = 0, lowestArm = 0;
         double xAxis = 0, yAxis = 0, zAxis = 0;
         double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0, liftPower = 0, strafeTog = 0;
         boolean lControl = true, aControl = true, foundation = false, strafeD = true;
@@ -103,6 +103,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             if(gamepad1.y && strafeTog + 250 < time.milliseconds())
             {
                 strafeD = !strafeD;
+                strafeTog = time.milliseconds();
             }
             if (gamepad1.right_trigger > 0.05) {
                 strafing = true;
@@ -177,6 +178,9 @@ public class TeleOp extends SkystoneLinearOpMode {
                 min = -1;
                 max = 1;
                 pow = -gamepad2.right_stick_y;
+                if(arm.getCurrentPosition() > lowestArm){//technically higher because its weird
+                    lowestArm = arm.getCurrentPosition();
+                }
                 if(gamepad2.right_stick_y > -0.6 && gamepad2.right_stick_y < 0.6)
                 {
                     pow /= 2;
@@ -233,7 +237,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                 }
 
                 if(actuallyGo){
-                    arm.setTargetPosition(-540); //-540 for up, -830 for horizontal
+                    arm.setTargetPosition(lowestArm - 540); //-540 for up, -830 for horizontal
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     arm.setPower(1);
                 }
@@ -249,7 +253,7 @@ public class TeleOp extends SkystoneLinearOpMode {
 
                     if(lift.getCurrentPosition() > -100)
                     {
-                        arm.setTargetPosition(0);
+                        arm.setTargetPosition(lowestArm);
                         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         arm.setPower(1);
                     }
@@ -328,7 +332,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             telemetry.addData("Halfspeed", halfSpeed);
             telemetry.addData("Arm Speed", armPower);
             telemetry.addData("Mode change", changeMode);
-            telemetry.addData("Lift Height", liftHeight);
+            //telemetry.addData("Lift Height", liftHeight);
             telemetry.addData("strafing: ", strafing);
             telemetry.addData("auto arm (false is down, true is up): ", goArm);
             telemetry.update();
