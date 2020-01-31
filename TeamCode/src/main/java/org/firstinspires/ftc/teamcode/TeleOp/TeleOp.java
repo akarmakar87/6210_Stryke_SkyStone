@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -9,7 +10,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 import java.util.concurrent.TimeUnit;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group="teleop")
-//@Disabled
+@Disabled
 public class TeleOp extends SkystoneLinearOpMode {
 
     @Override
