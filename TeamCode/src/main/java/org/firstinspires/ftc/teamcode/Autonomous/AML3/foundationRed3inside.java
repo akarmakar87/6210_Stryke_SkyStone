@@ -30,7 +30,7 @@ public class foundationRed3inside extends SkystoneLinearOpMode {
 
         driveAdjust(90, -0.7, 60, 5);   //pull foundation into build site
 
-        turnPIDF(0, 0.8/90,0.0001,2, 4000);  //turn foundation and robot toward the wall
+        turnPIDF(0, 0.7/90,0.0001,2, 4000);  //turn foundation and robot toward the wall
 
         foundationD(true);     //Release foundation
 
