@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.Autonomous.AML2;
+package org.firstinspires.ftc.teamcode.Autonomous.AML3;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="right side bridge park", group = "auto")
+@Autonomous(name="Park Right Side Bridge", group = "auto")
 
 //@Disabled
 public class outsidePark_right extends SkystoneLinearOpMode {

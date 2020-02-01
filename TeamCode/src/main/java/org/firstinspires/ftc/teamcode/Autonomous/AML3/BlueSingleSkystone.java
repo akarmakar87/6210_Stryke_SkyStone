@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="BlueSingleSkystone", group = "auto") // BLUE SIDE
 
-@Disabled
+//@Disabled
 public class BlueSingleSkystone extends SkystoneLinearOpMode{
 
     @Override
@@ -37,29 +37,22 @@ public class BlueSingleSkystone extends SkystoneLinearOpMode{
 
         grabStoneBlue(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(270,-0.8,7, 7); //MOVE BACKWARD
+        if (pos == -1)
+            driveAdjust(270, -0.8, 6, 7);
+        else
+            driveAdjust(270,-0.8,8, 7); //MOVE BACKWARD
 
-        //turnPID(0, 0.6/90,0.0001,2,2000);
+        turnPID(0, 0.6/90,0.0001,2,2000);
 
-        //driveAdjust(0, 0.6, longAdjust, 4); // MOVE OTHER SIDE
-
-        if (pos == -1){
-            turnPID(-2, 0.6/90,0.0001,2,2000);
-
-            driveAdjust(358, 0.8, longAdjust, 4); // MOVE OTHER SIDE
-        } else {
-            turnPID(2, 0.6/90,0.0001,2,2000);
-
-            driveAdjust(2, 0.8, longAdjust, 4); // MOVE OTHER SIDE
-        }
+        driveAdjust(0, 0.5, longAdjust, 4); // MOVE OTHER SIDE
 
         foundationD(true); // drop stone
 
-        turnPID(0, 0.6/90,0.0001,2,1500); // autocorrect angle to account for stone friction
+        driveAdjust(0, -0.8, 20, 2); //park
 
-        driveAdjust(0, -0.6, 25, 2); //park
+        sleep(100);
 
-        strafeAdjust(.4,14,0,true);
+        strafeAdjust(.4,8,0,true);
 
         telemetry.addData("auto:", "complete");
         telemetry.update();

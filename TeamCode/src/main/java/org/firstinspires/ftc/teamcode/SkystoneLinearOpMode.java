@@ -1937,13 +1937,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }else{
             switch(pos) {
                 case -1:
-                    driveDistance(0.4, 20);
+                    driveDistance(0.4, 19);
                     break;
                 case 0:
                     driveDistance(0.4, 31);
                     break;
                 case 1:
-                    driveDistance(0.4, 9);
+                    driveDistance(0.4, 11);
                     break;
             }
         }

@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode.Autonomous.AML3;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Blue DoubleSkystone", group = "auto") // BLUE SIDE
+@Autonomous(name="Blue DoubleSkystone Wall", group = "auto") // BLUE SIDE
 
-//
-public class BlueDoubleSkystone extends SkystoneLinearOpMode{
+public class BlueDoubleSkystoneWall extends SkystoneLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -38,9 +36,9 @@ public class BlueDoubleSkystone extends SkystoneLinearOpMode{
         grabStoneBlue(pos,false); //GRAB SKYSTONE
 
         if (pos == -1)
-            driveAdjust(270, -0.8, 1, 7);
+            driveAdjust(270, -0.8, 61, 7);
         else
-            driveAdjust(270,-0.8,8, 7); //MOVE BACKWARD
+            driveAdjust(270,-0.8,61, 7); //MOVE BACKWARD
 
         turnPID(0, 0.6/90,0.0001,2,2000);
 
@@ -72,11 +70,11 @@ public class BlueDoubleSkystone extends SkystoneLinearOpMode{
 
         if (pos == 1) strafeAdjust(0.4,2,270,true); // strafe
 
-        driveAdjust(270, 0.4, 30, 5); //GO TO STONES
+        driveAdjust(270, 0.4, 61, 5); //GO TO STONES
 
         grabStoneBlue(pos, false);
 
-        driveAdjust(270,-0.4,11, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.4,61, 7); //MOVE BACKWARD
 
         // MOVE TO OTHER SIDE
         switch (pos) {
@@ -98,13 +96,14 @@ public class BlueDoubleSkystone extends SkystoneLinearOpMode{
 
         foundationD(true);
 
-        driveAdjust(0, -0.8, 20, 2); //park
+        driveAdjust(0, -0.8, 30, 2); //park
 
         sleep(100);
 
-        strafeAdjust(.4,8,0,true);
+        strafeAdjust(.4,8,0,false);
 
         telemetry.addData("auto:", "complete");
         telemetry.update();
     }
+
 }

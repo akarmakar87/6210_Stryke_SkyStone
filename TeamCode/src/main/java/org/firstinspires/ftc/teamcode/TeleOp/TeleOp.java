@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 import java.util.concurrent.TimeUnit;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group="teleop")
-@Disabled
+//@Disabled
 public class TeleOp extends SkystoneLinearOpMode {
 
     @Override
@@ -328,15 +328,15 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
 
 
-            telemetry.addData("Lift Position", lift.getCurrentPosition());
-            telemetry.addData("Arm Position", arm.getCurrentPosition());
-            telemetry.addData("Halfspeed", halfSpeed);
-            telemetry.addData("Arm Speed", armPower);
-            telemetry.addData("Mode change", changeMode);
+            //telemetry.addData("Lift Position", lift.getCurrentPosition());
+            //telemetry.addData("Arm Position", arm.getCurrentPosition());
+            //telemetry.addData("Halfspeed", halfSpeed);
+            //telemetry.addData("Arm Speed", armPower);
+            //telemetry.addData("Mode change", changeMode);
             //telemetry.addData("Lift Height", liftHeight);
-            telemetry.addData("strafing: ", strafing);
-            telemetry.addData("auto arm (false is down, true is up): ", goArm);
-            telemetry.update();
+            //telemetry.addData("strafing: ", strafing);
+            //telemetry.addData("auto arm (false is down, true is up): ", goArm);
+            //telemetry.update();
 
 
 
