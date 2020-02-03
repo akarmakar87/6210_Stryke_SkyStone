@@ -423,6 +423,40 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
 
     //DRIVE METHODS
+    public double[] holonomicPower(double leftX, double leftY, double rightX){
+        double[] motorPower = {0.0, 0.0, 0.0, 0.0};
+
+        double magnitude = Math.hypot(leftX, leftY); //How fast it goes (slight push is slow etc)
+        double angle = Math.atan2(leftY, leftX); //Angle the joystick is turned in
+        double rotation = rightX;
+
+        motorPower[0] = magnitude * Math.sin(angle + Math.PI / 4) + rotation; //Left front motor
+        motorPower[1] = magnitude * Math.sin(angle - Math.PI / 4) + rotation; //Right front motor
+        motorPower[2] = magnitude * Math.sin(angle + Math.PI / 4) + rotation; //Left back motor
+        motorPower[3] = magnitude * Math.sin(angle - Math.PI / 4) + rotation; //Right back motor
+
+        return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3]);
+    }
+
+    public double[] scalePower(double LF, double RF, double LB, double RB){ //important for if we try to turn while strafing
+        double[] power = {LF, RF, LB, RB};
+        double max = power[0];
+        int index = 0;
+        while(index < power.length){ //find the max power to scale all the powers down by it
+            if(power[index] > max){
+                max = power[index];
+            }
+            index += 1;
+        }
+        if(max > 1.0){
+            power[0] /= max;
+            power[1] /= max;
+            power[2] /= max;
+            power[3] /= max;
+        }
+        return power;
+    }
+
     public void setMotorPowers(double leftPower, double rightPower) {
         LF.setPower(Range.clip(leftPower, -1, 1));
         RF.setPower(Range.clip(rightPower, -1, 1));
