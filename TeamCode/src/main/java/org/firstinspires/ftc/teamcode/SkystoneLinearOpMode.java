@@ -1354,6 +1354,58 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stopMotors();
     }
 
+    public void turnArc(double tAngle, double P, double I, double D, double timeOut){
+        // ORIENTATION -180 TO 180
+        // - is right, + is left
+        // increased minimum power in order to push foundation all the flush to the wall
+        double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
+
+        double kP = P;
+        double kI = I;
+        double kD = D;
+
+        prevError = error = tAngle - get180Yaw(); //INITIALIZE THESE VARIABLES
+
+        power = dT = prevTime = currTime = 0.0;
+
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        while (opModeIsActive() && Math.abs(error) > 0.7 && currTime < timeOut){
+            prevError = error;
+            error = tAngle - get180Yaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+
+            if(error > 180){
+                error = -(error-180);
+            }else  if(error < -180){
+                error = -(error+180);
+            }
+
+            prevTime = currTime;
+            currTime = time.milliseconds();
+            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
+            power = (error * kP) + ((error) * dT * kI) + ((error - prevError)/dT * kD);
+
+            if (power < 0)
+                setMotorPowers(-Range.clip(-power, 0.3, 0.5), Range.clip(power, -1, -0.3));
+            else
+                setMotorPowers(Range.clip(-power, -1, -0.3), -Range.clip(power, 0.3, 0.5));
+
+            foundationD(false);
+
+            telemetry.addData("tAngle: ", tAngle)
+                    .addData("currAngle: ", get180Yaw())
+                    .addData("kP:", error * kP)
+                    .addData("kI:", error * dT * kI)
+                    .addData("kD:", (error - prevError)/dT * kD)
+                    .addData("power", power)
+                    .addData("ACTUAL POWER:",LF.getPower())
+                    .addData("error: ", error)
+                    .addData("currTime: ", currTime);
+            telemetry.update();
+        }
+        stopMotors();
+    }
+
     public void turnPIDtest(double tAngle, double P, double I, double D, double timeOut){
 
         double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
@@ -1493,6 +1545,18 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
         }
         stopMotors();
+    }
+
+    public void arcT (double targetAngle, double speed, double timeout)
+    {
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        double error = targetAngle - get180Yaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+        while(opModeIsActive() && error > 0.05 && time.seconds() < timeout)
+        {
+            error = targetAngle - get180Yaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+
+        }
     }
 
     //TIME METHODS
