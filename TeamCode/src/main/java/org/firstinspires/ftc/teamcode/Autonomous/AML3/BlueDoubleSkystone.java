@@ -33,14 +33,14 @@ public class BlueDoubleSkystone extends SkystoneLinearOpMode{
 
         turnPID(-90, 0.6/90,0.0001,2,2000);
 
-        driveAdjust(270,0.4,61, 7); //GO TO STONES
+        driveAdjust(270,0.4,63, 7); //GO TO STONES
 
         grabStoneBlue(pos,false); //GRAB SKYSTONE
 
         if (pos == -1)
-            driveAdjust(270, -0.8, 1, 7);
+            driveAdjust(270, -0.4, 1, 7);
         else
-            driveAdjust(270,-0.8,8, 7); //MOVE BACKWARD
+            driveAdjust(270,-0.8,10, 7); //MOVE BACKWARD
 
         turnPID(0, 0.6/90,0.0001,2,2000);
 
@@ -76,7 +76,10 @@ public class BlueDoubleSkystone extends SkystoneLinearOpMode{
 
         grabStoneBlue(pos, false);
 
-        driveAdjust(270,-0.4,11, 7); //MOVE BACKWARD
+        if (pos == -1)
+            driveAdjust(270, -.4, 6, 7);
+        else
+            driveAdjust(270,-0.4,11, 7); //MOVE BACKWARD
 
         // MOVE TO OTHER SIDE
         switch (pos) {

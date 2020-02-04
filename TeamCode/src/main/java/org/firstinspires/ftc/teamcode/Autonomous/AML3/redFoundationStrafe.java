@@ -4,14 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Red Foundation", group = "auto")
 
-//@Disabled
-public class foundationRed3 extends SkystoneLinearOpMode {
+@Autonomous(name="Red Foundation Strafe", group = "auto")
+
+public class redFoundationStrafe extends SkystoneLinearOpMode {
+
     @Override
     public void runOpMode() throws InterruptedException {
-
-        //sets up imu
         init(hardwareMap, true);
 
         waitForStart();
@@ -32,23 +31,13 @@ public class foundationRed3 extends SkystoneLinearOpMode {
 
         driveAdjust(90, -0.7, 60, 5);   //pull foundation into build site
 
-        foundationD(false);
+        foundationD(true);
 
-        //originally 0 
-        turnPIDF(-20, 0.8/90,0.0001,2, 4000);  //Turn the foundation and the robot toward the site
+        turnPID(0, 0.6/90,0.0001,2, 3000);
 
-        foundationD(true);     //Release foundation
+        strafeAdjust(0.6,2,0,true);
 
-        sleep(1000);    //wait to release foundation
+        driveAdjust(0, -0.5, 60, 5);
 
-        driveDistance(.8,35);   //push foundation into build site
-
-        driveAdjust(0, -0.5, 5, 2);  //back away from foundation
-
-        strafeAdjust(0.6,20,0,true);    //align with parking spot
-
-        sleep(4000);    //wait to release foundation
-
-        driveDistance(-0.4, 70);     //Drive to the parking spot (backward)
     }
 }
