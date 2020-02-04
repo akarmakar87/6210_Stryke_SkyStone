@@ -39,7 +39,7 @@ public class arm_Test extends SkystoneLinearOpMode {
 
             if(gamepad1.y)
             {
-                setMotorPowers(0.3, 0.3);
+                setMotorPowers(0.1, 0.1);
             }else if(gamepad1.a)
             {
                 setMotorPowers(-1, -1);

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 import java.util.concurrent.TimeUnit;
 
 @TeleOp(name="REALHolonomicDrive", group="teleop")
-@Disabled
+//@Disabled
 public class REALHolonomicDrive extends SkystoneLinearOpMode {
 
     @Override
@@ -63,9 +63,9 @@ public class REALHolonomicDrive extends SkystoneLinearOpMode {
 
             //HOLONOMIC DRIVE (LEFT JOYSTICK LATERAL, RIGHT JOYSTICK TURN)
             if(Math.abs(gamepad1.left_stick_x) > 0.05){
-                rightX = gamepad1.left_stick_x;
+                leftX = gamepad1.left_stick_x;
             }else{
-                rightX = 0.0;
+                leftX = 0.0;
             }
 
             if(Math.abs(gamepad1.left_stick_y) > 0.05){
@@ -75,9 +75,9 @@ public class REALHolonomicDrive extends SkystoneLinearOpMode {
             }
 
             if(Math.abs(gamepad1.right_stick_x) > 0.05){
-                leftX = -gamepad1.right_stick_x;
+                rightX = -gamepad1.right_stick_x;
             }else{
-                leftX = 0.0;
+                rightX = 0.0;
             }
 
             motorPower = holonomicPower(leftX * halfspeedValue, leftY * halfspeedValue, rightX * halfspeedValue);

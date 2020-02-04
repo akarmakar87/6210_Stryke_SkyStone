@@ -434,16 +434,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         double angle = Math.atan2(leftY, leftX); //Angle the joystick is turned in
         double rotation = rightX;
 
-        motorPower[0] = magnitude * Math.sin(angle + Math.PI / 4) + rotation; //Left front motor
+        motorPower[0] = magnitude * Math.sin(angle - Math.PI / 4) - rotation; //Left front motor
         motorPower[1] = magnitude * Math.sin(angle - Math.PI / 4) + rotation; //Right front motor
-        motorPower[2] = magnitude * Math.sin(angle + Math.PI / 4) + rotation; //Left back motor
-        motorPower[3] = magnitude * Math.sin(angle - Math.PI / 4) + rotation; //Right back motor
+        motorPower[2] = magnitude * Math.sin(angle + Math.PI / 4) - rotation; //Left back motor
+        motorPower[3] = magnitude * Math.sin(angle + Math.PI / 4) + rotation; //Right back motor
 
         return motorPower;
         //return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3]);
     }
 
-    public double[] scalePower(double LF, double RF, double LB, double RB){ //important for if we try to turn while strafing
+    public double[] scalePower(double LF, double RF, double LB, double RB,double correction){ //important for if we try to turn while strafing
         double[] power = {LF, RF, LB, RB};
         double max = power[0];
         int index = 0;
@@ -458,6 +458,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             power[1] /= max;
             power[2] /= max;
             power[3] /= max;
+        }
+        if(correction > 1){
+            power[0] *= 0.9;
+            power[2] *= 0.9;
+        }else if(correction < -1){
+            power[1] *= 0.9;
+            power[3] *= 0.9;
         }
         return power;
     }

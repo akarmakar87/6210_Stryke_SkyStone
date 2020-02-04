@@ -44,7 +44,7 @@ public class MotorEncodersTest extends SkystoneLinearOpMode {
             moving = true;
             startTime = time.milliseconds();
             setStrafePowers(1, true);
-        }else if(moving && startTime < time.milliseconds() + 10000){
+        }else if(moving && startTime > time.milliseconds() - 10000){
             elapsedTime = time.milliseconds() - startTime;
             LF.setPower(0);
             RF.setPower(0);

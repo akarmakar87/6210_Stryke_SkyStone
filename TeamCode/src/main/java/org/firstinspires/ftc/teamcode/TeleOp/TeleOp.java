@@ -18,7 +18,7 @@ public class TeleOp extends SkystoneLinearOpMode {
 
         init(hardwareMap, true);
         int lpos = 0, apos = 0, liftHeight = 0, lowestArm = 0;
-        double xAxis = 0, yAxis = 0, zAxis = 0;
+        double xAxis = 0, yAxis = 0, zAxis = 0, currHeading = 0, tHeading= 0, hError = 0, correction = 0;
         double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0, liftPower = 0, strafeTog = 0;
         boolean lControl = true, aControl = true, foundation = false, strafeD = true;
         double lTime = 0, aTime = 0, fTime = 0, htime = 0, toggleTime = 0, deployTime = 0, min = 0, max = 0, pow = 0;
@@ -47,19 +47,30 @@ public class TeleOp extends SkystoneLinearOpMode {
             //Holonomic drive inputs
             if (Math.abs(gamepad1.left_stick_y) > 0.05) {
                 yAxis = gamepad1.left_stick_y;
+                currHeading = getYaw();
             } else {
                 yAxis = 0;
             }
             if (Math.abs(gamepad1.left_stick_x) > 0.05) {
                 xAxis = -gamepad1.left_stick_x;
+                currHeading = getYaw();
             } else {
                 xAxis = 0;
             }
             if (Math.abs(gamepad1.right_stick_x) > 0.05) {
                 zAxis = -gamepad1.right_stick_x;
+                tHeading = getYaw();
+                currHeading = getYaw();
             } else {
                 zAxis = 0;
             }
+
+            hError = tHeading - currHeading;
+
+            if(hError > 180){
+                hError = -(hError-360);
+            } else if (hError < -180)
+                hError = 360+hError;
 
             //Calculating power for each motor
             // Real holonomic
@@ -68,7 +79,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             lbPower = -xAxis - yAxis - zAxis;
             rbPower = -xAxis - yAxis + zAxis;
 
-            double[] motorP = scalePower(lfPower, rfPower, lbPower, rbPower);
+            double[] motorP = scalePower(lfPower, rfPower, lbPower, rbPower,hError);
 
             /*lfPower = xAxis - yAxis - zAxis;
             rfPower = -xAxis - yAxis + zAxis;
