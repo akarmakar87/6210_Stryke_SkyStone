@@ -62,6 +62,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public DcMotor lift;
     public DcMotor arm;
     public Servo claw;
+    public Servo stickL;
+    public Servo stickR;
     //public RevColorSensorV3 colorSensor;
     //public DistanceSensor distanceSensor;
     public Servo foundationR;
@@ -169,6 +171,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         claw = map.servo.get("claw");
         foundationL = map.servo.get("fL");
         foundationR = map.servo.get("fR");
+        stickL = map.servo.get("stickL");
+        stickR = map.servo.get("stickR");
         //distanceSensor = map.get(DistanceSensor.class, "distanceSensor");
 
         LF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -435,7 +439,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         motorPower[2] = magnitude * Math.sin(angle + Math.PI / 4) + rotation; //Left back motor
         motorPower[3] = magnitude * Math.sin(angle - Math.PI / 4) + rotation; //Right back motor
 
-        return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3]);
+        return motorPower;
+        //return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3]);
     }
 
     public double[] scalePower(double LF, double RF, double LB, double RB){ //important for if we try to turn while strafing
@@ -1169,14 +1174,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void foundationD( boolean deployed){
         if (deployed){
-            foundationL.setPosition(1);
-            foundationR.setPosition(0);
+            stickL.setPosition(1);
+            stickR.setPosition(0);
         }
         else {
-            foundationL.setPosition(0);
-            foundationR.setPosition(1);
+            stickL.setPosition(0);
+            stickR.setPosition(1);
         }
-        sleep(100);
+        //DON'T ADD A SLEEP!!!
     }
 
     /*public void setArm(int target, double pwr){

@@ -68,6 +68,8 @@ public class TeleOp extends SkystoneLinearOpMode {
             lbPower = -xAxis - yAxis - zAxis;
             rbPower = -xAxis - yAxis + zAxis;
 
+            double[] motorP = scalePower(lfPower, rfPower, lbPower, rbPower);
+
             /*lfPower = xAxis - yAxis - zAxis;
             rfPower = -xAxis - yAxis + zAxis;
             lbPower = -xAxis - yAxis - zAxis;
@@ -81,22 +83,22 @@ public class TeleOp extends SkystoneLinearOpMode {
 
             //Halfspeed controls
             if (halfSpeed && !strafing) {
-                lfPower /= 2;
-                rfPower /= 2;
-                lbPower /= 2;
-                rbPower /= 2;
-                LF.setPower(Range.clip(lfPower, -.5, .5));
-                RF.setPower(Range.clip(rfPower, -.5, .5));
-                LB.setPower(Range.clip(lbPower, -.5, .5));
-                RB.setPower(Range.clip(rbPower, -.5, .5));
+                motorP[0] /= 2;
+                motorP[1] /= 2;
+                motorP[2] /= 2;
+                motorP[3] /= 2;
+                LF.setPower(Range.clip(motorP[0], -.5, .5));
+                RF.setPower(Range.clip(motorP[1], -.5, .5));
+                LB.setPower(Range.clip(motorP[2], -.5, .5));
+                RB.setPower(Range.clip(motorP[3], -.5, .5));
             }
 
             //Normal controls
             else if (!strafing){
-                LF.setPower(Range.clip(lfPower, -1, 1));
-                RF.setPower(Range.clip(rfPower, -1, 1));
-                LB.setPower(Range.clip(lbPower, -1, 1));
-                RB.setPower(Range.clip(rbPower, -1, 1));
+                LF.setPower(Range.clip(motorP[0], -1, 1));
+                RF.setPower(Range.clip(motorP[1], -1, 1));
+                LB.setPower(Range.clip(motorP[2], -1, 1));
+                RB.setPower(Range.clip(motorP[3], -1, 1));
             }
 
             //Auto-strafe controls
