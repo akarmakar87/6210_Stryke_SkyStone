@@ -46,7 +46,7 @@ public class BlueSingleSkystone extends SkystoneLinearOpMode{
 
         driveAdjust(0, 0.5, longAdjust, 4); // MOVE OTHER SIDE
 
-        foundationD(true); // drop stone
+        hook(false, false); // drop stone
 
         driveAdjust(0, -0.8, 20, 2); //park
 

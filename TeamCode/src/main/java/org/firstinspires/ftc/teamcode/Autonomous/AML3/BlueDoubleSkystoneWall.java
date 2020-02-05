@@ -94,7 +94,7 @@ public class BlueDoubleSkystoneWall extends SkystoneLinearOpMode {
                 break;
         }
 
-        foundationD(true);
+        hook(false, false);
 
         driveAdjust(0, -0.8, 30, 2); //park
 
