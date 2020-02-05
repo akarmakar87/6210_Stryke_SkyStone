@@ -453,19 +453,22 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
             index += 1;
         }
+
+        if(correction < 0) {
+            power[3] *= correction; //RB if positive (leaning right) power is greater on right, negative (leaning left) takes away from right power
+        }
+        if(correction > 0){//RB if positive (leaning right) power is greater on right, negative (leaning left) takes away from right power
+            power[2] *= correction;
+        }
+
         if(max > 1.0){
             power[0] /= max;
             power[1] /= max;
             power[2] /= max;
             power[3] /= max;
         }
-        if(correction > 1){
-            power[0] *= 0.9;
-            power[2] *= 0.9;
-        }else if(correction < -1){
-            power[1] *= 0.9;
-            power[3] *= 0.9;
-        }
+
+
         return power;
     }
 

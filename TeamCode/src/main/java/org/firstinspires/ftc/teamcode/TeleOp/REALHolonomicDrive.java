@@ -317,7 +317,11 @@ public class REALHolonomicDrive extends SkystoneLinearOpMode {
 
 
             //TELEMETRY
-            telemetry.addData("Motor powers: ", motorPower);
+            telemetry.addData("LF: ", motorPower[0]);
+            telemetry.addData("RF: ", motorPower[1]);
+            telemetry.addData("LB: ", motorPower[2]);
+            telemetry.addData("RB: ", motorPower[3]);
+
             telemetry.update();
 
         }
