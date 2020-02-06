@@ -16,15 +16,15 @@ public class foundationBlueRegionals extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        strafeAdjust(0.5, 15, 0, true); //align with foundation
+        strafeAdjust(0.5, 10, 0, true); //align with foundation
 
-        driveAdjust(270,-0.6, 63, 4);    //Drive to foundation
+        driveAdjust(0,-0.6, 63, 4);    //Drive to foundation
 
         foundationD(true);  //Grab foundation
 
         sleep(1000);    //wait for grab
 
-        driveAdjust(270, 0.4, 60, 5);  //pull foundation back
+        driveAdjust(0, 0.4, 60, 5);  //pull foundation back
 
         foundationD(false);     //Release foundation
 
