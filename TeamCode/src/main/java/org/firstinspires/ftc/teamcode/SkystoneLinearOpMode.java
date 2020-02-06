@@ -431,7 +431,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         double[] motorPower = {0.0, 0.0, 0.0, 0.0};
 
         double magnitude = Math.hypot(leftX, leftY); //How fast it goes (slight push is slow etc)
-        double angle = Math.atan2(leftY, leftX) + Math.toRadians(getYaw()); //Angle the joystick is turned in
+        double angle = Math.atan2(leftY, leftX) - Math.toRadians(getYaw()); //Angle the joystick is turned in
         double rotation = rightX;
 
         motorPower[0] = magnitude * Math.sin(angle - Math.PI / 4) - rotation; //Left front motor

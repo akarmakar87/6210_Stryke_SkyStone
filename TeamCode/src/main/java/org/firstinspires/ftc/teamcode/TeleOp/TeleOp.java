@@ -46,7 +46,9 @@ public class TeleOp extends SkystoneLinearOpMode {
             //GAMEPAD 1
             //Holonomic drive inputs
             currHeading = getYaw();
-
+            if(Math.abs(gamepad1.left_stick_x) < 0.05 && Math.abs(gamepad1.left_stick_x) < 0.05 && Math.abs(gamepad1.right_stick_x) > 0.05 ){
+                tHeading = getYaw();
+            }
             if (Math.abs(gamepad1.left_stick_y) > 0.05) {
                 yAxis = gamepad1.left_stick_y;
                 currHeading = getYaw();
@@ -75,9 +77,13 @@ public class TeleOp extends SkystoneLinearOpMode {
             } else if (hError < -180)
                 hError = 360+hError;
 
-            correction = hError * .02; //just to make it small
-            if(hError < 10){
+            if(hError > 10){
+                correction = hError * .02; //just to make it small
+            }
+            else if(hError > 5){
                 correction = hError *.009;
+            }else{
+                correction = 0;
             }
 
             //Calculating power for each motor
