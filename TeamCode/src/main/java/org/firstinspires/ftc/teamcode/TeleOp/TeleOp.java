@@ -20,8 +20,8 @@ public class TeleOp extends SkystoneLinearOpMode {
         int lpos = 0, apos = 0, liftHeight = 0, lowestArm = 0;
         double xAxis = 0, yAxis = 0, zAxis = 0, currHeading = 0, tHeading= 0, hError = 0, correction = 0;
         double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0, liftPower = 0, strafeTog = 0;
-        boolean lControl = true, aControl = true, foundation = false, strafeD = true, rHook = false, lHook = false;
-        double lTime = 0, rTime = 0, fTime = 0, htime = 0, toggleTime = 0, deployTime = 0, min = 0, max = 0, pow = 0;
+        boolean lControl = true, aControl = true, foundation = false, strafeD = true, rHook = false, lHook = false, stopTurn = false;
+        double lTime = 0, rTime = 0, fTime = 0, htime = 0, toggleTime = 0, deployTime = 0, min = 0, max = 0, pow = 0, turnTime = 0;
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
@@ -46,18 +46,13 @@ public class TeleOp extends SkystoneLinearOpMode {
             //GAMEPAD 1
             //Holonomic drive inputs
             currHeading = getYaw();
-            if(Math.abs(gamepad1.left_stick_x) < 0.05 && Math.abs(gamepad1.left_stick_x) < 0.05 && Math.abs(gamepad1.right_stick_x) > 0.05 ){
-                tHeading = getYaw();
-            }
             if (Math.abs(gamepad1.left_stick_y) > 0.05) {
                 yAxis = gamepad1.left_stick_y;
-                currHeading = getYaw();
             } else {
                 yAxis = 0;
             }
             if (Math.abs(gamepad1.left_stick_x) > 0.05) {
                 xAxis = -gamepad1.left_stick_x;
-                currHeading = getYaw();
             } else {
                 xAxis = 0;
             }
@@ -65,9 +60,20 @@ public class TeleOp extends SkystoneLinearOpMode {
                 zAxis = -gamepad1.right_stick_x;
                 tHeading = getYaw();
                 currHeading = getYaw();
-            } else {
-                zAxis = 0;
+                turnTime = time.milliseconds();
+            }else if(turnTime > time.milliseconds() - 1000){
+                stopTurn = true;
             }
+            else {
+                zAxis = 0;
+                stopTurn = false;
+            }
+            if(stopTurn){ //1 second after stopping turning
+                tHeading = getYaw();
+                if(Math.abs(gamepad1.left_stick_x) < 0.05 && Math.abs(gamepad1.left_stick_x) < 0.05){ //not trying to move
+                    stopTurn = false;
+                }
+            } //keep getting angle because may drift after turning
 
 
             hError = tHeading - currHeading;
