@@ -22,25 +22,19 @@ public class foundationBlueRegionals extends SkystoneLinearOpMode {
 
         driveAdjust(270,0.6, 63, 4);    //Drive to foundation
 
-        foundationD(false);  //Grab foundation
+        foundationD(true);  //Grab foundation
 
         sleep(1000);    //wait for grab
 
         driveAdjust(270, -0.6, 60, 5);  //pull foundation back
 
-        turnPIDF(0, 0.8/90,0.0001,2, 4000);    //turn robot & foundation into wall
+        foundationD(false);     //Release foundation
 
-        foundationD(true);     //Release foundation
+        sleep(250);    //wait for release
 
-        sleep(1000);    //wait for release
+        strafeAdjust(0.6,15,0,true);   //Align with parking spot
 
-        driveDistance(.8,35);   //Push foundation into wall (maybe switch to driveAdjust incase it gets stuck)
-
-        driveAdjust(0, -0.5, 7, 2);  //back away from foundation
-
-        strafeAdjust(0.6,15,0,false);   //Align with parking spot
-
-        turnPID(0, 0.6/90,0.0001,2,2000);
+        sleep(5000);    //wait for alliance partner to finish
 
         driveDistance(-0.4, 95);     //Drive to the parking spot (backward)
     }

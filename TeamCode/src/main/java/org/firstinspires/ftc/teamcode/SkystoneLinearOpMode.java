@@ -1196,6 +1196,21 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
         //DON'T ADD A SLEEP!!!
     }
+    //1 = right when servo testing
+    public void hook( boolean left, boolean right)
+    {
+        if(left){
+            foundationL.setPosition(0);
+        }
+        else
+            foundationL.setPosition(1);
+        if(right){
+            foundationR.setPosition(1);
+        }
+        else
+            foundationR.setPosition(0);
+
+    }
 
     /*public void setArm(int target, double pwr){
         double endPos = target; //GET VALUE RANGE IN TELEOP : 0 - ?
