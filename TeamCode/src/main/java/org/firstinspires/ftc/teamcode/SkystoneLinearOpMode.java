@@ -199,7 +199,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         if (auto) {
             resetEncoders();
-            foundationD(true);
+            foundationD(false);
             BNO055IMU.Parameters bparameters = new BNO055IMU.Parameters();
             bparameters.mode = BNO055IMU.SensorMode.IMU;
             bparameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -454,14 +454,24 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             index += 1;
         }
         if(power[0] < 0){
-            power[0] = -(Math.abs(power[0] + correction));
+            power[0] = -(Math.abs(power[0] - correction));
         }else{
-            power[0] += correction;
+            power[0] -= correction;
+        }
+        if(power[1] < 0){
+            power[1] = -(Math.abs(power[1] + correction));
+        }else{
+            power[1] += correction;
+        }
+        if(power[2] < 0){
+            power[2] = -(Math.abs(power[2] + correction));
+        }else{
+            power[2] += correction;
         }
         if(power[3] < 0){
-            power[3] = -(Math.abs(power[3] + correction));
+            power[3] = -(Math.abs(power[3] - correction));
         }else{
-            power[3] += correction;
+            power[3] -= correction;
         }
 
         if(max > 1.0){
@@ -1187,12 +1197,12 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void foundationD( boolean deployed){
         if (deployed){
-            stickL.setPosition(1);
-            stickR.setPosition(0);
-        }
-        else {
             stickL.setPosition(0);
             stickR.setPosition(1);
+        }
+        else {
+            stickL.setPosition(1);
+            stickR.setPosition(0);
         }
         //DON'T ADD A SLEEP!!!
     }

@@ -20,8 +20,8 @@ public class TeleOp extends SkystoneLinearOpMode {
         int lpos = 0, apos = 0, liftHeight = 0, lowestArm = 0;
         double xAxis = 0, yAxis = 0, zAxis = 0, currHeading = 0, tHeading= 0, hError = 0, correction = 0;
         double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0, liftPower = 0, strafeTog = 0;
-        boolean lControl = true, aControl = true, foundation = false, strafeD = true;
-        double lTime = 0, aTime = 0, fTime = 0, htime = 0, toggleTime = 0, deployTime = 0, min = 0, max = 0, pow = 0;
+        boolean lControl = true, aControl = true, foundation = false, strafeD = true, rHook = false, lHook = false;
+        double lTime = 0, rTime = 0, fTime = 0, htime = 0, toggleTime = 0, deployTime = 0, min = 0, max = 0, pow = 0;
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
@@ -75,8 +75,10 @@ public class TeleOp extends SkystoneLinearOpMode {
             } else if (hError < -180)
                 hError = 360+hError;
 
-            correction = hError * .009; //just to make it small
-
+            correction = hError * .02; //just to make it small
+            if(hError < 10){
+                correction = hError *.009;
+            }
 
             //Calculating power for each motor
             // Real holonomic
@@ -153,10 +155,21 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
 
             //Hook Controls
-            if (gamepad1.right_bumper && fTime < time.milliseconds() - 250) {
+            if (gamepad1.b && fTime < time.milliseconds() - 250) {
                 foundation = !foundation;
                 fTime = time.milliseconds();
                 foundationD(foundation);
+            }
+
+            if (gamepad1.right_bumper && rTime < time.milliseconds() - 250) {
+                rTime = time.milliseconds();
+                rHook = !rHook;
+                hook(lHook, rHook);
+            }
+            if (gamepad1.left_bumper && lTime < time.milliseconds() - 250) {
+                lTime = time.milliseconds();
+                lHook = !lHook;
+                hook(lHook, rHook);
             }
 
             //GAMEPAD 2
@@ -358,7 +371,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             //telemetry.addData("Lift Position", lift.getCurrentPosition());
             //telemetry.addData("Arm Position", arm.getCurrentPosition());
             //telemetry.addData("Halfspeed", halfSpeed);
-            //telemetry.addData("Arm Speed", armPower);
+            telemetry.addData("deployed: ", foundation);
             //telemetry.addData("Mode change", changeMode);
             //telemetry.addData("Lift Height", liftHeight);
             //telemetry.addData("strafing: ", strafing);
