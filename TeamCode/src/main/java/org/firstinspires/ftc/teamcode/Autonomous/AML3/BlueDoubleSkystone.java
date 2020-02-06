@@ -46,7 +46,7 @@ public class BlueDoubleSkystone extends SkystoneLinearOpMode{
 
         driveAdjust(0, 0.5, longAdjust, 4); // MOVE OTHER SIDE
 
-        foundationD(true); // drop stone
+        hook(false, false); // drop stone
 
         turnPID(0, 0.6/90,0.0001,2,1500); // autocorrect angle to account for stone friction
 

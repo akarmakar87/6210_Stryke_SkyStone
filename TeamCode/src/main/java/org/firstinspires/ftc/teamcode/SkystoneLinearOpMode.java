@@ -62,6 +62,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public DcMotor lift;
     public DcMotor arm;
     public Servo claw;
+    public Servo stickL;
+    public Servo stickR;
     //public RevColorSensorV3 colorSensor;
     //public DistanceSensor distanceSensor;
     public Servo foundationR;
@@ -169,6 +171,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         claw = map.servo.get("claw");
         foundationL = map.servo.get("fL");
         foundationR = map.servo.get("fR");
+        stickL = map.servo.get("stickL");
+        stickR = map.servo.get("stickR");
         //distanceSensor = map.get(DistanceSensor.class, "distanceSensor");
 
         LF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -195,7 +199,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         if (auto) {
             resetEncoders();
-            foundationD(true);
+            foundationD(false);
             BNO055IMU.Parameters bparameters = new BNO055IMU.Parameters();
             bparameters.mode = BNO055IMU.SensorMode.IMU;
             bparameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -423,6 +427,64 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
 
     //DRIVE METHODS
+    public double[] holonomicPower(double leftX, double leftY, double rightX){
+        double[] motorPower = {0.0, 0.0, 0.0, 0.0};
+
+        double magnitude = Math.hypot(leftX, leftY); //How fast it goes (slight push is slow etc)
+        double angle = Math.atan2(leftY, leftX) - Math.toRadians(getYaw()); //Angle the joystick is turned in
+        double rotation = rightX;
+
+        motorPower[0] = magnitude * Math.sin(angle - Math.PI / 4) - rotation; //Left front motor
+        motorPower[1] = magnitude * Math.sin(angle - Math.PI / 4) + rotation; //Right front motor
+        motorPower[2] = magnitude * Math.sin(angle + Math.PI / 4) - rotation; //Left back motor
+        motorPower[3] = magnitude * Math.sin(angle + Math.PI / 4) + rotation; //Right back motor
+
+        //return motorPower;
+        return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3], 0);
+    }
+
+    public double[] scalePower(double LF, double RF, double LB, double RB,double correction){ //important for if we try to turn while strafing
+        double[] power = {LF, RF, LB, RB};
+        double max = power[0];
+        int index = 0;
+        while(index < power.length){ //find the max power to scale all the powers down by it
+            if(power[index] > max){
+                max = power[index];
+            }
+            index += 1;
+        }
+        if(power[0] < 0){
+            power[0] = -(Math.abs(power[0] - correction));
+        }else{
+            power[0] -= correction;
+        }
+        if(power[1] < 0){
+            power[1] = -(Math.abs(power[1] + correction));
+        }else{
+            power[1] += correction;
+        }
+        if(power[2] < 0){
+            power[2] = -(Math.abs(power[2] + correction));
+        }else{
+            power[2] += correction;
+        }
+        if(power[3] < 0){
+            power[3] = -(Math.abs(power[3] - correction));
+        }else{
+            power[3] -= correction;
+        }
+
+        if(max > 1.0){
+            power[0] /= max;
+            power[1] /= max;
+            power[2] /= max;
+            power[3] /= max;
+        }
+
+
+        return power;
+    }
+
     public void setMotorPowers(double leftPower, double rightPower) {
         LF.setPower(Range.clip(leftPower, -1, 1));
         RF.setPower(Range.clip(rightPower, -1, 1));
@@ -1135,14 +1197,29 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void foundationD( boolean deployed){
         if (deployed){
-            foundationL.setPosition(1);
-            foundationR.setPosition(0);
+            stickL.setPosition(0);
+            stickR.setPosition(1);
         }
         else {
+            stickL.setPosition(1);
+            stickR.setPosition(0);
+        }
+        //DON'T ADD A SLEEP!!!
+    }
+    //1 = right when servo testing
+    public void hook( boolean left, boolean right)
+    {
+        if(left){
             foundationL.setPosition(0);
+        }
+        else
+            foundationL.setPosition(1);
+        if(right){
             foundationR.setPosition(1);
         }
-        sleep(100);
+        else
+            foundationR.setPosition(0);
+
     }
 
     /*public void setArm(int target, double pwr){
@@ -1320,6 +1397,58 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stopMotors();
     }
 
+    public void turnArc(double tAngle, double P, double I, double D, double timeOut){
+        // ORIENTATION -180 TO 180
+        // - is right, + is left
+        // increased minimum power in order to push foundation all the flush to the wall
+        double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
+
+        double kP = P;
+        double kI = I;
+        double kD = D;
+
+        prevError = error = tAngle - get180Yaw(); //INITIALIZE THESE VARIABLES
+
+        power = dT = prevTime = currTime = 0.0;
+
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        while (opModeIsActive() && Math.abs(error) > 0.7 && currTime < timeOut){
+            prevError = error;
+            error = tAngle - get180Yaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+
+            if(error > 180){
+                error = -(error-180);
+            }else  if(error < -180){
+                error = -(error+180);
+            }
+
+            prevTime = currTime;
+            currTime = time.milliseconds();
+            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
+            power = (error * kP) + ((error) * dT * kI) + ((error - prevError)/dT * kD);
+
+            if (power < 0)
+                setMotorPowers(-Range.clip(-power, 0.3, 0.5), Range.clip(power, -1, -0.3));
+            else
+                setMotorPowers(Range.clip(-power, -1, -0.3), -Range.clip(power, 0.3, 0.5));
+
+            foundationD(false);
+
+            telemetry.addData("tAngle: ", tAngle)
+                    .addData("currAngle: ", get180Yaw())
+                    .addData("kP:", error * kP)
+                    .addData("kI:", error * dT * kI)
+                    .addData("kD:", (error - prevError)/dT * kD)
+                    .addData("power", power)
+                    .addData("ACTUAL POWER:",LF.getPower())
+                    .addData("error: ", error)
+                    .addData("currTime: ", currTime);
+            telemetry.update();
+        }
+        stopMotors();
+    }
+
     public void turnPIDtest(double tAngle, double P, double I, double D, double timeOut){
 
         double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
@@ -1459,6 +1588,18 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
         }
         stopMotors();
+    }
+
+    public void arcT (double targetAngle, double speed, double timeout)
+    {
+        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
+        resetTime();
+        double error = targetAngle - get180Yaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+        while(opModeIsActive() && error > 0.05 && time.seconds() < timeout)
+        {
+            error = targetAngle - get180Yaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+
+        }
     }
 
     //TIME METHODS

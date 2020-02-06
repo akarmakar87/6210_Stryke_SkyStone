@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Drive Test Methods", group = "auto")
 
-@Disabled
+//@Disabled
 public class driveTestMethods extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -18,9 +18,14 @@ public class driveTestMethods extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        driveAdjust(0, 0.6, 70, 4);
+        turnArc(90, 0.8/90,0.0001,2, 4000);
 
-        driveAdjust(0, -0.6, 70, 4);
+        telemetry.addData("First Turn ", "done");
+        telemetry.update();
+
+        sleep(3000);
+
+        turnArc(0, 0.8/90,0.0001,2, 4000);
 
         telemetry.addData("auto:", "complete");
         telemetry.update();
