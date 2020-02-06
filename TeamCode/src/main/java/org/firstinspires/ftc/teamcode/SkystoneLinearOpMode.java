@@ -431,7 +431,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         double[] motorPower = {0.0, 0.0, 0.0, 0.0};
 
         double magnitude = Math.hypot(leftX, leftY); //How fast it goes (slight push is slow etc)
-        double angle = Math.atan2(leftY, leftX); //Angle the joystick is turned in
+        double angle = Math.atan2(leftY, leftX) + Math.toRadians(getYaw()); //Angle the joystick is turned in
         double rotation = rightX;
 
         motorPower[0] = magnitude * Math.sin(angle - Math.PI / 4) - rotation; //Left front motor
@@ -439,8 +439,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         motorPower[2] = magnitude * Math.sin(angle + Math.PI / 4) - rotation; //Left back motor
         motorPower[3] = magnitude * Math.sin(angle + Math.PI / 4) + rotation; //Right back motor
 
-        return motorPower;
-        //return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3]);
+        //return motorPower;
+        return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3], 0);
     }
 
     public double[] scalePower(double LF, double RF, double LB, double RB,double correction){ //important for if we try to turn while strafing
@@ -453,12 +453,15 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
             index += 1;
         }
-
-        if(correction < 0) {
-            power[3] *= correction; //RB if positive (leaning right) power is greater on right, negative (leaning left) takes away from right power
+        if(power[0] < 0){
+            power[0] = -(Math.abs(power[0] + correction));
+        }else{
+            power[0] += correction;
         }
-        if(correction > 0){//RB if positive (leaning right) power is greater on right, negative (leaning left) takes away from right power
-            power[2] *= correction;
+        if(power[3] < 0){
+            power[3] = -(Math.abs(power[3] + correction));
+        }else{
+            power[3] += correction;
         }
 
         if(max > 1.0){

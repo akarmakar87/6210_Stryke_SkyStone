@@ -75,15 +75,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             } else if (hError < -180)
                 hError = 360+hError;
 
-            if(hError > 20){
-                correction = .9;
-            }
-            else if(hError < -20){
-                correction = -.9;
-            }  else{
-                correction = 0;
-            }
-
+            correction = hError * .009; //just to make it small
 
 
             //Calculating power for each motor
