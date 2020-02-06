@@ -45,6 +45,8 @@ public class TeleOp extends SkystoneLinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             //GAMEPAD 1
             //Holonomic drive inputs
+            currHeading = getYaw();
+
             if (Math.abs(gamepad1.left_stick_y) > 0.05) {
                 yAxis = gamepad1.left_stick_y;
                 currHeading = getYaw();
@@ -65,12 +67,24 @@ public class TeleOp extends SkystoneLinearOpMode {
                 zAxis = 0;
             }
 
+
             hError = tHeading - currHeading;
 
             if(hError > 180){
                 hError = -(hError-360);
             } else if (hError < -180)
                 hError = 360+hError;
+
+            if(hError > 20){
+                correction = .9;
+            }
+            else if(hError < -20){
+                correction = -.9;
+            }  else{
+                correction = 0;
+            }
+
+
 
             //Calculating power for each motor
             // Real holonomic
@@ -79,7 +93,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             lbPower = -xAxis - yAxis - zAxis;
             rbPower = -xAxis - yAxis + zAxis;
 
-            double[] motorP = scalePower(lfPower, rfPower, lbPower, rbPower,hError);
+            double[] motorP = scalePower(lfPower, rfPower, lbPower, rbPower, correction);
 
             /*lfPower = xAxis - yAxis - zAxis;
             rfPower = -xAxis - yAxis + zAxis;
@@ -340,7 +354,15 @@ public class TeleOp extends SkystoneLinearOpMode {
                 changeMode = true;
             }
 
-
+            telemetry.addData("Target orientation: ", tHeading);
+            telemetry.addData("Current orientation: ", currHeading);
+            telemetry.addData("Current orientation: ", getYaw());
+            telemetry.addData("Error: ", hError);
+            telemetry.addData("Correction: ", correction);
+            telemetry.addData("LF: ", motorP[0]);
+            telemetry.addData("RF: ", motorP[1]);
+            telemetry.addData("LB: ", motorP[2]);
+            telemetry.addData("RB: ", motorP[3]);
             //telemetry.addData("Lift Position", lift.getCurrentPosition());
             //telemetry.addData("Arm Position", arm.getCurrentPosition());
             //telemetry.addData("Halfspeed", halfSpeed);
@@ -349,7 +371,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             //telemetry.addData("Lift Height", liftHeight);
             //telemetry.addData("strafing: ", strafing);
             //telemetry.addData("auto arm (false is down, true is up): ", goArm);
-            //telemetry.update();
+            telemetry.update();
 
 
 
