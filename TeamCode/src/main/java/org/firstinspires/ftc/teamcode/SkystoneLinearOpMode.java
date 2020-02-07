@@ -723,7 +723,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void driveAdjust(double tHeading, double power, double distance, int timeout){
         // ORIENTATION 0 TO 360
-        // INCREASING GOING COUNTER CLOCKWISE
+        // INCREASING GOING COUNTER CLOCKWISE (left)
 
         double total = distance * encoderToInches;
         double remaining, finalPower = power, origHeading = tHeading, error = 0, lp, rp;
@@ -1398,7 +1398,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             else
                 setMotorPowers(Range.clip(-power, -0.5, -0.3), Range.clip(power, 0.3, 0.5));
 
-            foundationD(false);
+            foundationD(true);
 
             telemetry.addData("tAngle: ", tAngle)
                     .addData("currAngle: ", get180Yaw())
