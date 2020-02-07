@@ -5,9 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="encoder test", group = "auto")
+@Autonomous(name="encoder/turn test", group = "auto")
 
-@Disabled
+//@Disabled
 public class EncoderTest extends SkystoneLinearOpMode{
 
     @Override
@@ -55,8 +55,13 @@ public class EncoderTest extends SkystoneLinearOpMode{
 
         //strafeAdjust(0.5,70,0,true);
 
-        turnPID(180, 0.5/360,0.001,2,3000);
+        /*turnPID(180, 0.6/180,0.0001,0.5,5000);
+        sleep(1000);
+        turnPID(-90, 0.6/180,0.0001,0.5,5000);*/
 
+        driveAdjust(0,-0.5,40, 7);
+
+        //driveDistance(-0.5,24);
     }
 
 }

@@ -748,9 +748,73 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 error = -(error+180);
             }*/
 
-
+            double m = 1.5;
 
             finalPower = (remaining / total) * power;
+
+            if (power > 0) {
+                if (error > 1) {
+                    rp = finalPower*m;
+                    lp = finalPower;
+                } else if (error < -1) {
+                    rp = finalPower;
+                    lp = finalPower*m;
+                } else {
+                    rp = finalPower;
+                    lp = finalPower;
+                }
+                rp = Range.clip(rp,0.2,1);
+                lp = Range.clip(lp, 0.2,1);
+            } else {
+                if (error > 1) {
+                    rp = finalPower;
+                    lp = finalPower*m;
+                } else if (error < -1) {
+                    rp = finalPower*m;
+                    lp = finalPower;
+                } else {
+                    rp = finalPower;
+                    lp = finalPower;
+                }
+                rp = Range.clip(rp,-1,-0.2);
+                lp = Range.clip(lp, -1,-0.2);
+            }
+            setMotorPowers(lp,rp);
+            telemetry.addData("left power: ", lp);
+            telemetry.addData("right power: ", rp);
+            telemetry.addData("error", error);
+            telemetry.addData("current angle", getYaw());
+            telemetry.addData("target angle", tHeading);
+            telemetry.update();
+
+        }
+
+        stopMotors();
+    }
+
+    public void driveAdjustO(double tHeading, double power, double distance, int timeout){
+        // ORIENTATION 0 TO 360
+        // INCREASING GOING COUNTER CLOCKWISE
+
+        double total = distance * encoderToInches;
+        double remaining, finalPower = power, error = 0, lp, rp;
+        int[] encVals = new int[4];
+        ElapsedTime t = new ElapsedTime();
+        t.reset();
+        resetEncoders();
+
+        while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < timeout) {
+            remaining = total - getEncoderAvg();
+
+            error = tHeading - get180Yaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
+
+            if(error > 180){
+                error = -(error-180);
+            }else  if(error < -180){
+                error = -(error+180);
+            }
+
+            //finalPower = (remaining / total) * power;
 
             if (power > 0) {
                 if (error > 1) {
