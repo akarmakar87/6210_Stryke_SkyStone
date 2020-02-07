@@ -1,14 +1,12 @@
-package org.firstinspires.ftc.teamcode.Autonomous.AML3;
+package org.firstinspires.ftc.teamcode.Autonomous.Regionals;
 
+import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
+@Autonomous(name="Blue Dual", group = "auto") // BLUE SIDE
 
-@Autonomous(name="Blue DoubleSkystone Wall", group = "auto") // BLUE SIDE
-
-@Disabled
-public class BlueDoubleSkystoneWall extends SkystoneLinearOpMode {
+public class dualBlue extends SkystoneLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -23,34 +21,52 @@ public class BlueDoubleSkystoneWall extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        pos = detectSkystoneOnePix(getBitmap(),true); //DETECT SKYSTONE
+        pos = detectSkystoneOnePix(getBitmap(), true); //DETECT SKYSTONE
 
         adjustForSkystone(pos, true); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
 
-        longAdjust = forLongAdjust(pos,true) + 100;
+        longAdjust = forLongAdjust(pos, true) + 100;
 
-        strafeAdjust(0.6,2,0,true);
+        strafeAdjust(0.6, 2, 0, true);
 
-        turnPID(-90, 0.6/90,0.0001,2,2000);
+        turnPID(-90, 0.6 / 90, 0.0001, 2, 2000);
 
-        driveAdjust(270,0.4,61, 7); //GO TO STONES
+        driveAdjust(270, 0.4, 61, 7); //GO TO STONES
 
-        grabStoneBlue(pos,false); //GRAB SKYSTONE
+        grabStoneBlue(pos, false); //GRAB SKYSTONE
 
         if (pos == -1)
-            driveAdjust(270, -0.8, 61, 7);
+            driveAdjust(270, -0.8, 1, 7);
         else
-            driveAdjust(270,-0.8,61, 7); //MOVE BACKWARD
+            driveAdjust(270, -0.8, 8, 7); //MOVE BACKWARD
 
-        turnPID(0, 0.6/90,0.0001,2,2000);
+        turnPID(0, 0.6 / 90, 0.0001, 2, 2000);
 
-        driveAdjust(0, 0.5, longAdjust, 4); // MOVE OTHER SIDE
+        driveAdjust(0, 0.5, longAdjust + 50, 4); // MOVE OTHER SIDE
 
-        foundationD(true); // drop stone
+        hook(false, false); // drop stone
 
-        turnPID(0, 0.6/90,0.0001,2,1500); // autocorrect angle to account for stone friction
+        turnPID(90, 0.6 / 90, 0.0001, 2, 1500);
 
-        // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
+        driveAdjust(90, -0.5, 5, 2); // DRIVE TO FOUNDATION
+
+        foundationD(true);
+
+        driveAdjust(90, 0.8, 40, 4);
+
+        turnPID(180, 0.6 / 90, 0.0001, 2, 2000);
+
+        driveAdjust(180, -0.6, 10, 1); // MAYBE USE DRIVE FORWARD
+
+        foundationD(false);
+
+        driveAdjust(180, 0.5, 3, 1);
+
+        strafeAdjust(0.6, 10, 0, false);
+
+        driveAdjust(180, 0.6, 10, 2);
+
+        /* +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
 
         // MOVE BACK TO STONE SIDE
         switch (pos) {
@@ -72,11 +88,11 @@ public class BlueDoubleSkystoneWall extends SkystoneLinearOpMode {
 
         if (pos == 1) strafeAdjust(0.4,2,270,true); // strafe
 
-        driveAdjust(270, 0.4, 61, 5); //GO TO STONES
+        driveAdjust(270, 0.4, 30, 5); //GO TO STONES
 
         grabStoneBlue(pos, false);
 
-        driveAdjust(270,-0.4,61, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.4,11, 7); //MOVE BACKWARD
 
         // MOVE TO OTHER SIDE
         switch (pos) {
@@ -96,16 +112,17 @@ public class BlueDoubleSkystoneWall extends SkystoneLinearOpMode {
                 break;
         }
 
-        hook(false, false);
+        foundationD(true);
 
-        driveAdjust(0, -0.8, 30, 2); //park
+        driveAdjust(0, -0.8, 20, 2); //park
 
         sleep(100);
 
-        strafeAdjust(.4,8,0,false);
+        strafeAdjust(.4,8,0,true);
+
+         */
 
         telemetry.addData("auto:", "complete");
         telemetry.update();
     }
-
 }

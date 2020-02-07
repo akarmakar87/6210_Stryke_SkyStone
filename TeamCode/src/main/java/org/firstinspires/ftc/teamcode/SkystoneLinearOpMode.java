@@ -1429,9 +1429,9 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             power = (error * kP) + ((error) * dT * kI) + ((error - prevError)/dT * kD);
 
             if (power < 0)
-                setMotorPowers(-Range.clip(-power, 0.3, 0.5), Range.clip(power, -1, -0.3));
+                setMotorPowers(-0.1, Range.clip(power, -1, -0.3));
             else
-                setMotorPowers(Range.clip(-power, -1, -0.3), -Range.clip(power, 0.3, 0.5));
+                setMotorPowers(Range.clip(-power, -1, -0.3), 0.1);
 
             foundationD(false);
 

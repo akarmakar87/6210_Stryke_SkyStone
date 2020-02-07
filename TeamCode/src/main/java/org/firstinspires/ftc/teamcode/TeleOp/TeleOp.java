@@ -59,10 +59,10 @@ public class TeleOp extends SkystoneLinearOpMode {
             if (Math.abs(gamepad1.right_stick_x) > 0.05) {
                 zAxis = -gamepad1.right_stick_x;
                 tHeading = getYaw();
-                currHeading = getYaw();
                 turnTime = time.milliseconds();
             }else if(turnTime > time.milliseconds() - 1000){
                 stopTurn = true;
+                zAxis = 0;
             }
             else {
                 zAxis = 0;
@@ -70,26 +70,26 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
             if(stopTurn){ //1 second after stopping turning
                 tHeading = getYaw();
-                if(Math.abs(gamepad1.left_stick_x) < 0.05 && Math.abs(gamepad1.left_stick_x) < 0.05){ //not trying to move
+                if(Math.abs(gamepad1.left_stick_x) > 0.05 && Math.abs(gamepad1.left_stick_y) > 0.05){ //not trying to move
                     stopTurn = false;
                 }
             } //keep getting angle because may drift after turning
 
 
-            hError = tHeading - currHeading;
 
+
+            hError = tHeading - currHeading;
             if(hError > 180){
                 hError = -(hError-360);
-            } else if (hError < -180)
+            } else if (hError < -180){
                 hError = 360+hError;
-
-            if(hError > 10){
-                correction = hError * .02; //just to make it small
             }
-            else if(hError > 5){
-                correction = hError *.009;
-            }else{
-                correction = 0;
+
+            if(Math.abs(hError) > 10){
+                correction = hError * .045; //just to make it small
+            }
+            else{
+                correction = hError *.02;
             }
 
             //Calculating power for each motor
@@ -373,7 +373,6 @@ public class TeleOp extends SkystoneLinearOpMode {
 
             telemetry.addData("Target orientation: ", tHeading);
             telemetry.addData("Current orientation: ", currHeading);
-            telemetry.addData("Current orientation: ", getYaw());
             telemetry.addData("Error: ", hError);
             telemetry.addData("Correction: ", correction);
             telemetry.addData("LF: ", motorP[0]);

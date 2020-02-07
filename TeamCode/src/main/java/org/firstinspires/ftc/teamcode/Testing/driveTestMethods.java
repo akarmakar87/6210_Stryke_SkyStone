@@ -18,6 +18,8 @@ public class driveTestMethods extends SkystoneLinearOpMode {
 
         waitForStart();
 
+        foundationD(true);
+
         turnArc(90, 0.8/90,0.0001,2, 4000);
 
         telemetry.addData("First Turn ", "done");

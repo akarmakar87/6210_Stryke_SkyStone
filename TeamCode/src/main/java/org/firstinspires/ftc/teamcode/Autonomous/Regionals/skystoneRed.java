@@ -1,14 +1,13 @@
-package org.firstinspires.ftc.teamcode.Autonomous.AML3;
+package org.firstinspires.ftc.teamcode.Autonomous.Regionals;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Red DoubleSkystone", group = "auto") // RED SIDE DOUBLE
+@Autonomous(name="Red Skystone", group = "auto") // RED SIDE DOUBLE
 
-@Disabled
-public class RedDoubleSkystone extends SkystoneLinearOpMode{
+public class skystoneRed extends SkystoneLinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {

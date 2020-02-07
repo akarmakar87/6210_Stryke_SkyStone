@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="RedSingleSkystone", group = "auto") // RED SIDE
 
-//@Disabled
+@Disabled
 public class RedSingleSkystone extends SkystoneLinearOpMode{
 
     @Override
