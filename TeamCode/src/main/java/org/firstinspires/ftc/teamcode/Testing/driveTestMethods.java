@@ -20,14 +20,14 @@ public class driveTestMethods extends SkystoneLinearOpMode {
 
         foundationD(true);
 
-        turnArc(90, 0.8/90,0.0001,2, 4000);
+        turnArc(90, 0.8/90,0.0001,2, true, 4000);
 
         telemetry.addData("First Turn ", "done");
         telemetry.update();
 
         sleep(3000);
 
-        turnArc(0, 0.8/90,0.0001,2, 4000);
+        turnArc(0, 0.8/90,0.0001,2, false, 4000);
 
         telemetry.addData("auto:", "complete");
         telemetry.update();

@@ -1414,7 +1414,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stopMotors();
     }
 
-    public void turnArc(double tAngle, double P, double I, double D, double timeOut){
+    public void turnArc(double tAngle, double P, double I, double D, boolean right, double timeOut){
         // ORIENTATION -180 TO 180
         // - is right, + is left
         // increased minimum power in order to push foundation all the flush to the wall
@@ -1445,12 +1445,17 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
             power = (error * kP) + ((error) * dT * kI) + ((error - prevError)/dT * kD);
 
-            if (power < 0)
-                setMotorPowers(-0.1, Range.clip(power, -1, -0.3));
-            else
-                setMotorPowers(Range.clip(-power, -1, -0.3), 0.1);
-
-            foundationD(false);
+            if (right) {
+                if (power < 0) // face left
+                    setMotorPowers(0, Range.clip(power, -1, -0.3));
+                else
+                    setMotorPowers(0, Range.clip(power, 0.3, 1));
+            } else {
+                if (power < 0) // face left
+                    setMotorPowers(Range.clip(-power, 0.3, 1), 0);
+                else
+                    setMotorPowers(Range.clip(-power, -1, -0.3), 0);
+            }
 
             telemetry.addData("tAngle: ", tAngle)
                     .addData("currAngle: ", get180Yaw())
