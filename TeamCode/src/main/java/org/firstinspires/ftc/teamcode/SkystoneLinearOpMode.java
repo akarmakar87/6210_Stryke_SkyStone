@@ -443,7 +443,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3], 0);
     }
 
-    public double[] scalePower(double LF, double RF, double LB, double RB,double correction){ //important for if we try to turn while strafing
+    public double[] scalePower(double LF, double RF, double LB, double RB, double correction){ //important for if we try to turn while strafing
         double[] power = {LF, RF, LB, RB};
         double max = power[0];
         int index = 0;
@@ -480,9 +480,26 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             power[2] /= max;
             power[3] /= max;
         }
-
-
         return power;
+    }
+
+    public double[] getCorrectionPID(double currAngle, double tAngle, double kP, double kI, double kD, double time, double pastTime, double pastError){
+        double[] correction = {0, 0, 0};
+        double hError, prevError, dT, prevTime, currTime;
+
+        if(Math.abs(tAngle - currAngle) > 4){
+            prevError = pastError;
+            hError = tAngle - currAngle;
+            prevTime = pastTime;
+            currTime = time;
+            dT = currTime - prevTime; //Difference in time
+            correction[0] = (hError * kP) + ((hError) * dT * kI) + ((hError - prevError)/dT * kD);
+            correction[1] = hError;
+            correction[2] = currTime;
+        }else {
+            correction[0] = 0;
+        }
+        return correction;
     }
 
     public void setMotorPowers(double leftPower, double rightPower) {
@@ -706,7 +723,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public void driveAdjust(double tHeading, double power, double distance, int timeout){
         // ORIENTATION 0 TO 360
-        // INCREASING GOING COUNTER CLOCKWISE
+        // INCREASING GOING COUNTER CLOCKWISE (left)
 
         double total = distance * encoderToInches;
         double remaining, finalPower = power, origHeading = tHeading, error = 0, lp, rp;
@@ -1381,7 +1398,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             else
                 setMotorPowers(Range.clip(-power, -0.4, -0.3), Range.clip(power, 0.3, 0.4));
 
-            foundationD(false);
+            foundationD(true);
 
             telemetry.addData("tAngle: ", tAngle)
                     .addData("currAngle: ", get180Yaw())
@@ -1397,7 +1414,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stopMotors();
     }
 
-    public void turnArc(double tAngle, double P, double I, double D, double timeOut){
+    public void turnArc(double tAngle, double P, double I, double D, boolean right, double timeOut){
         // ORIENTATION -180 TO 180
         // - is right, + is left
         // increased minimum power in order to push foundation all the flush to the wall
@@ -1428,12 +1445,17 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
             power = (error * kP) + ((error) * dT * kI) + ((error - prevError)/dT * kD);
 
-            if (power < 0)
-                setMotorPowers(-Range.clip(-power, 0.3, 0.5), Range.clip(power, -1, -0.3));
-            else
-                setMotorPowers(Range.clip(-power, -1, -0.3), -Range.clip(power, 0.3, 0.5));
-
-            foundationD(false);
+            if (right) {
+                if (power < 0) // face left
+                    setMotorPowers(0, Range.clip(power, -1, -0.3));
+                else
+                    setMotorPowers(0, Range.clip(power, 0.3, 1));
+            } else {
+                if (power < 0) // face left
+                    setMotorPowers(Range.clip(-power, 0.3, 1), 0);
+                else
+                    setMotorPowers(Range.clip(-power, -1, -0.3), 0);
+            }
 
             telemetry.addData("tAngle: ", tAngle)
                     .addData("currAngle: ", get180Yaw())

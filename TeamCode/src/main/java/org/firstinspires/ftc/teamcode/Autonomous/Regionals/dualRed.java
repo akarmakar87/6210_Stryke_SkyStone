@@ -1,14 +1,12 @@
-package org.firstinspires.ftc.teamcode.Autonomous.AML3;
+package org.firstinspires.ftc.teamcode.Autonomous.Regionals;
 
+import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
+@Autonomous(name="Red Dual", group = "auto") // RED SIDE DOUBLE
 
-@Autonomous(name="Red DoubleSkystone", group = "auto") // RED SIDE DOUBLE
-
-@Disabled
-public class RedDoubleSkystone extends SkystoneLinearOpMode{
+public class dualRed extends SkystoneLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -27,7 +25,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
 
-        longAdjust = forLongAdjust(pos,false) + 96;
+        longAdjust = forLongAdjust(pos,false) + 95;
 
         strafeAdjust(0.4,2,0,true);
 
@@ -37,23 +35,35 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         grabStone(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(270,-0.8,11, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.8,9, 7); //MOVE BACKWARD
 
-        if (pos == 1){
-            turnPID(180, 0.6/90,0.0001,2,2000);
+        turnPID(180, 0.6/90,0.0001,2,2000);
 
-            driveAdjust(180, 0.8, longAdjust, 4); // MOVE OTHER SIDE
-        } else {
-            turnPID(180, 0.6/90,0.0001,2,2000);
+        driveAdjust(180, 0.8, longAdjust + 50, 4); // MOVE OTHER SIDE
 
-            driveAdjust(180, 0.8, longAdjust, 4); // MOVE OTHER SIDE
-        }
+        hook(false, false); // drop stone
 
-        foundationD(true); // drop stone
+        turnPID(90, 0.6/90,0.0001,2,1500); // TURN TO POSITION FOR FOUNDATION
 
-        turnPID(180, 0.6/90,0.0001,2,1500); // autocorrect angle to account for stone friction
+        driveAdjust(90, -0.6, 10, 2);
 
-        // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
+        foundationD(true);
+
+        driveAdjust(90, 0.8, 50, 4);
+
+        turnPIDF(0, 0.8/90, 0.0001, 2, 4000);
+
+        driveAdjust(0, -0.6, 10, 1);
+
+        foundationD(false);
+
+        driveAdjust(0, 0.5, 3, 1);
+
+        strafeAdjust(0.6, 20, 0, true);
+
+        driveAdjust(0, 0.5, 10, 2);
+
+        /* +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
 
         // MOVE BACK TO STONE SIDE
         switch (pos) {
@@ -61,7 +71,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
                 driveAdjust(180, -0.8, longAdjust + 35, 3);
                 break;
             case 0:
-                driveAdjust(180, -0.8, longAdjust + 38, 3);
+                driveAdjust(180, -0.8, longAdjust + 45, 3);
                 break;
             case 1:
                 driveAdjust(180, -0.8, longAdjust + 43, 3);
@@ -83,7 +93,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
         if (pos == 1)
             driveAdjust(270,-0.6,13, 7);
         else
-            driveAdjust(270,-0.6,17, 7);
+            driveAdjust(270,-0.6,15, 7);
 
         // MOVE TO OTHER SIDE
         switch (pos) {
@@ -108,6 +118,8 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
         driveAdjust(180, -0.8, 30, 2); //park
 
         strafeAdjust(.6,10,180,false);
+
+        */
 
         telemetry.addData("auto:", "complete");
         telemetry.update();

@@ -1,14 +1,13 @@
-package org.firstinspires.ftc.teamcode.Autonomous.AML3;
+package org.firstinspires.ftc.teamcode.Autonomous.Regionals;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Red DoubleSkystone", group = "auto") // RED SIDE DOUBLE
+@Autonomous(name="Red Skystone", group = "auto") // RED SIDE DOUBLE
 
-@Disabled
-public class RedDoubleSkystone extends SkystoneLinearOpMode{
+public class skystoneRed extends SkystoneLinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -27,7 +26,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
 
-        longAdjust = forLongAdjust(pos,false) + 96;
+        longAdjust = forLongAdjust(pos,false) + 95;
 
         strafeAdjust(0.4,2,0,true);
 
@@ -37,7 +36,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
 
         grabStone(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(270,-0.8,11, 7); //MOVE BACKWARD
+        driveAdjust(270,-0.8,9, 7); //MOVE BACKWARD
 
         if (pos == 1){
             turnPID(180, 0.6/90,0.0001,2,2000);
@@ -61,7 +60,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
                 driveAdjust(180, -0.8, longAdjust + 35, 3);
                 break;
             case 0:
-                driveAdjust(180, -0.8, longAdjust + 38, 3);
+                driveAdjust(180, -0.8, longAdjust + 45, 3);
                 break;
             case 1:
                 driveAdjust(180, -0.8, longAdjust + 43, 3);
@@ -83,7 +82,7 @@ public class RedDoubleSkystone extends SkystoneLinearOpMode{
         if (pos == 1)
             driveAdjust(270,-0.6,13, 7);
         else
-            driveAdjust(270,-0.6,17, 7);
+            driveAdjust(270,-0.6,15, 7);
 
         // MOVE TO OTHER SIDE
         switch (pos) {
