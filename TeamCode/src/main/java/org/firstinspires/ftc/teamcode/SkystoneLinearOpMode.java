@@ -1511,14 +1511,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
             if (right) {
                 if (power < 0) // face left
-                    setMotorPowers(0, Range.clip(power, -1, -0.3));
+                    setMotorPowers(0, Range.clip(power, -1, -0.4));
                 else
-                    setMotorPowers(0, Range.clip(power, 0.3, 1));
+                    setMotorPowers(0, Range.clip(power, 0.4, 1));
             } else {
                 if (power < 0) // face left
-                    setMotorPowers(Range.clip(-power, 0.3, 1), 0);
+                    setMotorPowers(Range.clip(-power, 0.4, 1), 0);
                 else
-                    setMotorPowers(Range.clip(-power, -1, -0.3), 0);
+                    setMotorPowers(Range.clip(-power, -1, -0.4), 0);
             }
 
             telemetry.addData("tAngle: ", tAngle)

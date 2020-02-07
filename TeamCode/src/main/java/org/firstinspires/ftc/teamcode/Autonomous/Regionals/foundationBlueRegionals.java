@@ -18,9 +18,11 @@ public class foundationBlueRegionals extends SkystoneLinearOpMode {
 
         driveDistance(0.4, 11);    //align with foundation
 
-        turnPID(90, 0.6/90,0.0001,2,3000);   //turn toward foundation
+        turnPID(90, 0.6/180,0.0001,0.5,5000);   //turn toward foundation
 
-        driveAdjust(90,-0.5, 43, 4);    //Drive to foundation
+        driveAdjust(90,-0.5, 27, 4);    //Drive to foundation
+
+        driveAdjust(90, -.2, 5, 2); //Carefully approach foundation
 
         foundationD(true);  //Grab foundation
 
@@ -28,7 +30,7 @@ public class foundationBlueRegionals extends SkystoneLinearOpMode {
 
         turnPIDF(70, .8/90,.0001, 2, 3000);
 
-        driveAdjust(80, 2, 90, 4);  //pull foundation back
+        driveAdjust(80, 2, 85, 4);  //pull foundation back
 
         turnPIDF(90, .8/90,.0001, 2, 3000);
 
@@ -36,7 +38,7 @@ public class foundationBlueRegionals extends SkystoneLinearOpMode {
 
         sleep(5000);    //wait for alliance partner to finish
 
-        strafeAdjust(0.5,23,90,false);   //Align with parking spot
+        strafeAdjust(0.5,25,90,false);   //Align with parking spot
 
         driveAdjust(90, 0.5, 10,2);
     }
