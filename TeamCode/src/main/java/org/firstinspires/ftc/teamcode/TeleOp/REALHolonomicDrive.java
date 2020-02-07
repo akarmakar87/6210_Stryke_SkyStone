@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 import java.util.concurrent.TimeUnit;
 
-@TeleOp(name="REALHolonomicDrive", group="teleop")
+@TeleOp(name="Field Oriented Holonomic", group="teleop")
 //@Disabled
 public class REALHolonomicDrive extends SkystoneLinearOpMode {
 

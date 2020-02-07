@@ -443,7 +443,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3], 0);
     }
 
-    public double[] scalePower(double LF, double RF, double LB, double RB,double correction){ //important for if we try to turn while strafing
+    public double[] scalePower(double LF, double RF, double LB, double RB, double correction){ //important for if we try to turn while strafing
         double[] power = {LF, RF, LB, RB};
         double max = power[0];
         int index = 0;
@@ -480,9 +480,26 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             power[2] /= max;
             power[3] /= max;
         }
-
-
         return power;
+    }
+
+    public double[] getCorrectionPID(double currAngle, double tAngle, double kP, double kI, double kD, double time, double pastTime, double pastError){
+        double[] correction = {0, 0, 0};
+        double hError, prevError, dT, prevTime, currTime;
+
+        if(Math.abs(tAngle - currAngle) > 4){
+            prevError = pastError;
+            hError = tAngle - currAngle;
+            prevTime = pastTime;
+            currTime = time;
+            dT = currTime - prevTime; //Difference in time
+            correction[0] = (hError * kP) + ((hError) * dT * kI) + ((hError - prevError)/dT * kD);
+            correction[1] = hError;
+            correction[2] = currTime;
+        }else {
+            correction[0] = 0;
+        }
+        return correction;
     }
 
     public void setMotorPowers(double leftPower, double rightPower) {

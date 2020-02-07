@@ -45,7 +45,9 @@ public class TeleOp extends SkystoneLinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
             //GAMEPAD 1
             //Holonomic drive inputs
-            currHeading = getYaw();
+
+            currHeading = getYaw(); //Get current heading
+
             if (Math.abs(gamepad1.left_stick_y) > 0.05) {
                 yAxis = gamepad1.left_stick_y;
             } else {
@@ -60,7 +62,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                 zAxis = -gamepad1.right_stick_x;
                 tHeading = getYaw();
                 turnTime = time.milliseconds();
-            }else if(turnTime > time.milliseconds() - 1000){
+            }else if(turnTime > time.milliseconds() - 1000){ //Keep getting target angle for another second to account for drift
                 stopTurn = true;
                 zAxis = 0;
             }
@@ -68,22 +70,22 @@ public class TeleOp extends SkystoneLinearOpMode {
                 zAxis = 0;
                 stopTurn = false;
             }
-            if(stopTurn){ //1 second after stopping turning
+            if(stopTurn){ //1 second after stopping turning or start
                 tHeading = getYaw();
                 if(Math.abs(gamepad1.left_stick_x) > 0.05 && Math.abs(gamepad1.left_stick_y) > 0.05){ //not trying to move
                     stopTurn = false;
                 }
-            } //keep getting angle because may drift after turning
+            }
 
-
-
+            if(tHeading > 180){ //make it so that if it's over 180 degrees just make it the negatives so 210 = -150 degrees
+                tHeading -= 360;
+            }
+            if(currHeading > 180){
+                currHeading -= 360;
+            }
 
             hError = tHeading - currHeading;
-            if(hError > 180){
-                hError = -(hError-360);
-            } else if (hError < -180){
-                hError = 360+hError;
-            }
+
 
             if(Math.abs(hError) > 10){
                 correction = hError * .045; //just to make it small
