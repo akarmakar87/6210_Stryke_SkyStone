@@ -673,8 +673,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         idle();*/
     }
 
-
-
     public void driveDistance(double power, double distance) throws InterruptedException{
 
         double total = distance * encoderToInches;
@@ -1743,7 +1741,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }
     }
 
-
     public Bitmap getBitmap() throws InterruptedException {
         Bitmap bm = null;
         if(opModeIsActive()&& !isStopRequested()){
@@ -2551,8 +2548,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
      }
      }**/
-
-
 
     @Override
     public void runOpMode() throws InterruptedException {
