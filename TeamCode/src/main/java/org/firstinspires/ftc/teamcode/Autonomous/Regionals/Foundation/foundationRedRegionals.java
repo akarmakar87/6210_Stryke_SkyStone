@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous.Regionals;
+package org.firstinspires.ftc.teamcode.Autonomous.Regionals.Foundation;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -42,7 +42,7 @@ public class foundationRedRegionals extends SkystoneLinearOpMode {
 
         turnPID(-180, 0.6/180,0.0001,0.5,5000);   //turn toward parking spot
 
-        strafeAdjust(0.5,5,-90,false);   //Align with parking spot
+        strafeAdjust(0.5,5,270,false);   //Align with parking spot
 
         driveAdjust(-180, 0.5, 30,2);  //drive into parking spot
     }
