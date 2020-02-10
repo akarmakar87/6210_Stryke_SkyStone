@@ -30,7 +30,6 @@ public class skystoneBlue extends SkystoneLinearOpMode {
 
         strafeAdjust(0.6,2,0,true);
 
-        //turnPID(-90, 0.6/90,0.0001,2,2000);
         turnPID(-90, 0.6/180,0.0001,0.5,5000);
 
         driveAdjust(270,0.4,61, 7); //GO TO STONES
@@ -42,14 +41,12 @@ public class skystoneBlue extends SkystoneLinearOpMode {
         else
             driveAdjust(270,-0.8,8, 7); //MOVE BACKWARD
 
-        //turnPID(0, 0.6/90,0.0001,2,2000);
         turnPID(0, 0.6/180,0.0001,0.5,5000);
 
         driveAdjust(0, 0.5, longAdjust, 4); // MOVE OTHER SIDE
 
         hook(false, false); // drop stone
 
-        //turnPID(0, 0.6/90,0.0001,2,1500); // autocorrect angle to account for stone friction
         turnPID(0, 0.6/180,0.0001,0.5,5000);
 
         // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
@@ -67,7 +64,6 @@ public class skystoneBlue extends SkystoneLinearOpMode {
                 break;
         }
 
-        //turnPID(-90, 0.6/90,0.0001,2,1500);
         turnPID(-90, 0.6/180,0.0001,0.5,5000);
 
         if (pos == 1) strafeAdjust(0.4,2,270,true); // strafe
@@ -79,19 +75,15 @@ public class skystoneBlue extends SkystoneLinearOpMode {
         driveAdjust(270,-0.4,11, 7); //MOVE BACKWARD
 
         // MOVE TO OTHER SIDE
+        turnPID(0, 0.6/180,0.0001,0.5,2000);
         switch (pos) {
             case -1:
-                //turnPID(175, 0.6/360,0.001,2,3000);
-                turnPID(0, 0.6/90,0.0001,2,2000);
                 driveAdjust(0, .8, longAdjust + 55, 3000); // MOVE OTHER SIDE
                 break;
             case 0:
-                turnPID(0, 0.6/90,0.0001,2,2000);
                 driveAdjust(0, .8, longAdjust + 50, 3000); // MOVE OTHER SIDE
                 break;
             case 1:
-                //turnPID(-178, 0.6/360,0.001,2,3000);
-                turnPID(0, 0.6/90,0.0001,2,2000);
                 driveAdjust(0, .8, longAdjust + 57, 3000); // MOVE OTHER SIDE
                 break;
         }

@@ -1378,6 +1378,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public void turnPID(double tAngle, double P, double I, double D, double timeOut){
         // ORIENTATION -180 TO 180
         // - is right, + is left
+        // constants P: 0.6/180    I: 0.0001   D: 0.5
         double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
 
         double kP = P;
@@ -1428,6 +1429,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         // ORIENTATION -180 TO 180
         // - is right, + is left
         // increased minimum power in order to push foundation all the flush to the wall
+        // constants P: .8/90   I: .0001    D: 2
         double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
 
         double kP = P;
@@ -1480,6 +1482,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         // ORIENTATION -180 TO 180
         // - is right, + is left
         // increased minimum power in order to push foundation all the flush to the wall
+        // right boolean refers to what side will turn
+        // constants P: 0.8/90      I: 0.0001       D: 2
         double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
 
         double kP = P;

@@ -30,7 +30,7 @@ public class skystoneRed extends SkystoneLinearOpMode{
 
         strafeAdjust(0.4,2,0,true);
 
-        turnPID(-90, 0.6/90,0.0001,2,2000);
+        turnPID(-90, 0.6/180,0.0001,0.5,2000);
 
         driveAdjust(270,0.4,62, 7); //GO TO STONES
 
@@ -38,19 +38,17 @@ public class skystoneRed extends SkystoneLinearOpMode{
 
         driveAdjust(270,-0.8,9, 7); //MOVE BACKWARD
 
-        if (pos == 1){
-            turnPID(180, 0.6/90,0.0001,2,2000);
+        turnPID(180, 0.6/180,0.0001,0.5,2000);
 
+        if (pos == 1){
             driveAdjust(180, 0.8, longAdjust, 4); // MOVE OTHER SIDE
         } else {
-            turnPID(180, 0.6/90,0.0001,2,2000);
-
             driveAdjust(180, 0.8, longAdjust, 4); // MOVE OTHER SIDE
         }
 
         foundationD(true); // drop stone
 
-        turnPID(180, 0.6/90,0.0001,2,1500); // autocorrect angle to account for stone friction
+        turnPID(180, 0.6/180,0.0001,0.5,1500); // autocorrect angle to account for stone friction
 
         // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
 
@@ -66,11 +64,8 @@ public class skystoneRed extends SkystoneLinearOpMode{
                 driveAdjust(180, -0.8, longAdjust + 43, 3);
                 break;
         }
-        //driveAdjust(180, -0.8, longAdjust + 31, 3);
 
-        //sleep(250);
-        //turnPID(-90, 0.5/360,0.001,2,4000);
-        turnPID(-90, 0.6/90,0.0001,2,1500);
+        turnPID(-90, 0.6/180,0.0001,0.5,1500);
 
         if (pos == -1) strafeAdjust(0.4,5,270,false); // strafe
 
@@ -85,19 +80,16 @@ public class skystoneRed extends SkystoneLinearOpMode{
             driveAdjust(270,-0.6,15, 7);
 
         // MOVE TO OTHER SIDE
+
+        turnPID(180, 0.6/180,0.0001,0.5,2000);
         switch (pos) {
             case -1:
-                //turnPID(175, 0.6/360,0.001,2,3000);
-                turnPID(180, 0.6/90,0.0001,2,2000);
                 driveAdjust(180, 1, longAdjust + 53, 3000); // MOVE OTHER SIDE
                 break;
             case 0:
-                turnPID(180, 0.6/90,0.0001,2,2000);
                 driveAdjust(180, 1, longAdjust + 52, 3000); // MOVE OTHER SIDE
                 break;
             case 1:
-                //turnPID(-178, 0.6/360,0.001,2,3000);
-                turnPID(-180, 0.6/90,0.0001,2,2000);
                 driveAdjust(180, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
                 break;
         }
