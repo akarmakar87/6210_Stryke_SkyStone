@@ -427,7 +427,18 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
 
     //DRIVE METHODS
-    public double[] holonomicPower(double leftX, double leftY, double rightX){
+    public double[] holonomicDrive(double leftX, double leftY, double rightX, double correction){
+        double[] motorPower = {0.0, 0.0, 0.0, 0.0};
+
+        motorPower[0] = leftX - leftY - rightX;
+        motorPower[1] = leftX - leftY + rightX;
+        motorPower[2] = -leftX - leftY - rightX;
+        motorPower[3] = -leftX - leftY + rightX;
+
+        return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3], correction);
+    }    
+
+    public double[] fieldOriented(double leftX, double leftY, double rightX){
         double[] motorPower = {0.0, 0.0, 0.0, 0.0};
 
         double magnitude = Math.hypot(leftX, leftY); //How fast it goes (slight push is slow etc)

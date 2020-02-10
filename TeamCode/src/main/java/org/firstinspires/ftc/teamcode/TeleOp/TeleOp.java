@@ -86,27 +86,30 @@ public class TeleOp extends SkystoneLinearOpMode {
 
             hError = tHeading - currHeading;
 
+            if(hError > 0){
+                correction = hError * .045; //strafe bad on this side so more
+            }else if(hError < 0){
+                correction = hError * .02; //less aggressive on this side
+            }
 
-            if(Math.abs(hError) > 10){
+            /*if(Math.abs(hError) > 10){ old correction
                 correction = hError * .045; //just to make it small
             }
             else{
                 correction = hError *.02;
-            }
+            }*/
 
-            //Calculating power for each motor
-            // Real holonomic
-            lfPower = xAxis - yAxis - zAxis;
-            rfPower = xAxis - yAxis + zAxis;
-            lbPower = -xAxis - yAxis - zAxis;
-            rbPower = -xAxis - yAxis + zAxis;
-
-            double[] motorP = scalePower(lfPower, rfPower, lbPower, rbPower, correction);
+            //ROBOT ORIENTED HOLONOMIC
+            double[] motorP = holonomicDrive(xAxis, yAxis, zAxis, correction);
 
             /*lfPower = xAxis - yAxis - zAxis;
-            rfPower = -xAxis - yAxis + zAxis;
+            rfPower = xAxis - yAxis + zAxis;
             lbPower = -xAxis - yAxis - zAxis;
-            rbPower = xAxis - yAxis + zAxis;*/
+            rbPower = -xAxis - yAxis + zAxis;*/
+
+            //FIELD ORIENTED HOLONOMIC
+            //double[] motorP = fieldOriented(xAxis, yAxis, zAxis, correction);
+
 
             //Checking if halfspeed is toggled
             if (gamepad1.x && htime < time.milliseconds() - 250) {
