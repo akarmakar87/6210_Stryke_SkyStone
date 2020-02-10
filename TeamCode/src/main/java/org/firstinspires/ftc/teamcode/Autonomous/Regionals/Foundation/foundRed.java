@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Red Foundation Regionals", group = "auto")
+@Autonomous(name="Red Foundation", group = "auto")
 
 //@Disabled
-public class foundationRedRegionals extends SkystoneLinearOpMode {
+public class foundRed extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 

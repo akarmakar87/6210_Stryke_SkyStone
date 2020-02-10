@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Blue Foundation(regional)", group = "auto")
+@Autonomous(name="Blue Foundation( flat )", group = "auto")
 
 //@Disabled
-public class foundationBlueRegionals extends SkystoneLinearOpMode {
+public class foundBlueFlat extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -16,7 +16,7 @@ public class foundationBlueRegionals extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        driveDistance(0.4, 11);    //align with foundation
+        driveDistance(0.4, 20);    //align with foundation
 
         turnPID(90, 0.6/180,0.0001,0.5,5000);   //turn toward foundation
 
@@ -28,18 +28,28 @@ public class foundationBlueRegionals extends SkystoneLinearOpMode {
 
         sleep(1000);    //wait for grab
 
-        turnPIDF(70, .8/90,.0001, 2, 3000);
+        turnArc(0, 0.8/90,0.0001,2, true, 4000);
 
-        driveAdjust(80, 2, 85, 4);  //pull foundation back
+        foundationD(false);
 
-        turnPIDF(90, .8/90,.0001, 2, 3000);
+        sleep(250);
 
-        foundationD(false);     //Release foundation
+        turnPID(90, 0.8/90,0.0001,2, 4000);
 
-        sleep(5000);    //wait for alliance partner to finish
+        driveAdjust(90, 0.7, 20, 4);
 
-        strafeAdjust(0.5,25,90,false);   //Align with parking spot
+        strafeAdjust(1, 10, 90, true);
 
-        driveAdjust(90, 0.5, 10,2);
+        driveAdjust(90, -0.2, 10, 3);
+
+        foundationD(true);     //Release foundation
+
+        driveAdjust(90, 1, 15,3);
+
+        turnPID(180, 0.8/90,0.0001,2, 4000);
+
+        driveAdjust(90, 1, 45,5);
+
+        strafeAdjust(1, 5, 0, true);
     }
 }
