@@ -87,7 +87,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             hError = tHeading - currHeading;
 
             if(hError > 0){
-                correction = hError * .045; //strafe bad on this side so more
+                correction = hError * .049; //strafe bad on this side so more
             }else if(hError < 0){
                 correction = hError * .02; //less aggressive on this side
             }
@@ -210,6 +210,8 @@ public class TeleOp extends SkystoneLinearOpMode {
             else if (changeMode){
                 intakeL.setPower(0);
                 intakeR.setPower(0);
+            }else{
+
             }
 
             //Arm Module Controls
@@ -384,6 +386,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             telemetry.addData("RF: ", motorP[1]);
             telemetry.addData("LB: ", motorP[2]);
             telemetry.addData("RB: ", motorP[3]);
+            telemetry.addData("Change Mode: ", changeMode);
             //telemetry.addData("Lift Position", lift.getCurrentPosition());
             //telemetry.addData("Arm Position", arm.getCurrentPosition());
             //telemetry.addData("Halfspeed", halfSpeed);

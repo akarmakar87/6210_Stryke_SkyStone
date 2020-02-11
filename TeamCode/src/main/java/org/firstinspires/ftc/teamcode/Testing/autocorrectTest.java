@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group="teleop")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Autocorrect Test", group="teleop")
 //@Disabled
 public class autocorrectTest extends SkystoneLinearOpMode {
 
