@@ -20,7 +20,7 @@ public class foundRed extends SkystoneLinearOpMode {
 
         turnPID(-90, 0.6/180,0.0001,0.5,5000);   //turn toward foundation
 
-        driveAdjust(270,-0.5, 27, 4);    //Drive to foundation
+        driveAdjust(270,-0.5, 47, 4);    //Drive to foundation
 
         driveAdjust(270, -.2, 5, 2); //Carefully approach foundation
 
@@ -28,7 +28,7 @@ public class foundRed extends SkystoneLinearOpMode {
 
         sleep(1000);    //wait for grab
 
-        //turnPIDF(-70, .8/90,.0001, 2, 3000);
+        turnPIDF(-100, .8/90,.0001, 2, 3000);
 
         driveAdjust(270, 2, 85, 4);  //pull foundation back
 
@@ -44,6 +44,6 @@ public class foundRed extends SkystoneLinearOpMode {
 
         strafeAdjust(0.5,5,270,false);   //Align with parking spot
 
-        driveAdjust(-180, 0.5, 30,2);  //drive into parking spot
+        driveAdjust(-180, 0.5, 40,2);  //drive into parking spot
     }
 }

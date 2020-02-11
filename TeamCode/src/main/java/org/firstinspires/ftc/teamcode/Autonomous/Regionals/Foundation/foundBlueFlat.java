@@ -20,7 +20,7 @@ public class foundBlueFlat extends SkystoneLinearOpMode {
 
         turnPID(90, 0.6/180,0.0001,0.5,5000);   //turn toward foundation
 
-        driveAdjust(90,-0.5, 27, 4);    //Drive to foundation
+        driveAdjust(90,-0.5, 48, 4);    //Drive to foundation
 
         driveAdjust(90, -.2, 5, 2); //Carefully approach foundation
 
@@ -28,7 +28,7 @@ public class foundBlueFlat extends SkystoneLinearOpMode {
 
         sleep(1000);    //wait for grab
 
-        turnArc(0, 0.8/90,0.0001,2, true, 4000);
+        turnArc(0, 0.8/90,0.0001,2, false, 4000);
 
         foundationD(false);
 
