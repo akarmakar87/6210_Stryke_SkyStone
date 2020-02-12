@@ -80,7 +80,7 @@ public class REALHolonomicDrive extends SkystoneLinearOpMode {
                 rightX = 0.0;
             }
 
-            motorPower = fieldOriented(leftX * halfspeedValue, leftY * halfspeedValue, rightX * halfspeedValue, 0, 0);
+            motorPower = fieldOriented(leftX * halfspeedValue, leftY * halfspeedValue, rightX * halfspeedValue, 0);
 
             if(!strafing) {
                 LF.setPower(motorPower[0]);

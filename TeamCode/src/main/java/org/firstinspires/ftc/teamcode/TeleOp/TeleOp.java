@@ -63,6 +63,10 @@ public class TeleOp extends SkystoneLinearOpMode {
             //RESET GYRO
             if (gamepad1.a) {
                 zeroAng = getYaw();
+                zeroAng += 180;
+                if(zeroAng > 360){
+                    zeroAng -= 360;
+                }
             }
 
             //Holonomic drive inputs
@@ -99,7 +103,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
 
             //DRIVE MODE TOGGLE
-            if (gamepad1.x && dtime < time.milliseconds() - 250) {
+            if (gamepad1.y && dtime < time.milliseconds() - 250) {
                 robotOriented = !robotOriented;
                 dtime = time.milliseconds();
             }
@@ -120,7 +124,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
             //FIELD ORIENTED HOLONOMIC
             else{
-                motorP = fieldOriented(xAxis, yAxis, zAxis, Range.clip(correction, -0.4, 0.4), zeroAng);
+                motorP = fieldOriented(xAxis, yAxis, zAxis, zeroAng);
             }
 
             //HALFSPEED TOGGLE
@@ -390,6 +394,8 @@ public class TeleOp extends SkystoneLinearOpMode {
                 changeMode = true;
             }
 
+
+            telemetry.addData("Drive Mode: ", robotOriented);
             telemetry.addData("Target orientation: ", tHeading);
             telemetry.addData("Current orientation: ", currHeading);
             telemetry.addData("Error: ", hError);
