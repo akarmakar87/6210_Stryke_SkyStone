@@ -18,10 +18,11 @@ public class TeleOp extends SkystoneLinearOpMode {
 
         init(hardwareMap, true);
         int lpos = 0, apos = 0, liftHeight = 0, lowestArm = 0;
-        double xAxis = 0, yAxis = 0, zAxis = 0, currHeading = 0, tHeading= 0, hError = 0, correction = 0;
-        double lfPower = 0, rfPower = 0, lbPower = 0, rbPower = 0, strafePower = 0, armPower = 0, liftPower = 0, strafeTog = 0;
-        boolean lControl = true, aControl = true, foundation = false, strafeD = true, rHook = false, lHook = false, stopTurn = false;
-        double lTime = 0, rTime = 0, fTime = 0, htime = 0, toggleTime = 0, deployTime = 0, min = 0, max = 0, pow = 0, turnTime = 0;
+        double xAxis = 0, yAxis = 0, zAxis = 0, currHeading = 0, tHeading= 0, hError = 0, correction = 0, zeroAng = 0;
+        double strafePower = 0, armPower = 0, liftPower = 0, strafeTog = 0;
+        boolean lControl = true, aControl = true, foundation = false, strafeD = true, rHook = false, lHook = false, stopTurn = false, robotOriented = true;
+        double lTime = 0, rTime = 0, fTime = 0, htime = 0, dtime = 0, deployTime = 0, min = 0, max = 0, pow = 0, turnTime = 0;
+        double[] motorP;
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
@@ -43,10 +44,30 @@ public class TeleOp extends SkystoneLinearOpMode {
         waitForStart();
 
         while (opModeIsActive() && !isStopRequested()) {
-            //GAMEPAD 1
+
+            /**
+             *
+             * GAMEPAD 1
+             *
+             * Controls:
+             * Right Joystick - Robot Movement (Arcade Drive)
+             * Left Joystick - Robot Orientation
+             * Right Trigger - Right Strafe , Left Trigger - Left Strafe
+             * Right Bumper - Right Hook , Left Bumper - Left Hook
+             * X - Half Speed , B - Foundation Hooks
+             * Y - Switch Drive Modes (Robot Oriented or Field Oriented)
+             * A - Reset Gyro
+             *
+             */
+
+            //RESET GYRO
+            if (gamepad1.a) {
+                zeroAng = getYaw();
+            }
+
             //Holonomic drive inputs
 
-            currHeading = getYaw(); //Get current heading
+            currHeading = get180Yaw(); //Get current heading
 
             if (Math.abs(gamepad1.left_stick_y) > 0.05) {
                 yAxis = gamepad1.left_stick_y;
@@ -60,7 +81,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
             if (Math.abs(gamepad1.right_stick_x) > 0.05) {
                 zAxis = -gamepad1.right_stick_x;
-                tHeading = getYaw();
+                tHeading = get180Yaw();
                 turnTime = time.milliseconds();
             }else if(turnTime > time.milliseconds() - 1000){ //Keep getting target angle for another second to account for drift
                 stopTurn = true;
@@ -71,19 +92,20 @@ public class TeleOp extends SkystoneLinearOpMode {
                 stopTurn = false;
             }
             if(stopTurn){ //1 second after stopping turning or start
-                tHeading = getYaw();
+                tHeading = get180Yaw();
                 if(Math.abs(gamepad1.left_stick_x) > 0.05 && Math.abs(gamepad1.left_stick_y) > 0.05){ //not trying to move
                     stopTurn = false;
                 }
             }
 
-            if(tHeading > 180){ //make it so that if it's over 180 degrees just make it the negatives so 210 = -150 degrees
-                tHeading -= 360;
-            }
-            if(currHeading > 180){
-                currHeading -= 360;
+            //DRIVE MODE TOGGLE
+            if (gamepad1.x && dtime < time.milliseconds() - 250) {
+                robotOriented = !robotOriented;
+                dtime = time.milliseconds();
             }
 
+
+            //DRIFT CORRECTION
             hError = tHeading - currHeading;
 
             if(hError > 0){
@@ -92,26 +114,16 @@ public class TeleOp extends SkystoneLinearOpMode {
                 correction = hError * .02; //less aggressive on this side
             }
 
-            /*if(Math.abs(hError) > 10){ old correction
-                correction = hError * .045; //just to make it small
-            }
-            else{
-                correction = hError *.02;
-            }*/
-
             //ROBOT ORIENTED HOLONOMIC
-            double[] motorP = holonomicDrive(xAxis, yAxis, zAxis, correction);
-
-            /*lfPower = xAxis - yAxis - zAxis;
-            rfPower = xAxis - yAxis + zAxis;
-            lbPower = -xAxis - yAxis - zAxis;
-            rbPower = -xAxis - yAxis + zAxis;*/
-
+            if(robotOriented){
+                motorP = holonomicDrive(xAxis, yAxis, zAxis, Range.clip(correction, -0.4, 0.4));
+            }
             //FIELD ORIENTED HOLONOMIC
-            //double[] motorP = fieldOriented(xAxis, yAxis, zAxis, correction);
+            else{
+                motorP = fieldOriented(xAxis, yAxis, zAxis, Range.clip(correction, -0.4, 0.4), zeroAng);
+            }
 
-
-            //Checking if halfspeed is toggled
+            //HALFSPEED TOGGLE
             if (gamepad1.x && htime < time.milliseconds() - 250) {
                 halfSpeed = !halfSpeed;
                 htime = time.milliseconds();

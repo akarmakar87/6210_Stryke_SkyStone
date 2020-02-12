@@ -438,11 +438,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3], correction);
     }    
 
-    public double[] fieldOriented(double leftX, double leftY, double rightX){
+    public double[] fieldOriented(double leftX, double leftY, double rightX, double correction, double zeroAng){
         double[] motorPower = {0.0, 0.0, 0.0, 0.0};
 
         double magnitude = Math.hypot(leftX, leftY); //How fast it goes (slight push is slow etc)
-        double angle = Math.atan2(leftY, leftX) - Math.toRadians(getYaw()); //Angle the joystick is turned in
+        double angle = Math.atan2(leftY, leftX) - Math.toRadians(getResetableYaw(zeroAng)); //Angle the joystick is turned in
         double rotation = rightX;
 
         motorPower[0] = magnitude * Math.sin(angle - Math.PI / 4) - rotation; //Left front motor
@@ -451,7 +451,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         motorPower[3] = magnitude * Math.sin(angle + Math.PI / 4) + rotation; //Right back motor
 
         //return motorPower;
-        return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3], 0);
+        return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3], correction);
     }
 
     public double[] scalePower(double LF, double RF, double LB, double RB, double correction){ //important for if we try to turn while strafing
@@ -2230,6 +2230,20 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public double get180Yaw() {
         angles = imu.getAngularOrientation();
         return angles.firstAngle;
+    }
+
+    public double getResetableYaw(double zeroAngle){
+        angles = imu.getAngularOrientation();
+
+        double angle = angles.firstAngle;
+
+        angle -= zeroAngle;
+
+        if (angle < 0){
+            angle += 360;
+        }
+
+        return angle;
     }
 
     public double getRobotX() {
