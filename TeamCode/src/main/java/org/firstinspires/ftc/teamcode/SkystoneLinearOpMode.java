@@ -2164,10 +2164,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         if(!red){ // RED
             switch(pos) { // red
                 case -1:
-                    driveDistance(-0.4, 0);
+                    driveDistance(0.4, 2);
                     break;
                 case 0:
-                    driveDistance(-0.4, 15);
+                    driveDistance(-0.4, 12);
                     break;
                 case 1:
                     driveDistance(-0.4, 5);
@@ -2176,13 +2176,13 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         }else{
             switch(pos) {
                 case -1:
-                    driveDistance(0.4, 19);
+                    driveDistance(0.4, 16);
                     break;
                 case 0:
-                    driveDistance(0.4, 31);
+                    driveDistance(0.4, 23);
                     break;
                 case 1:
-                    driveDistance(0.4, 11);
+                    driveDistance(0.4, 6);
                     break;
             }
         }

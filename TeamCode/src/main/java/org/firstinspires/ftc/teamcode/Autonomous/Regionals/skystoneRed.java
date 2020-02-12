@@ -46,14 +46,14 @@ public class skystoneRed extends SkystoneLinearOpMode{
             driveAdjust(180, 0.8, longAdjust, 4); // MOVE OTHER SIDE
         }
 
-        foundationD(true); // drop stone
+        hook(false, false); // drop stone
 
-        turnPID(180, 0.6/180,0.0001,0.5,1500); // autocorrect angle to account for stone friction
+        turnPID(180, 0.6/180,0.0001,0.5,2000); // autocorrect angle to account for stone friction
 
         // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
 
         // MOVE BACK TO STONE SIDE
-        switch (pos) {
+        /*switch (pos) {
             case -1:
                 driveAdjust(180, -0.8, longAdjust + 35, 3);
                 break;
@@ -63,13 +63,29 @@ public class skystoneRed extends SkystoneLinearOpMode{
             case 1:
                 driveAdjust(180, -0.8, longAdjust + 43, 3);
                 break;
+        }*/
+
+        driveAdjust(180, -0.6, 175, 3); //all the way back
+
+        switch (pos) {
+            case -1:
+                driveAdjust(180, 0.6, 5, 2);
+                break;
+            case 0:
+                driveAdjust(180, 0.6, 20.5, 2);
+                break;
+            case 1:
+                driveAdjust(180,0.6,12, 1);
+                break;
         }
 
-        turnPID(-90, 0.6/180,0.0001,0.5,1500);
+
+        //turnPID(-90, 0.6/180,0.0001,0.5,2000);
 
         if (pos == -1) strafeAdjust(0.4,5,270,false); // strafe
 
-        driveAdjust(270, 0.4, 23, 5); //GO TO STONES
+
+         driveAdjust(270, 0.4, 23, 5); //GO TO STONES
 
         grabStone(pos, false);
 
@@ -82,6 +98,8 @@ public class skystoneRed extends SkystoneLinearOpMode{
         // MOVE TO OTHER SIDE
 
         turnPID(180, 0.6/180,0.0001,0.5,2000);
+
+
         switch (pos) {
             case -1:
                 driveAdjust(180, 1, longAdjust + 53, 3000); // MOVE OTHER SIDE
@@ -99,6 +117,8 @@ public class skystoneRed extends SkystoneLinearOpMode{
         driveAdjust(180, -0.8, 30, 2); //park
 
         strafeAdjust(.6,10,180,false);
+
+
 
         telemetry.addData("auto:", "complete");
         telemetry.update();
