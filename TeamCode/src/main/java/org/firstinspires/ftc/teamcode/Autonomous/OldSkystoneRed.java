@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Red Skystone", group = "auto") // RED SIDE DOUBLE
+@Autonomous(name="Old Red Skystone", group = "auto") // RED SIDE DOUBLE
 @Disabled
 public class OldSkystoneRed extends SkystoneLinearOpMode{
 

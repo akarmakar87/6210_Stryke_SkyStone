@@ -2195,7 +2195,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                 case -1:
                     return 15;
                 case 0:
-                    return 5;
+                    return 0;
                 case 1:
                     return 10;
             }

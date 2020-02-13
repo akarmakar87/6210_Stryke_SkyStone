@@ -23,103 +23,96 @@ public class dualRed extends SkystoneLinearOpMode {
 
         pos = detectSkystoneOnePix(getBitmap(),false); //DETECT SKYSTONE
 
-        adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
+        adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONe
 
-        longAdjust = forLongAdjust(pos,false) + 95;
+        longAdjust = forLongAdjust(pos,false) + 87;
 
-        strafeAdjust(0.4,2,0,true);
+        strafeAdjust(0.6,2,0,true);
 
-        turnPID(-90, 0.6/90,0.0001,2,2000);
+        turnPID(-90, 0.6/180,0.0001,0.5,5000);
 
-        driveAdjust(270,0.4,62, 7); //GO TO STONES
+        driveAdjust(270,0.4,59, 7); //GO TO STONES
 
         grabStone(pos,false); //GRAB SKYSTONE
 
-        driveAdjust(270,-0.8,9, 7); //MOVE BACKWARD
+        if (pos == 1)
+            driveAdjust(270, -0.6, 7, 7);
+        else
+            driveAdjust(270,-0.6,8, 7); //MOVE BACKWARD
 
-        turnPID(180, 0.6/90,0.0001,2,2000);
+        turnPID(180, 0.4/180,0.0001,0.5,2000);
 
-        driveAdjust(180, 0.8, longAdjust + 50, 4); // MOVE OTHER SIDE
+        driveAdjust(180, 0.5, longAdjust, 4); // MOVE OTHER SIDE
 
         hook(false, false); // drop stone
 
-        turnPID(90, 0.6/90,0.0001,2,1500); // TURN TO POSITION FOR FOUNDATION
+        //turnPID(180, 0.6/180,0.0001,0.5,5000); // realign
 
-        driveAdjust(90, -0.6, 10, 2);
+        // +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
 
-        foundationD(true);
+        driveAdjust(180, -0.6, 190, 3); // MOVE BACK TO STONE SIDE
 
-        driveAdjust(90, 0.8, 50, 4);
-
-        turnPIDF(0, 0.8/90, 0.0001, 2, 4000);
-
-        driveAdjust(0, -0.6, 10, 1);
-
-        foundationD(false);
-
-        driveAdjust(0, 0.5, 3, 1);
-
-        strafeAdjust(0.6, 20, 0, true);
-
-        driveAdjust(0, 0.5, 10, 2);
-
-        /* +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+ second stone
-
-        // MOVE BACK TO STONE SIDE
         switch (pos) {
             case -1:
-                driveAdjust(180, -0.8, longAdjust + 35, 3);
+                driveAdjust(180, 0.6, 5, 2);
                 break;
             case 0:
-                driveAdjust(180, -0.8, longAdjust + 45, 3);
+                driveAdjust(180, 0.6, 16.5, 2);
                 break;
             case 1:
-                driveAdjust(180, -0.8, longAdjust + 43, 3);
+                driveAdjust(180,0.6,12, 2);
                 break;
         }
-        //driveAdjust(180, -0.8, longAdjust + 31, 3);
 
-        //sleep(250);
-        //turnPID(-90, 0.5/360,0.001,2,4000);
-        turnPID(-90, 0.6/90,0.0001,2,1500);
+        //strafeAdjust(0.4,2,180,true);
 
-        if (pos == -1) strafeAdjust(0.4,5,270,false); // strafe
+        turnPID(-90, 0.6/180,0.0001,0.5,5000);
 
-        driveAdjust(270, 0.4, 23, 5); //GO TO STONES
+        if (pos == -1) strafeAdjust(0.4,2,270,false); // strafe
+
+        driveAdjust(270, 0.4, 24, 5); //GO TO STONES
 
         grabStone(pos, false);
 
         //MOVE BACKWARD
         if (pos == 1)
-            driveAdjust(270,-0.6,13, 7);
+            driveAdjust(270,-0.4,11.5, 7);
         else
-            driveAdjust(270,-0.6,15, 7);
+            driveAdjust(270,-0.4,14.5, 7);
 
         // MOVE TO OTHER SIDE
+        turnPID(180, 0.4/180,0.0001,0.5,5000);
         switch (pos) {
             case -1:
-                //turnPID(175, 0.6/360,0.001,2,3000);
-                turnPID(180, 0.6/90,0.0001,2,2000);
-                driveAdjust(180, 1, longAdjust + 53, 3000); // MOVE OTHER SIDE
+                driveAdjust(180, .5, longAdjust + 50, 3000); // MOVE OTHER SIDE
                 break;
             case 0:
-                turnPID(180, 0.6/90,0.0001,2,2000);
-                driveAdjust(180, 1, longAdjust + 52, 3000); // MOVE OTHER SIDE
+                driveAdjust(180, .5, longAdjust + 47, 3000); // MOVE OTHER SIDE
                 break;
             case 1:
-                //turnPID(-178, 0.6/360,0.001,2,3000);
-                turnPID(-180, 0.6/90,0.0001,2,2000);
-                driveAdjust(180, 1, longAdjust + 60, 3000); // MOVE OTHER SIDE
+                driveAdjust(180, .5, longAdjust + 43, 3000); // MOVE OTHER SIDE
                 break;
         }
 
-        hook(false, false);
+        // FOUNDATION MOVEMENTS
 
-        driveAdjust(180, -0.8, 30, 2); //park
+        driveAdjust(180, .7, 70, 3000); // go to foundation
 
-        strafeAdjust(.6,10,180,false);
+        hook(false, false); // drop stone
 
-        */
+        turnPID(90, 0.6/180,0.0001,0.5,5000);   //turn toward foundation
+
+        driveAdjust(90, -0.4, 16, 2); //Carefully approach foundation
+
+        foundationD(true);  //Grab foundation
+
+        sleep(500);    //wait for grab
+
+        turnPIDF(80, .8/90,.0001, 2, 3000);
+
+        driveAdjust(90, 2, 85, 4);
+
+        turnPIDF(90, .8/90,.0001, 2, 3000);
 
         telemetry.addData("auto:", "complete");
         telemetry.update();

@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="New Skystone Red", group = "auto") // BLUE SIDE
+@Autonomous(name="Red Skystone", group = "auto") // BLUE SIDE
 
 public class skystoneRed extends SkystoneLinearOpMode {
 
@@ -25,7 +25,7 @@ public class skystoneRed extends SkystoneLinearOpMode {
 
         adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONe
 
-        longAdjust = forLongAdjust(pos,false) + 90;
+        longAdjust = forLongAdjust(pos,false) + 87;
 
         strafeAdjust(0.6,2,0,true);
 
@@ -40,9 +40,9 @@ public class skystoneRed extends SkystoneLinearOpMode {
         else
             driveAdjust(270,-0.6,8, 7); //MOVE BACKWARD
 
-        turnPID(180, 0.6/180,0.0001,0.5,5000);
+        turnPID(180, 0.4/180,0.0001,0.5,2000);
 
-        driveAdjust(180, 0.6, longAdjust, 4); // MOVE OTHER SIDE
+        driveAdjust(180, 0.5, longAdjust, 4); // MOVE OTHER SIDE
 
         hook(false, false); // drop stone
 
@@ -57,10 +57,10 @@ public class skystoneRed extends SkystoneLinearOpMode {
                 driveAdjust(180, 0.6, 5, 2);
                 break;
             case 0:
-                driveAdjust(180, 0.6, 23, 2);
+                driveAdjust(180, 0.6, 16.5, 2);
                 break;
             case 1:
-                driveAdjust(180,0.6,14, 2);
+                driveAdjust(180,0.6,12, 2);
                 break;
         }
 
@@ -70,27 +70,27 @@ public class skystoneRed extends SkystoneLinearOpMode {
 
         if (pos == -1) strafeAdjust(0.4,2,270,false); // strafe
 
-        driveAdjust(270, 0.4, 25, 5); //GO TO STONES
+        driveAdjust(270, 0.4, 24, 5); //GO TO STONES
 
         grabStone(pos, false);
 
         //MOVE BACKWARD
         if (pos == 1)
-            driveAdjust(270,-0.4,10, 7);
+            driveAdjust(270,-0.4,11.5, 7);
         else
-            driveAdjust(270,-0.4,10, 7);
+            driveAdjust(270,-0.4,14, 7);
 
         // MOVE TO OTHER SIDE
-        turnPID(180, 0.6/180,0.0001,0.5,2000);
+        turnPID(180, 0.4/180,0.0001,0.5,5000);
         switch (pos) {
             case -1:
-                driveAdjust(180, .8, longAdjust + 57, 3000); // MOVE OTHER SIDE
+                driveAdjust(180, .5, longAdjust + 50, 3000); // MOVE OTHER SIDE
                 break;
             case 0:
-                driveAdjust(180, .8, longAdjust + 50, 3000); // MOVE OTHER SIDE
+                driveAdjust(180, .5, longAdjust + 47, 3000); // MOVE OTHER SIDE
                 break;
             case 1:
-                driveAdjust(180, .8, longAdjust + 43, 3000); // MOVE OTHER SIDE
+                driveAdjust(180, .5, longAdjust + 43, 3000); // MOVE OTHER SIDE
                 break;
         }
 
