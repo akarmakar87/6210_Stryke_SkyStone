@@ -84,7 +84,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                 xAxis = 0;
             }
             if (Math.abs(gamepad1.right_stick_x) > 0.05) {
-                zAxis = -gamepad1.right_stick_x;
+                zAxis = -gamepad1.right_stick_x*3/4;
                 tHeading = get180Yaw();
                 turnTime = time.milliseconds();
             }else if(turnTime > time.milliseconds() - 1000){ //Keep getting target angle for another second to account for drift

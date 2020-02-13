@@ -28,7 +28,9 @@ public class foundBlueFlat extends SkystoneLinearOpMode {
 
         sleep(1000);    //wait for grab
 
-        turnArc(0, 0.8/90,0.0001,2, false, 4000);
+        turnArc(0, -0.8/90,-0.0001,-2, true, 3000);
+
+        driveAdjust(0, -0.5, 15, 2);
 
         foundationD(false);
 
@@ -36,20 +38,26 @@ public class foundBlueFlat extends SkystoneLinearOpMode {
 
         turnPID(90, 0.8/90,0.0001,2, 4000);
 
-        driveAdjust(90, 0.7, 20, 4);
+        driveAdjust(90, 0.7, 25, 4);
 
-        strafeAdjust(1, 10, 90, true);
+        strafeAdjust(1, 25, 90, true);
 
-        driveAdjust(90, -0.2, 10, 3);
+        driveAdjust(90, -0.2, 15, 3);
 
-        foundationD(true);     //Release foundation
+        foundationD(true);     //Grab foundation
 
-        driveAdjust(90, 1, 15,3);
+        sleep(250);
+
+        driveAdjust(90, 0.8, 60,3);
+
+        foundationD(false); //Release foundation
+
+        strafeAdjust(0.8, 25, 0, false);
 
         turnPID(180, 0.8/90,0.0001,2, 4000);
 
-        driveAdjust(90, 1, 45,5);
+        driveAdjust(90, 0.8, 100,5);
 
-        strafeAdjust(1, 5, 0, true);
+        strafeAdjust(0.8, 5, 0, true);
     }
 }
