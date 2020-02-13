@@ -494,6 +494,21 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         return power;
     }
 
+    public double getCorrection(double currAngle, double tAngle){
+        double leftCoefficient = 0.055, rightCoefficient = 0.018;
+        double correction = 0, hError;
+
+        hError = tAngle - currAngle;
+
+        if(hError > 0){
+            correction = hError * leftCoefficient; //strafe bad on this side so more
+        }else if(hError < 0){
+            correction = hError * rightCoefficient; //less aggressive on this side
+        }
+
+        return correction;
+    }
+
     public double[] getCorrectionPID(double currAngle, double tAngle, double kP, double kI, double kD, double time, double pastTime, double pastError){
         double[] correction = {0, 0, 0};
         double hError, prevError, dT, prevTime, currTime;

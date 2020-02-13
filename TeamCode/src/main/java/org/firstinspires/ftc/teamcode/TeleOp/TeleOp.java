@@ -108,19 +108,24 @@ public class TeleOp extends SkystoneLinearOpMode {
                 dtime = time.milliseconds();
             }
 
-
             //DRIFT CORRECTION
-            hError = tHeading - currHeading;
+            if(Math.abs(gamepad1.left_stick_x) > 0.05 || Math.abs(gamepad1.left_stick_y) > 0.05){
+                correction = getCorrection(currHeading, tHeading);
+            }else{
+                correction = 0;
+            }
+
+            /*hError = tHeading - currHeading;
 
             if(hError > 0){
                 correction = hError * .049; //strafe bad on this side so more
             }else if(hError < 0){
                 correction = hError * .02; //less aggressive on this side
-            }
+            }*/
 
             //ROBOT ORIENTED HOLONOMIC
             if(robotOriented){
-                motorP = holonomicDrive(xAxis, yAxis, zAxis, Range.clip(correction, -0.4, 0.4));
+                motorP = holonomicDrive(xAxis, yAxis, zAxis, Range.clip(correction, -0.5, 0.5));
             }
             //FIELD ORIENTED HOLONOMIC
             else{
@@ -395,7 +400,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
 
 
-            telemetry.addData("Drive Mode: ", robotOriented);
+            telemetry.addData("Drive Mode: ", robotOriented ? "Robot Oriented" : "Field Oriented");
             telemetry.addData("Target orientation: ", tHeading);
             telemetry.addData("Current orientation: ", currHeading);
             telemetry.addData("Error: ", hError);
