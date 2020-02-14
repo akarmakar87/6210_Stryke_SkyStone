@@ -330,6 +330,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                         arm.setPower(1);
                     }
+                    claw.setPosition(1);
             }
 
 
@@ -401,10 +402,9 @@ public class TeleOp extends SkystoneLinearOpMode {
 
 
             telemetry.addData("Drive Mode: ", robotOriented ? "Robot Oriented" : "Field Oriented");
-            telemetry.addData("Target orientation: ", tHeading);
+            /*telemetry.addData("Target orientation: ", tHeading);
             telemetry.addData("Current orientation: ", currHeading);
-            telemetry.addData("Error: ", hError);
-            telemetry.addData("Correction: ", correction);
+            telemetry.addData("Error: ", hError)telemetry.addData("Correction: ", correction);
             telemetry.addData("LF: ", motorP[0]);
             telemetry.addData("RF: ", motorP[1]);
             telemetry.addData("LB: ", motorP[2]);
@@ -412,8 +412,9 @@ public class TeleOp extends SkystoneLinearOpMode {
             telemetry.addData("Change Mode: ", changeMode);
             //telemetry.addData("Lift Position", lift.getCurrentPosition());
             //telemetry.addData("Arm Position", arm.getCurrentPosition());
-            //telemetry.addData("Halfspeed", halfSpeed);
-            telemetry.addData("deployed: ", foundation);
+            */
+            telemetry.addData("Halfspeed", halfSpeed);
+            telemetry.addData("foundation movers: ", foundation);
             //telemetry.addData("Mode change", changeMode);
             //telemetry.addData("Lift Height", liftHeight);
             //telemetry.addData("strafing: ", strafing);
