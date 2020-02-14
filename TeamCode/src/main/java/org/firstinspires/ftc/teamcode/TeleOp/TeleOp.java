@@ -115,49 +115,6 @@ public class TeleOp extends SkystoneLinearOpMode {
                 correction = 0;
             }
 
-            /*hError = tHeading - currHeading;
-
-            if(hError > 0){
-                correction = hError * .049; //strafe bad on this side so more
-            }else if(hError < 0){
-                correction = hError * .02; //less aggressive on this side
-            }*/
-
-            //ROBOT ORIENTED HOLONOMIC
-            if(robotOriented){
-                motorP = holonomicDrive(xAxis, yAxis, zAxis, Range.clip(correction, -0.5, 0.5));
-            }
-            //FIELD ORIENTED HOLONOMIC
-            else{
-                motorP = fieldOriented(xAxis, yAxis, zAxis, zeroAng);
-            }
-
-            //HALFSPEED TOGGLE
-            if (gamepad1.x && htime < time.milliseconds() - 250) {
-                halfSpeed = !halfSpeed;
-                htime = time.milliseconds();
-            }
-
-            //Halfspeed controls
-            if (halfSpeed && !strafing) {
-                motorP[0] /= 2;
-                motorP[1] /= 2;
-                motorP[2] /= 2;
-                motorP[3] /= 2;
-                LF.setPower(Range.clip(motorP[0], -.5, .5));
-                RF.setPower(Range.clip(motorP[1], -.5, .5));
-                LB.setPower(Range.clip(motorP[2], -.5, .5));
-                RB.setPower(Range.clip(motorP[3], -.5, .5));
-            }
-
-            //Normal controls
-            else if (!strafing){
-                LF.setPower(Range.clip(motorP[0], -1, 1));
-                RF.setPower(Range.clip(motorP[1], -1, 1));
-                LB.setPower(Range.clip(motorP[2], -1, 1));
-                RB.setPower(Range.clip(motorP[3], -1, 1));
-            }
-
             //Auto-strafe controls
             //strafe right
             if(gamepad1.y && strafeTog + 250 < time.milliseconds())
@@ -191,6 +148,43 @@ public class TeleOp extends SkystoneLinearOpMode {
             else {
                 strafing = false;
             }
+
+            //ROBOT ORIENTED HOLONOMIC
+            if(robotOriented){
+                motorP = holonomicDrive(xAxis, yAxis, zAxis, Range.clip(correction, -0.5, 0.5));
+            }
+            //FIELD ORIENTED HOLONOMIC
+            else{
+                motorP = fieldOriented(xAxis, yAxis, zAxis, correction, zeroAng);
+            }
+
+            //HALFSPEED TOGGLE
+            if (gamepad1.x && htime < time.milliseconds() - 250) {
+                halfSpeed = !halfSpeed;
+                htime = time.milliseconds();
+            }
+
+            //Halfspeed controls
+            if (halfSpeed && !strafing) {
+                motorP[0] /= 2;
+                motorP[1] /= 2;
+                motorP[2] /= 2;
+                motorP[3] /= 2;
+                LF.setPower(Range.clip(motorP[0], -.5, .5));
+                RF.setPower(Range.clip(motorP[1], -.5, .5));
+                LB.setPower(Range.clip(motorP[2], -.5, .5));
+                RB.setPower(Range.clip(motorP[3], -.5, .5));
+            }
+
+            //Normal controls
+            else if (!strafing){
+                LF.setPower(Range.clip(motorP[0], -1, 1));
+                RF.setPower(Range.clip(motorP[1], -1, 1));
+                LB.setPower(Range.clip(motorP[2], -1, 1));
+                RB.setPower(Range.clip(motorP[3], -1, 1));
+            }
+
+
 
             //Hook Controls
             if (gamepad1.b && fTime < time.milliseconds() - 250) {
