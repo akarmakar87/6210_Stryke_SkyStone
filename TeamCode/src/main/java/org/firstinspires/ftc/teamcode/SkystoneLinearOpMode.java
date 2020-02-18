@@ -201,7 +201,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         if (auto) {
             foundationD(false);
-            claw.setPosition(1);
+            //claw.setPosition(1);
             hook(false, false);
         }
 
@@ -2197,7 +2197,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     driveDistance(0.4, 2);
                     break;
                 case 0:
-                    driveDistance(-0.4, 12);
+                    driveDistance(-0.4, 10);//orig 12
                     break;
                 case 1:
                     driveDistance(-0.4, 4.5);

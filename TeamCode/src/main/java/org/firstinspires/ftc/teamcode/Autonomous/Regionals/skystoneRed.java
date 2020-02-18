@@ -54,10 +54,10 @@ public class skystoneRed extends SkystoneLinearOpMode {
 
         switch (pos) {
             case -1:
-                driveAdjust(180, 0.6, 5, 2);
+                driveAdjust(180, 0.6, 4, 2);//orig 5
                 break;
             case 0:
-                driveAdjust(180, 0.6, 16.5, 2);
+                driveAdjust(180, 0.6, 18, 2);//orig 16.5
                 break;
             case 1:
                 driveAdjust(180,0.6,12, 2);
@@ -77,8 +77,10 @@ public class skystoneRed extends SkystoneLinearOpMode {
         //MOVE BACKWARD
         if (pos == 1)
             driveAdjust(270,-0.4,11.5, 7);
+        else if (pos == 0)
+            driveAdjust(270,-0.4,25, 7);
         else
-            driveAdjust(270,-0.4,14, 7);
+            driveAdjust(270,-0.4,25, 7);
 
         // MOVE TO OTHER SIDE
         turnPID(180, 0.4/180,0.0001,0.5,5000);
