@@ -121,14 +121,14 @@ public class testla extends SkystoneLinearOpMode {
             if (gamepad1.right_trigger > 0.05) {
                 strafing = true;
                 strafePower = gamepad1.right_trigger * 0.75;
-                motorP = strafeField(0, strafePower, correction, zeroAng);
+                motorP = strafeField((3 * Math.PI) / 2, strafePower, correction, zeroAng);
             }
 
             //STRAFE LEFT (FIELD ORIENTED)
             else if (gamepad1.left_trigger > 0.05) {
                 strafing = true;
                 strafePower = gamepad1.left_trigger * 0.75;
-                motorP = strafeField(Math.PI, strafePower, correction, zeroAng);
+                motorP = strafeField(Math.PI / 2, strafePower, correction, zeroAng);
             }
 
             //STOP AUTO STRAFE

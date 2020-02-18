@@ -22,7 +22,8 @@ public class TeleOp extends SkystoneLinearOpMode {
         double strafePower = 0, armPower = 0, liftPower = 0, strafeTog = 0;
         boolean lControl = true, aControl = true, foundation = false, strafeD = true, rHook = false, lHook = false, stopTurn = false, robotOriented = true;
         double lTime = 0, rTime = 0, fTime = 0, htime = 0, dtime = 0, deployTime = 0, min = 0, max = 0, pow = 0, turnTime = 0;
-        double[] motorP;
+        double[] motorP = {0.0, 0.0, 0.0, 0.0};
+        double rightAngle = 0, leftAngle = Math.PI;
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
@@ -46,7 +47,6 @@ public class TeleOp extends SkystoneLinearOpMode {
         while (opModeIsActive() && !isStopRequested()) {
 
             /**
-             *
              * GAMEPAD 1
              *
              * Controls:
@@ -57,8 +57,13 @@ public class TeleOp extends SkystoneLinearOpMode {
              * X - Half Speed , B - Foundation Hooks
              * Y - Switch Drive Modes (Robot Oriented or Field Oriented)
              * A - Reset Gyro
+             * Up Arrow - Auto Strafe is Away and Closer
+             * Right Arrow - Auto Strafe is Right and Left
              *
              */
+
+            //GET CURRENT HEADING
+            currHeading = get180Yaw();
 
             //RESET GYRO
             if (gamepad1.a) {
@@ -69,10 +74,18 @@ public class TeleOp extends SkystoneLinearOpMode {
                 }
             }
 
-            //Holonomic drive inputs
+            //AUTO STRAFE TOGGLE
+            if(gamepad1.dpad_up){
+                rightAngle = 0;
+                leftAngle = Math.PI;
+            }
 
-            currHeading = get180Yaw(); //Get current heading
+            if(gamepad1.dpad_up){
+                rightAngle = (3 * Math.PI) / 2;
+                leftAngle = Math.PI / 2;
+            }
 
+            //CONTROLLER INPUTS AND ROBOT HEADINGS
             if (Math.abs(gamepad1.left_stick_y) > 0.05) {
                 yAxis = gamepad1.left_stick_y;
             } else {
@@ -115,48 +128,38 @@ public class TeleOp extends SkystoneLinearOpMode {
                 correction = 0;
             }
 
-            //Auto-strafe controls
-            //strafe right
-            if(gamepad1.y && strafeTog + 250 < time.milliseconds())
-            {
-                strafeD = !strafeD;
-                strafeTog = time.milliseconds();
-            }
+            //AUTO STRAFE
+            //STRAFE RIGHT (FIELD ORIENTED)
             if (gamepad1.right_trigger > 0.05) {
                 strafing = true;
                 strafePower = gamepad1.right_trigger * 0.75;
-                if(halfSpeed)
-                {
-                    strafePower /= 2;
-                }
-                setStrafePowers(strafePower, strafeD);
+                motorP = strafeField(rightAngle, strafePower, correction, zeroAng);
             }
 
-            //strafe left
+            //STRAFE LEFT (FIELD ORIENTED)
             else if (gamepad1.left_trigger > 0.05) {
                 strafing = true;
                 strafePower = gamepad1.left_trigger * 0.75;
-                if(halfSpeed)
-                {
-                    strafePower /= 2;
-                }
-                setStrafePowers(strafePower, !strafeD);
+                motorP = strafeField(leftAngle, strafePower, correction, zeroAng);
             }
 
-            //stop strafing
-
+            //STOP AUTO STRAFE
             else {
                 strafing = false;
             }
 
-            //ROBOT ORIENTED HOLONOMIC
-            if(robotOriented){
-                motorP = holonomicDrive(xAxis, yAxis, zAxis, Range.clip(correction, -0.5, 0.5));
+            //DRIVE MODES
+            if(!strafing){
+                //ROBOT ORIENTED HOLONOMIC
+                if(robotOriented){
+                    motorP = holonomicDrive(xAxis, yAxis, zAxis, Range.clip(correction, -0.5, 0.5));
+                }
+                //FIELD ORIENTED HOLONOMIC
+                else{
+                    motorP = fieldOriented(xAxis, yAxis, zAxis, correction, zeroAng);
+                }
             }
-            //FIELD ORIENTED HOLONOMIC
-            else{
-                motorP = fieldOriented(xAxis, yAxis, zAxis, correction, zeroAng);
-            }
+
 
             //HALFSPEED TOGGLE
             if (gamepad1.x && htime < time.milliseconds() - 250) {
@@ -164,8 +167,8 @@ public class TeleOp extends SkystoneLinearOpMode {
                 htime = time.milliseconds();
             }
 
-            //Halfspeed controls
-            if (halfSpeed && !strafing) {
+            //HALFSPEED
+            if (halfSpeed) {
                 motorP[0] /= 2;
                 motorP[1] /= 2;
                 motorP[2] /= 2;
@@ -176,8 +179,8 @@ public class TeleOp extends SkystoneLinearOpMode {
                 RB.setPower(Range.clip(motorP[3], -.5, .5));
             }
 
-            //Normal controls
-            else if (!strafing){
+            //NORMAL
+            else{
                 LF.setPower(Range.clip(motorP[0], -1, 1));
                 RF.setPower(Range.clip(motorP[1], -1, 1));
                 LB.setPower(Range.clip(motorP[2], -1, 1));
@@ -185,8 +188,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
 
 
-
-            //Hook Controls
+            //HOOK CONTROLS
             if (gamepad1.b && fTime < time.milliseconds() - 250) {
                 foundation = !foundation;
                 fTime = time.milliseconds();
@@ -204,7 +206,17 @@ public class TeleOp extends SkystoneLinearOpMode {
                 hook(lHook, rHook);
             }
 
-            //GAMEPAD 2
+            /**
+             * GAMEPAD 2
+             *
+             * Controls:
+             * Left Trigger - Lift Up ,  Right Trigger - Lift Down
+             * Left Bumper - Expel , Right Bumper - Intake
+             * Y - Close Claw , X - Open Claw , A - Unstick Block
+             * B - Arm Deploy , Right Joystick Y - Rotate Arm
+             *
+             */
+
             //Intake controls
             //intake
             if (gamepad2.right_bumper) {
@@ -408,7 +420,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             //telemetry.addData("Arm Position", arm.getCurrentPosition());
             */
             telemetry.addData("Halfspeed", halfSpeed);
-            telemetry.addData("foundation movers: ", foundation);
+            //telemetry.addData("foundation movers: ", foundation);
             //telemetry.addData("Mode change", changeMode);
             //telemetry.addData("Lift Height", liftHeight);
             //telemetry.addData("strafing: ", strafing);
