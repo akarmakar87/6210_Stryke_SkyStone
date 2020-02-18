@@ -22,6 +22,8 @@ public class skystoneBlue extends SkystoneLinearOpMode {
 
         waitForStart();
 
+        hook(false, false);
+
         pos = detectSkystoneOnePix(getBitmap(),true); //DETECT SKYSTONE
 
         adjustForSkystone(pos, true); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE

@@ -16,7 +16,7 @@ public class TeleOp extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        init(hardwareMap, true);
+        init(hardwareMap, false);
         int lpos = 0, apos = 0, liftHeight = 0, lowestArm = 0;
         double xAxis = 0, yAxis = 0, zAxis = 0, currHeading = 0, tHeading= 0, hError = 0, correction = 0, zeroAng = 0;
         double strafePower = 0, armPower = 0, liftPower = 0, strafeTog = 0;

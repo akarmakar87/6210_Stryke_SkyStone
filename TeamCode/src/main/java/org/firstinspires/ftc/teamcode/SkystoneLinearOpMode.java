@@ -197,35 +197,38 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         //SET UP GYRO
         angles = new Orientation();
 
+        resetEncoders();
+
         if (auto) {
-            resetEncoders();
             foundationD(false);
             claw.setPosition(1);
-            BNO055IMU.Parameters bparameters = new BNO055IMU.Parameters();
-            bparameters.mode = BNO055IMU.SensorMode.IMU;
-            bparameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
-            bparameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-            bparameters.loggingEnabled = false;
-
-            imu.initialize(bparameters);
-
-            angles = imu.getAngularOrientation(); //GET ORIENTATION
-
-            telemetry.addData("Mode", "calibrating...");
-            telemetry.update();
-
-            while (!isStopRequested() && !imu.isGyroCalibrated()) {
-                sleep(50);
-                idle();
-            }
-
-            telemetry.addData("imu calib status", imu.getCalibrationStatus().toString());
-            telemetry.update();
-
-            //initBitmapVuforia();
-            telemetry.addData("Vuforia: ", "Initialization complete");
-            telemetry.update();
+            hook(false, false);
         }
+
+        BNO055IMU.Parameters bparameters = new BNO055IMU.Parameters();
+        bparameters.mode = BNO055IMU.SensorMode.IMU;
+        bparameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        bparameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        bparameters.loggingEnabled = false;
+
+        imu.initialize(bparameters);
+
+        angles = imu.getAngularOrientation(); //GET ORIENTATION
+
+        telemetry.addData("Mode", "calibrating...");
+        telemetry.update();
+
+        while (!isStopRequested() && !imu.isGyroCalibrated()) {
+            sleep(50);
+            idle();
+        }
+
+        telemetry.addData("imu calib status", imu.getCalibrationStatus().toString());
+        telemetry.update();
+
+        //initBitmapVuforia();
+        telemetry.addData("Vuforia: ", "Initialization complete");
+        telemetry.update();
 
         telemetry.addData("Status: ", "All Initialized");
         telemetry.update();
