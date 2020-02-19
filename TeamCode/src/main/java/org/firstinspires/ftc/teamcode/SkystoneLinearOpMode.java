@@ -459,11 +459,11 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
     public double[] scalePower(double LF, double RF, double LB, double RB, double correction){ //important for if we try to turn while strafing
         double[] power = {LF, RF, LB, RB};
-        double max = power[0];
+        double max = Math.abs(power[0]);
         int index = 0;
         while(index < power.length){ //find the max power to scale all the powers down by it
-            if(power[index] > max){
-                max = power[index];
+            if(Math.abs(power[index]) > max){
+                max = Math.abs(power[index]);
             }
             index += 1;
         }
