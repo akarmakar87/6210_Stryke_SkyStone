@@ -38,8 +38,8 @@ public class foundBlue extends SkystoneLinearOpMode {
 
         sleep(5000);    //wait for alliance partner to finish
 
-        strafeAdjust(0.5,50,90,false);   //Align with parking spot
+        strafeAdjust(0.6,50,90,false);   //Align with parking spot
 
-        driveAdjust(90, 0.5, 10,2);
+        driveAdjust(90, 0.6, 10,2);
     }
 }

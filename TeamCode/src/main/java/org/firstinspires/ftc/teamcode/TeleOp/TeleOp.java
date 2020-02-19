@@ -80,7 +80,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                 leftAngle = Math.PI;
             }
 
-            if(gamepad1.dpad_up){
+            if(gamepad1.dpad_right){
                 rightAngle = (3 * Math.PI) / 2;
                 leftAngle = Math.PI / 2;
             }
@@ -97,10 +97,10 @@ public class TeleOp extends SkystoneLinearOpMode {
                 xAxis = 0;
             }
             if (Math.abs(gamepad1.right_stick_x) > 0.05) {
-                zAxis = -gamepad1.right_stick_x*3/4;
+                zAxis = -gamepad1.right_stick_x * 3/4;
                 tHeading = get180Yaw();
                 turnTime = time.milliseconds();
-            }else if(turnTime > time.milliseconds() - 1000){ //Keep getting target angle for another second to account for drift
+            }else if(turnTime > time.milliseconds() - 500){ //Keep getting target angle for another second to account for drift
                 stopTurn = true;
                 zAxis = 0;
             }
@@ -133,14 +133,14 @@ public class TeleOp extends SkystoneLinearOpMode {
             if (gamepad1.right_trigger > 0.05) {
                 strafing = true;
                 strafePower = gamepad1.right_trigger * 0.75;
-                motorP = strafeField(rightAngle, strafePower, correction, zeroAng);
+                motorP = strafeField(leftAngle, strafePower, correction, zeroAng);
             }
 
             //STRAFE LEFT (FIELD ORIENTED)
             else if (gamepad1.left_trigger > 0.05) {
                 strafing = true;
                 strafePower = gamepad1.left_trigger * 0.75;
-                motorP = strafeField(leftAngle, strafePower, correction, zeroAng);
+                motorP = strafeField(rightAngle, strafePower, correction, zeroAng);
             }
 
             //STOP AUTO STRAFE
@@ -284,6 +284,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                 changeMode = true;
 
             }
+            /*
             if (gamepad2.b) //go to up position or back inside the robot
             {
                 changeMode = false;
@@ -337,7 +338,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                         arm.setPower(1);
                     }
                     claw.setPosition(1);
-            }
+            }*/
 
 
             //Lift Controls

@@ -70,7 +70,7 @@ public class skystoneRed extends SkystoneLinearOpMode {
 
         if (pos == -1) strafeAdjust(0.4,2,270,false); // strafe
 
-        driveAdjust(270, 0.4, 24, 5); //GO TO STONES
+        driveAdjust(270, 0.4, 21, 5); //GO TO STONES
 
         grabStone(pos, false);
 

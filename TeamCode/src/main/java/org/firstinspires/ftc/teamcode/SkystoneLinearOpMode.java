@@ -524,6 +524,22 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         return correction;
     }
 
+    public double[] strafeCorrection(double strafePower, double correction, boolean right){
+        double[] power = {0.0, 0.0, 0.0, 0.0};
+        if (right){
+            power[0] = -strafePower;
+            power[1] = -strafePower;
+            power[2] = strafePower;
+            power[3] = strafePower;
+        }else {
+            power[0] = strafePower;
+            power[1] = strafePower;
+            power[2] = -strafePower;
+            power[3] = -strafePower;
+        }
+        return scalePower(power[0], power[1], power[2], power[3], correction);
+    }
+
     public double[] getCorrectionPID(double currAngle, double tAngle, double kP, double kI, double kD, double time, double pastTime, double pastError){
         double[] correction = {0, 0, 0};
         double hError, prevError, dT, prevTime, currTime;
@@ -541,6 +557,22 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             correction[0] = 0;
         }
         return correction;
+    }
+
+    public void setEachPower(double lf, double rf, double lb, double rb, boolean halfspeed){
+
+        if (halfspeed){
+            lf /= 2;
+            rf /= 2;
+            lb /= 2;
+            rb /= 2;
+        }
+
+        LF.setPower(lf);
+        RF.setPower(rf);
+        LB.setPower(lb);
+        RB.setPower(rb);
+
     }
 
     public void setMotorPowers(double leftPower, double rightPower) {
