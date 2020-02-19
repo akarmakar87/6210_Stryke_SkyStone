@@ -38,7 +38,7 @@ public class skystoneRed extends SkystoneLinearOpMode {
        if (pos == 1)
             driveAdjust(270, -0.6, 7, 7);
         else
-            driveAdjust(270,-0.6,8, 7); //MOVE BACKWARD
+            driveAdjust(270,-0.6,10, 7); //MOVE BACKWARD
 
         turnPID(180, 0.4/180,0.0001,0.5,2000);
 
@@ -78,9 +78,9 @@ public class skystoneRed extends SkystoneLinearOpMode {
         if (pos == 1)
             driveAdjust(270,-0.4,11.5, 7);
         else if (pos == 0)
-            driveAdjust(270,-0.4,25, 7);
+            driveAdjust(270,-0.4,22, 7);
         else
-            driveAdjust(270,-0.4,25, 7);
+            driveAdjust(270,-0.4,21, 7);
 
         // MOVE TO OTHER SIDE
         turnPID(180, 0.4/180,0.0001,0.5,5000);
@@ -92,13 +92,13 @@ public class skystoneRed extends SkystoneLinearOpMode {
                 driveAdjust(180, .5, longAdjust + 47, 3000); // MOVE OTHER SIDE
                 break;
             case 1:
-                driveAdjust(180, .5, longAdjust + 43, 3000); // MOVE OTHER SIDE
+                driveAdjust(180, .5, longAdjust + 45, 3000); // MOVE OTHER SIDE
                 break;
         }
 
         hook(false, false); // drop stone
 
-        driveAdjust(180, -0.8, 22, 2); //park
+        driveAdjust(180, -0.8, 24, 2); //park
 
         sleep(100);
 

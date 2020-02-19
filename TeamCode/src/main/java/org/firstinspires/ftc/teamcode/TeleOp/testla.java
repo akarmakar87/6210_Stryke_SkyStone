@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 import java.util.concurrent.TimeUnit;
 
 @TeleOp(name="testu", group="teleop")
-//@Disabled
+@Disabled
 public class testla extends SkystoneLinearOpMode {
 
     @Override
@@ -19,7 +19,7 @@ public class testla extends SkystoneLinearOpMode {
 
         init(hardwareMap, true);
         double currHeading = 0, tHeading = 0, correction = 0, zeroAng = 0;
-        double strafePower, xAxis, yAxis, zAxis;
+        double rStrafePower, lStrafePower, xAxis, yAxis, zAxis;
         boolean robotOriented = true;
         boolean htime = false, dtime = false;
         double[] motorP;
@@ -58,15 +58,8 @@ public class testla extends SkystoneLinearOpMode {
 
             currHeading = get180Yaw();
 
-            if(getTarget){
+            if(ifPressed(gamepad1.left_trigger) || ifPressed(gamepad1.right_trigger)){
                 tHeading = get180Yaw();
-            }
-            if(!gamepad1.x){
-                htime = true;
-            }
-
-            if(!gamepad1.y){
-                dtime = true;
             }
 
             //RESET GYRO
@@ -79,14 +72,12 @@ public class testla extends SkystoneLinearOpMode {
             }
 
             //HALFSPEED TOGGLE
-            if (gamepad1.x && htime) {
-                htime = false;
+            if (ifPressed(gamepad1.x)) {
                 halfSpeed = !halfSpeed;
             }
 
             //DRIVE MODE TOGGLE
-            if (gamepad1.y && dtime) {
-                dtime = false;
+            if (ifPressed(gamepad1.y)) {
                 robotOriented = !robotOriented;
             }
 
@@ -94,6 +85,8 @@ public class testla extends SkystoneLinearOpMode {
             yAxis = gamepad1.left_stick_y;
             xAxis = -gamepad1.left_stick_x;
             zAxis = -gamepad1.right_stick_x * 0.75;
+            lStrafePower = gamepad1.left_trigger * 0.75;
+            rStrafePower = gamepad1.right_trigger * 0.75;
 
             if(Math.abs(gamepad1.left_stick_x) > .05 ||
                     Math.abs(gamepad1.left_stick_y) > .05 ||
@@ -111,27 +104,25 @@ public class testla extends SkystoneLinearOpMode {
 
                 //RIGHT AUTO STRAFE
             }else if (gamepad1.right_trigger > 0.05) {
-                getTarget = false;
                 correction = getCorrection(currHeading, tHeading);
-                strafePower = gamepad1.right_trigger * 0.75;
-                strafeCorrection(strafePower, correction, true);
+                motorP = strafeCorrection(rStrafePower, correction, true);
 
                 //LEFT AUTO STRAFE
             }else if (gamepad1.left_trigger > 0.05) {
-                getTarget = false;
                 correction = getCorrection(currHeading, tHeading);
-                strafePower = gamepad1.left_trigger * 0.75;
-                strafeCorrection(strafePower, correction, false);
+                motorP = strafeCorrection(lStrafePower, correction, false);
 
             }else {
-                getTarget = true;
                 motorP[0] = 0;
                 motorP[1] = 0;
                 motorP[2] = 0;
                 motorP[3] = 0;
             }
 
+            //SET ALL POWERS
             setEachPower(motorP[0], motorP[1], motorP[2], motorP[3], halfSpeed);
+
+            booleanIncrementer = 0;
 
             //TELEMETRY
             telemetry.addData("Drive Mode (Y): ", robotOriented ? "Robot Oriented" : "Field Oriented");

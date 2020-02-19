@@ -17,13 +17,13 @@ public class TeleOp extends SkystoneLinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         init(hardwareMap, false);
-        int lpos = 0, apos = 0, liftHeight = 0, lowestArm = 0;
-        double xAxis = 0, yAxis = 0, zAxis = 0, currHeading = 0, tHeading= 0, hError = 0, correction = 0, zeroAng = 0;
-        double strafePower = 0, armPower = 0, liftPower = 0, strafeTog = 0;
+        int lowestArm = 0;
+        double xAxis = 0, yAxis = 0, zAxis = 0, lStrafePower = 0, rStrafePower = 0, currHeading = 0, tHeading = 0, correction = 0, zeroAng = 0;
+        double armPower = 0, liftPower = 0, strafeTog = 0;
         boolean lControl = true, aControl = true, foundation = false, strafeD = true, rHook = false, lHook = false, stopTurn = false, robotOriented = true;
         double lTime = 0, rTime = 0, fTime = 0, htime = 0, dtime = 0, deployTime = 0, min = 0, max = 0, pow = 0, turnTime = 0;
         double[] motorP = {0.0, 0.0, 0.0, 0.0};
-        double rightAngle = 0, leftAngle = Math.PI;
+
 
         //For more controlled movement when moving the foundation
         boolean halfSpeed = false;
@@ -61,147 +61,83 @@ public class TeleOp extends SkystoneLinearOpMode {
              * Right Arrow - Auto Strafe is Right and Left
              *
              */
-
-            //GET CURRENT HEADING
             currHeading = get180Yaw();
+
+            if (ifPressed(gamepad1.left_trigger) || ifPressed(gamepad1.right_trigger)) {
+                tHeading = get180Yaw();
+            }
 
             //RESET GYRO
             if (gamepad1.a) {
                 zeroAng = getYaw();
                 zeroAng += 180;
-                if(zeroAng > 360){
+                if (zeroAng > 360) {
                     zeroAng -= 360;
                 }
             }
 
-            //AUTO STRAFE TOGGLE
-            if(gamepad1.dpad_up){
-                rightAngle = 0;
-                leftAngle = Math.PI;
-            }
-
-            if(gamepad1.dpad_right){
-                rightAngle = (3 * Math.PI) / 2;
-                leftAngle = Math.PI / 2;
-            }
-
-            //CONTROLLER INPUTS AND ROBOT HEADINGS
-            if (Math.abs(gamepad1.left_stick_y) > 0.05) {
-                yAxis = gamepad1.left_stick_y;
-            } else {
-                yAxis = 0;
-            }
-            if (Math.abs(gamepad1.left_stick_x) > 0.05) {
-                xAxis = -gamepad1.left_stick_x;
-            } else {
-                xAxis = 0;
-            }
-            if (Math.abs(gamepad1.right_stick_x) > 0.05) {
-                zAxis = -gamepad1.right_stick_x * 3/4;
-                tHeading = get180Yaw();
-                turnTime = time.milliseconds();
-            }else if(turnTime > time.milliseconds() - 500){ //Keep getting target angle for another second to account for drift
-                stopTurn = true;
-                zAxis = 0;
-            }
-            else {
-                zAxis = 0;
-                stopTurn = false;
-            }
-            if(stopTurn){ //1 second after stopping turning or start
-                tHeading = get180Yaw();
-                if(Math.abs(gamepad1.left_stick_x) > 0.05 && Math.abs(gamepad1.left_stick_y) > 0.05){ //not trying to move
-                    stopTurn = false;
-                }
+            //HALFSPEED TOGGLE
+            if (ifPressed(gamepad1.x)) {
+                halfSpeed = !halfSpeed;
             }
 
             //DRIVE MODE TOGGLE
-            if (gamepad1.y && dtime < time.milliseconds() - 250) {
+            if (ifPressed(gamepad1.y)) {
                 robotOriented = !robotOriented;
-                dtime = time.milliseconds();
             }
 
-            //DRIFT CORRECTION
-            if(Math.abs(gamepad1.left_stick_x) > 0.05 || Math.abs(gamepad1.left_stick_y) > 0.05){
-                correction = getCorrection(currHeading, tHeading);
-            }else{
-                correction = 0;
-            }
+            //CONTROLLER INPUTS
+            yAxis = gamepad1.left_stick_y;
+            xAxis = -gamepad1.left_stick_x;
+            zAxis = -gamepad1.right_stick_x * 0.75;
+            lStrafePower = gamepad1.left_trigger * 0.75;
+            rStrafePower = gamepad1.right_trigger * 0.75;
 
-            //AUTO STRAFE
-            //STRAFE RIGHT (FIELD ORIENTED)
-            if (gamepad1.right_trigger > 0.05) {
-                strafing = true;
-                strafePower = gamepad1.right_trigger * 0.75;
-                motorP = strafeField(leftAngle, strafePower, correction, zeroAng);
-            }
+            if (Math.abs(gamepad1.left_stick_x) > .05 ||
+                    Math.abs(gamepad1.left_stick_y) > .05 ||
+                    Math.abs(gamepad1.right_stick_x) > .05) {
 
-            //STRAFE LEFT (FIELD ORIENTED)
-            else if (gamepad1.left_trigger > 0.05) {
-                strafing = true;
-                strafePower = gamepad1.left_trigger * 0.75;
-                motorP = strafeField(rightAngle, strafePower, correction, zeroAng);
-            }
-
-            //STOP AUTO STRAFE
-            else {
-                strafing = false;
-            }
-
-            //DRIVE MODES
-            if(!strafing){
                 //ROBOT ORIENTED HOLONOMIC
-                if(robotOriented){
-                    motorP = holonomicDrive(xAxis, yAxis, zAxis, Range.clip(correction, -0.5, 0.5));
+                if (robotOriented) {
+                    motorP = holonomicDrive(xAxis, yAxis, zAxis, 0);
                 }
                 //FIELD ORIENTED HOLONOMIC
-                else{
-                    motorP = fieldOriented(xAxis, yAxis, zAxis, correction, zeroAng);
+                else {
+                    motorP = fieldOriented(xAxis, yAxis, zAxis, 0, zeroAng);
                 }
+
+                //RIGHT AUTO STRAFE
+            } else if (gamepad1.right_trigger > 0.05) {
+                correction = getCorrection(currHeading, tHeading);
+                motorP = strafeCorrection(rStrafePower, correction, true);
+
+                //LEFT AUTO STRAFE
+            } else if (gamepad1.left_trigger > 0.05) {
+                correction = getCorrection(currHeading, tHeading);
+                motorP = strafeCorrection(lStrafePower, correction, false);
+
+            } else {
+                motorP[0] = 0;
+                motorP[1] = 0;
+                motorP[2] = 0;
+                motorP[3] = 0;
             }
 
-
-            //HALFSPEED TOGGLE
-            if (gamepad1.x && htime < time.milliseconds() - 250) {
-                halfSpeed = !halfSpeed;
-                htime = time.milliseconds();
-            }
-
-            //HALFSPEED
-            if (halfSpeed) {
-                motorP[0] /= 2;
-                motorP[1] /= 2;
-                motorP[2] /= 2;
-                motorP[3] /= 2;
-                LF.setPower(Range.clip(motorP[0], -.5, .5));
-                RF.setPower(Range.clip(motorP[1], -.5, .5));
-                LB.setPower(Range.clip(motorP[2], -.5, .5));
-                RB.setPower(Range.clip(motorP[3], -.5, .5));
-            }
-
-            //NORMAL
-            else{
-                LF.setPower(Range.clip(motorP[0], -1, 1));
-                RF.setPower(Range.clip(motorP[1], -1, 1));
-                LB.setPower(Range.clip(motorP[2], -1, 1));
-                RB.setPower(Range.clip(motorP[3], -1, 1));
-            }
+            //SET ALL POWERS
+            setEachPower(motorP[0], motorP[1], motorP[2], motorP[3], halfSpeed);
 
 
             //HOOK CONTROLS
-            if (gamepad1.b && fTime < time.milliseconds() - 250) {
+            if (ifPressed(gamepad1.b)) {
                 foundation = !foundation;
-                fTime = time.milliseconds();
                 foundationD(foundation);
             }
 
-            if (gamepad1.right_bumper && rTime < time.milliseconds() - 250) {
-                rTime = time.milliseconds();
+            if (ifPressed(gamepad1.right_bumper)) {
                 rHook = !rHook;
                 hook(lHook, rHook);
             }
-            if (gamepad1.left_bumper && lTime < time.milliseconds() - 250) {
-                lTime = time.milliseconds();
+            if (ifPressed(gamepad1.left_bumper)) {
                 lHook = !lHook;
                 hook(lHook, rHook);
             }
@@ -211,7 +147,7 @@ public class TeleOp extends SkystoneLinearOpMode {
              *
              * Controls:
              * Left Trigger - Lift Up ,  Right Trigger - Lift Down
-             * Left Bumper - Expel , Right Bumper - Intake
+             * Right Bumper - Expel , Left Bumper - Intake
              * Y - Close Claw , X - Open Claw , A - Unstick Block
              * B - Arm Deploy , Right Joystick Y - Rotate Arm
              *
@@ -234,64 +170,59 @@ public class TeleOp extends SkystoneLinearOpMode {
                 intakeR.setPower(-1);
             }
             //idle
-            else if (changeMode){
+            else if(changeMode) {
                 intakeL.setPower(0);
                 intakeR.setPower(0);
-            }else{
-
             }
 
             //Arm Module Controls
             //Claw Controls
-            if (gamepad2.x) {
-                claw.setPosition(0);
-            }
-            if (gamepad2.y) {
-                claw.setPosition(1);
+            if (ifPressed(gamepad2.x)) {
+                if (claw.getPosition() == 0) {
+                    claw.setPosition(1);
+                } else{
+                    claw.setPosition(0);
+                }
             }
 
             //Arm Controls
             //Manuel
+
             if (Math.abs(gamepad2.right_stick_y) > 0.05) {
                 arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 min = -1;
                 max = 1;
                 pow = -gamepad2.right_stick_y;
-                if(arm.getCurrentPosition() > lowestArm){//technically higher because its weird
+                if (arm.getCurrentPosition() > lowestArm) {//technically higher because its weird
                     lowestArm = arm.getCurrentPosition();
                 }
-                if(gamepad2.right_stick_y > -0.6 && gamepad2.right_stick_y < 0.6)
-                {
+                if (gamepad2.right_stick_y > -0.6 && gamepad2.right_stick_y < 0.6) {
                     pow /= 2;
                 }
-                if (gamepad2.right_stick_y > 0.05 && arm.getCurrentPosition() > 100)
-                {
+                if (gamepad2.right_stick_y > 0.05 && arm.getCurrentPosition() > 100) {
                     max = 0.2;
                 }
-                if (gamepad2.right_stick_y < -0.05 && arm.getCurrentPosition() < 120)
-                {
+                if (gamepad2.right_stick_y < -0.05 && arm.getCurrentPosition() < 120) {
                     min = -0.2;
                 }
                 armPower = Range.clip(pow, min, max);
                 arm.setPower(armPower);
-            } else if(changeMode){
+            } else if (changeMode) {
                 arm.setPower(0);
             }
             //Automatic
             //Arm (automatic to manuel) Toggle
-            if (Math.abs(gamepad2.right_stick_y) > 0.05){ //go back to manuel
-
+            if (Math.abs(gamepad2.right_stick_y) > 0.05) { //go back to manuel
                 changeMode = true;
-
             }
-            /*
+
             if (gamepad2.b) //go to up position or back inside the robot
             {
                 changeMode = false;
 
                 deployTime = time.milliseconds(); //for compliant unstick later
 
-                if(arm.getCurrentPosition() > -100 ){ //if arm inside the robot
+                if (arm.getCurrentPosition() > -100) { //if arm inside the robot
                     goArm = true;
                 } else { //else it's outside
                     goArm = false;
@@ -301,22 +232,18 @@ public class TeleOp extends SkystoneLinearOpMode {
             //DEPLOY ARM
             if (goArm && !changeMode) //if inside (goArm) and manuel movement is not being used (changeMode)
             {
-                if(deployTime > time.milliseconds() - 1000){ //1 second to clamp
-                    claw.setPosition(0); //clamp down
-                    actuallyGo = false;
-                }
-                else if(deployTime > time.milliseconds() - 2000) //expel block for 1 second
+
+                if (deployTime > time.milliseconds() - 1000) //expel block for 1 second
                 {
                     actuallyGo = true;
                     intakeL.setPower(1);
                     intakeR.setPower(-1);
-                }
-                else{
+                } else {
                     intakeL.setPower(0);
                     intakeR.setPower(0);
                 }
 
-                if(actuallyGo){
+                if (actuallyGo) {
                     arm.setTargetPosition(lowestArm - 540); //-540 for up, -830 for horizontal
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     arm.setPower(1);
@@ -324,26 +251,24 @@ public class TeleOp extends SkystoneLinearOpMode {
 
             }
 
-            if(!goArm && !changeMode) //if outside of robot (goArm)
+            if (!goArm && !changeMode) //if outside of robot (goArm)
             {
-                    //move lift down
-                    lift.setTargetPosition(0);
-                    lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    lift.setPower(1);
+                //move lift down
+                lift.setTargetPosition(0);
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                lift.setPower(1);
 
-                    if(lift.getCurrentPosition() > -100)
-                    {
-                        arm.setTargetPosition(lowestArm);
-                        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        arm.setPower(1);
-                    }
-                    claw.setPosition(1);
-            }*/
+                if (lift.getCurrentPosition() > -100) {
+                    arm.setTargetPosition(lowestArm);
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    arm.setPower(1);
+                }
+            }
 
 
             //Lift Controls
             //Manuel
-            if(!goLift && changeMode) {
+            if (changeMode) {
                 if (gamepad2.right_trigger > 0.05) {
                     lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                     liftPower = Range.clip(gamepad2.right_trigger, 0, 0.7);  //LIFT DOWN
@@ -353,9 +278,9 @@ public class TeleOp extends SkystoneLinearOpMode {
                     liftPower = 0;
                 }
 
-                if (lift.getCurrentPosition() < -4600 && gamepad2.left_trigger > 0.05){
+                if (lift.getCurrentPosition() < -4600 && gamepad2.left_trigger > 0.05) {
                     liftPower = 0;
-                } else if (lift.getCurrentPosition() > 0 && gamepad2.right_trigger > 0.05){
+                } else if (lift.getCurrentPosition() > 0 && gamepad2.right_trigger > 0.05) {
                     liftPower = 0;
                 }
 
@@ -403,33 +328,20 @@ public class TeleOp extends SkystoneLinearOpMode {
 
             if (gamepad2.right_trigger > 0.05 || gamepad2.left_trigger > 0.05) //stop auto lift
             {
-                goLift = false;
                 changeMode = true;
             }
 
 
-            telemetry.addData("Drive Mode: ", robotOriented ? "Robot Oriented" : "Field Oriented");
-            /*telemetry.addData("Target orientation: ", tHeading);
-            telemetry.addData("Current orientation: ", currHeading);
-            telemetry.addData("Error: ", hError)telemetry.addData("Correction: ", correction);
-            telemetry.addData("LF: ", motorP[0]);
-            telemetry.addData("RF: ", motorP[1]);
-            telemetry.addData("LB: ", motorP[2]);
-            telemetry.addData("RB: ", motorP[3]);
-            telemetry.addData("Change Mode: ", changeMode);
-            //telemetry.addData("Lift Position", lift.getCurrentPosition());
-            //telemetry.addData("Arm Position", arm.getCurrentPosition());
-            */
-            telemetry.addData("Halfspeed", halfSpeed);
-            //telemetry.addData("foundation movers: ", foundation);
-            //telemetry.addData("Mode change", changeMode);
-            //telemetry.addData("Lift Height", liftHeight);
-            //telemetry.addData("strafing: ", strafing);
-            //telemetry.addData("auto arm (false is down, true is up): ", goArm);
+            booleanIncrementer = 0;
+
+            telemetry.addData("Drive Mode (Y): ", robotOriented ? "Robot Oriented" : "Field Oriented");
+            telemetry.addData("Halfspeed (X): ", halfSpeed);
+            telemetry.addData("claw pos", claw.getPosition());
+
             telemetry.update();
 
 
-
+            }
         }
     }
-}
+

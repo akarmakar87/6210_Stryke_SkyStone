@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Drive Test Methods", group = "auto")
 
-//@Disabled
+@Disabled
 public class driveTestMethods extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

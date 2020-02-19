@@ -85,6 +85,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     //GYRO VARIABLES
     Orientation angles;
 
+    //TOGGLE VARIABLES
+    public ArrayList<Boolean> booleanArray = new ArrayList<Boolean>();
+    public int booleanIncrementer = 0;
+
     //ticks per inch = (Motor revolutions * gear up ratio) / (wheel diameter * pie)
     //Motor revolutions = COUNTS_PER_MOTOR_REV
     //gear up ratio = 2:1   (ratio beyond motor)
@@ -429,6 +433,47 @@ public class SkystoneLinearOpMode extends LinearOpMode{
        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_STONE, LABEL_SKYSTONE);
    }
 
+    public boolean ifPressed(boolean button){
+        boolean output = false;
+
+        if(booleanArray.size() == booleanIncrementer){
+            booleanArray.add(false);
+        }
+
+        boolean buttonWas = booleanArray.get(booleanIncrementer);
+        if(button != buttonWas && button == true){
+            output = true;
+        }
+
+        booleanArray.set(booleanIncrementer, button);
+
+        booleanIncrementer += 1;
+        return output;
+    }
+
+    public boolean ifPressed(double button){
+        boolean output = false;
+        boolean buttonBoolean = false;
+
+        if(button >= 0.05){
+            buttonBoolean = true;
+        }
+
+        if(booleanArray.size() == booleanIncrementer){
+            booleanArray.add(false);
+        }
+
+        boolean buttonWas = booleanArray.get(booleanIncrementer);
+        if(buttonBoolean != buttonWas && buttonBoolean == true){
+            output = true;
+        }
+
+        booleanArray.set(booleanIncrementer, buttonBoolean);
+
+        booleanIncrementer += 1;
+        return output;
+    }
+
 
     //DRIVE METHODS
     public double[] holonomicDrive(double leftX, double leftY, double rightX, double correction){
@@ -510,7 +555,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public double getCorrection(double currAngle, double tAngle){
-        double leftCoefficient = 0.055, rightCoefficient = 0.018;
+        double leftCoefficient = 0.06, rightCoefficient = 0.02;
         double correction = 0, hError;
 
         hError = tAngle - currAngle;
@@ -521,7 +566,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             correction = hError * rightCoefficient; //less aggressive on this side
         }
 
-        return correction;
+        return Range.clip(correction, -0.4, 0.4);
     }
 
     public double[] strafeCorrection(double strafePower, double correction, boolean right){
@@ -2232,7 +2277,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
                     driveDistance(-0.4, 10);//orig 12
                     break;
                 case 1:
-                    driveDistance(-0.4, 4.5);
+                    driveDistance(-0.4, 4);
                     break;
             }
         }else{

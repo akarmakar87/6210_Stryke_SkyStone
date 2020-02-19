@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Testing;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -7,7 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Autocorrect Test", group="teleop")
-//@Disabled
+@Disabled
 public class autocorrectTest extends SkystoneLinearOpMode {
 
     @Override
