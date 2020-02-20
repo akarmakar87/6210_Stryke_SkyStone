@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 @Autonomous(name="Blue Dual", group = "auto") // BLUE SIDE
 
+@Disabled
 public class dualBlue extends SkystoneLinearOpMode {
 
     @Override

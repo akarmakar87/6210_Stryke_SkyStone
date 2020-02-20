@@ -38,12 +38,12 @@ public class foundRed extends SkystoneLinearOpMode {
 
         sleep(14000);    //wait for alliance partner to finish
 
-        strafeAdjust(0.5,18,-90,true);   //strafe out of building site
+        strafeAdjust(0.5,18,270,true);   //strafe out of building site
 
         turnPID(-180, 0.6/180,0.0001,0.5,5000);   //turn toward parking spot
 
-        strafeAdjust(0.5,5,270,false);   //Align with parking spot
+        strafeAdjust(0.5,5,180,false);   //Align with parking spot
 
-        driveAdjust(-180, 0.5, 40,2);  //drive into parking spot
+        driveAdjust(-180, 0.5, 45,2);  //drive into parking spot
     }
 }
