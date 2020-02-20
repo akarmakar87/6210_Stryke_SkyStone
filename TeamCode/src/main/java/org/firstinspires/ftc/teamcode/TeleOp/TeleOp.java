@@ -212,9 +212,7 @@ public class TeleOp extends SkystoneLinearOpMode {
             }
             //Automatic
             //Arm (automatic to manuel) Toggle
-            if (Math.abs(gamepad2.right_stick_y) > 0.05) { //go back to manuel
-                changeMode = true;
-            }
+
 
             if (gamepad2.b) //go to up position or back inside the robot
             {
@@ -326,10 +324,17 @@ public class TeleOp extends SkystoneLinearOpMode {
                 }
             }*/
 
-            if (gamepad2.right_trigger > 0.05 || gamepad2.left_trigger > 0.05) //stop auto lift
+
+            if (gamepad2.right_trigger > 0.05
+                    || gamepad2.left_trigger > 0.05
+                    || Math.abs(gamepad2.right_stick_y) > 0.05
+                    || gamepad2.right_bumper
+                    || gamepad2.left_bumper
+                    || gamepad2.a) //STOP MACRO STUFF
             {
                 changeMode = true;
             }
+
 
 
             booleanIncrementer = 0;
