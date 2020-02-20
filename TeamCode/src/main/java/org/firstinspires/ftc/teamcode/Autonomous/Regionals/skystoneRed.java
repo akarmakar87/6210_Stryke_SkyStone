@@ -35,10 +35,12 @@ public class skystoneRed extends SkystoneLinearOpMode {
 
         grabStone(pos,false); //GRAB SKYSTONE
 
-       if (pos == 1)
-            driveAdjust(270, -0.6, 7, 7);
+        if (pos == 1)
+            driveAdjust(270, -0.6, 6, 7);
+        else if (pos == 0)
+            driveAdjust(270,-0.6,8, 7); //MOVE BACKWARD
         else
-            driveAdjust(270,-0.6,10, 7); //MOVE BACKWARD
+            driveAdjust(270,-0.6,10, 7);
 
         turnPID(180, 0.4/180,0.0001,0.5,2000);
 
@@ -68,7 +70,7 @@ public class skystoneRed extends SkystoneLinearOpMode {
 
         turnPID(-90, 0.6/180,0.0001,0.5,5000);
 
-        if (pos == -1) strafeAdjust(0.4,2,270,false); // strafe
+        if (pos == -1) strafeAdjust(0.3,1,270,false); // strafe
 
         driveAdjust(270, 0.4, 21, 5); //GO TO STONES
 
@@ -78,9 +80,11 @@ public class skystoneRed extends SkystoneLinearOpMode {
         if (pos == 1)
             driveAdjust(270,-0.4,11.5, 7);
         else if (pos == 0)
-            driveAdjust(270,-0.4,22, 7);
+            driveAdjust(270,-0.4,14, 7);
         else
-            driveAdjust(270,-0.4,21, 7);
+            driveAdjust(270,-0.4,17.5, 7);
+
+        if (pos == -1) strafeAdjust(0.3,1,270,true); // avoid hit wall when turn
 
         // MOVE TO OTHER SIDE
         turnPID(180, 0.4/180,0.0001,0.5,5000);

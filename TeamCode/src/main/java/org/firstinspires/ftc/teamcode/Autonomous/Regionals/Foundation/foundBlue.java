@@ -20,9 +20,9 @@ public class foundBlue extends SkystoneLinearOpMode {
 
         turnPID(90, 0.6/180,0.0001,0.5,5000);   //turn toward foundation
 
-        driveAdjust(90,-0.5, 47, 4);    //Drive to foundation
+        driveAdjust(90,-0.5, 50, 4);    //Drive to foundation
 
-        driveAdjust(90, -.2, 5, 2); //Carefully approach foundation
+        driveAdjust(90, -.2, 5.5, 2); //Carefully approach foundation
 
         foundationD(true);  //Grab foundation
 
@@ -36,10 +36,20 @@ public class foundBlue extends SkystoneLinearOpMode {
 
         foundationD(false);     //Release foundation
 
-        sleep(12000 + 5000);    //wait for alliance partner to finish
+        /*sleep(12000 + 4000);    //wait for alliance partner to finish
 
-        strafeAdjust(0.6,50,90,false);   //Align with parking spot
+        strafeAdjust(0.6,45,90,false);   //Align with parking spot
 
-        driveAdjust(90, 0.6, 10,2);
+        driveAdjust(90, 0.6, 10,2);*/
+
+        sleep(14000);    //wait for alliance partner to finish
+
+        strafeAdjust(0.5,18,90,false);   //strafe out of building site
+
+        turnPID(-180, 0.6/180,0.0001,0.5,5000);   //turn toward parking spot
+
+        strafeAdjust(0.5,5,180,false);   //Align with parking spot
+
+        driveAdjust(-180, 0.5, 45,2);  //drive into parking spot
     }
 }
