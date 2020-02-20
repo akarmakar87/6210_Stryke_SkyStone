@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="encoder/turn test", group = "auto")
 
-//@Disabled
+@Disabled
 public class EncoderTest extends SkystoneLinearOpMode{
 
     @Override

@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Regionals.Foundation;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Blue Foundation( flat )", group = "auto")
 
-//@Disabled
+@Disabled
 public class foundBlueFlat extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

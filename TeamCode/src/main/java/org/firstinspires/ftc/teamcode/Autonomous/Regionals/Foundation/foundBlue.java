@@ -36,7 +36,7 @@ public class foundBlue extends SkystoneLinearOpMode {
 
         foundationD(false);     //Release foundation
 
-        sleep(5000);    //wait for alliance partner to finish
+        sleep(12000 + 5000);    //wait for alliance partner to finish
 
         strafeAdjust(0.6,50,90,false);   //Align with parking spot
 
