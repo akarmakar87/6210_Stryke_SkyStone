@@ -57,8 +57,6 @@ public class TeleOp extends SkystoneLinearOpMode {
              * X - Half Speed , B - Foundation Hooks
              * Y - Switch Drive Modes (Robot Oriented or Field Oriented)
              * A - Reset Gyro
-             * Up Arrow - Auto Strafe is Away and Closer
-             * Right Arrow - Auto Strafe is Right and Left
              *
              */
             currHeading = get180Yaw();
@@ -125,7 +123,6 @@ public class TeleOp extends SkystoneLinearOpMode {
 
             //SET ALL POWERS
             setEachPower(motorP[0], motorP[1], motorP[2], motorP[3], halfSpeed);
-
 
             //HOOK CONTROLS
             if (ifPressed(gamepad1.b)) {
@@ -256,7 +253,7 @@ public class TeleOp extends SkystoneLinearOpMode {
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 lift.setPower(1);
 
-                if (lift.getCurrentPosition() > -100) {
+                if (lift.getCurrentPosition() > -50) {
                     arm.setTargetPosition(lowestArm);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     arm.setPower(1);
