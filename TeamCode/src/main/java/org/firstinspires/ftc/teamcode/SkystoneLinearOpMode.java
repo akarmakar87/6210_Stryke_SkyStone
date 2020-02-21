@@ -207,8 +207,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             foundationD(false);
             hook(false, false);
         }
-        else
-            claw.setPosition(1);
 
         BNO055IMU.Parameters bparameters = new BNO055IMU.Parameters();
         bparameters.mode = BNO055IMU.SensorMode.IMU;
