@@ -50,6 +50,6 @@ public class foundBlue extends SkystoneLinearOpMode {
 
         strafeAdjust(0.5,7,180,true);   //Align with parking spot
 
-        driveAdjust(-180, 0.5, 45,2);  //drive into parking spot
+        driveAdjust(-180, 0.5, 75,2);  //drive into parking spot
     }
 }

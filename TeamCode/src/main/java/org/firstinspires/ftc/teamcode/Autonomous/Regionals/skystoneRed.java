@@ -25,7 +25,7 @@ public class skystoneRed extends SkystoneLinearOpMode {
 
         adjustForSkystone(pos, false); //MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONe
 
-        longAdjust = forLongAdjust(pos,false) + 87;
+        longAdjust = forLongAdjust(pos,false) + 90;
 
         strafeAdjust(0.6,2,0,true);
 

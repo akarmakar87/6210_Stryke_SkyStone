@@ -81,13 +81,13 @@ public class skystoneBlue extends SkystoneLinearOpMode {
 
         switch (pos) {
             case -1:
-                driveAdjust(270,-0.4,9, 7);
+                driveAdjust(270,-0.4,8, 7);
                 break;
             case 0:
                 driveAdjust(270,-0.4,9, 7);
                 break;
             case 1:
-                driveAdjust(270,-0.4,6, 7);
+                driveAdjust(270,-0.4,5, 7);
                 break;
         }
 

@@ -20,7 +20,7 @@ public class foundRed extends SkystoneLinearOpMode {
 
         turnPID(-90, 0.6/180,0.0001,0.5,5000);   //turn toward foundation
 
-        driveAdjust(270,-0.5, 47, 4);    //Drive to foundation
+        driveAdjust(270,-0.5, 48, 4);    //Drive to foundation
 
         driveAdjust(270, -.2, 5, 2); //Carefully approach foundation
 
