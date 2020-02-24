@@ -19,6 +19,8 @@ public class park extends SkystoneLinearOpMode {
 
         waitForStart();
 
+        claw.setPosition(1);
+
         sleep(28000);
 
         driveDistance(0.5, 20);

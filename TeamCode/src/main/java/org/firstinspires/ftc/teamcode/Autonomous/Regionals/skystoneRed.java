@@ -62,7 +62,7 @@ public class skystoneRed extends SkystoneLinearOpMode {
                 driveAdjust(180, 0.6, 18, 2);//orig 16.5
                 break;
             case 1:
-                driveAdjust(180,0.6,12, 2);
+                driveAdjust(180,0.6,10, 2);
                 break;
         }
 
@@ -78,9 +78,9 @@ public class skystoneRed extends SkystoneLinearOpMode {
 
         //MOVE BACKWARD
         if (pos == 1)
-            driveAdjust(270,-0.4,11.5, 7);
+            driveAdjust(270,-0.4,17, 7);
         else if (pos == 0)
-            driveAdjust(270,-0.4,14, 7);
+            driveAdjust(270,-0.4,17, 7);
         else
             driveAdjust(270,-0.4,17.5, 7);
 
