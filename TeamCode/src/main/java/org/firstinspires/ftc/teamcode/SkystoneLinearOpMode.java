@@ -86,14 +86,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     Orientation angles;
 
     //TOGGLE VARIABLES
-    public ArrayList<Boolean> booleanArray = new ArrayList<Boolean>();
+    public ArrayList<Boolean> booleanArray = new ArrayList<>();
     public int booleanIncrementer = 0;
 
     //ticks per inch = (Motor revolutions * gear up ratio) / (wheel diameter * pie)
     //Motor revolutions = COUNTS_PER_MOTOR_REV
     //gear up ratio = 2:1   (ratio beyond motor)
     //wheel diameter = WHEEL_DIAMETER_INCHES
-    static final double     COUNTS_PER_MOTOR_REV    = 560 ;    // REV Motor Encoder (1120 for 40:1) (560 for 20:1)
+    static final double     COUNTS_PER_MOTOR_REV    = 560 ;    // REV Motor Encoder (1120 for 40:1) (560 for 20:1) (336 for 12:1)
     static final double     DRIVE_GEAR_REDUCTION    = 0.5 ;   // This is < 1.0 if geared UP   (ratio is 2:1)
     static final double     WHEEL_DIAMETER_INCHES   = 2 * (3 + (15 / 16)) ;     // For figuring circumference
 
@@ -487,7 +487,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }    
 
     public double[] fieldOriented(double leftX, double leftY, double rightX, double correction, double zeroAng){
-        double[] motorPower = {0.0, 0.0, 0.0, 0.0};
+        double[] motorPower = new double[4];
 
         double magnitude = Math.hypot(leftX, leftY); //How fast it goes (slight push is slow etc)
         double angle = Math.atan2(leftY, leftX) - Math.toRadians(getResetableYaw(zeroAng)); //Angle the joystick is turned in
@@ -511,6 +511,20 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
             index += 1;
         }
+
+        for(int i = 0; i < power.length; i++){
+            if(power[i] < 0)
+                power[i] = -(Math.abs(power[i] - correction));
+            else
+                power[i] -= correction;
+        }
+
+        if(max > 1.0){
+            for(int i = 0; i < power.length; i++){
+                power[i] /= max;
+            }
+        }
+        /**
         if(power[0] < 0){
             power[0] = -(Math.abs(power[0] - correction));
         }else{
@@ -530,14 +544,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             power[3] = -(Math.abs(power[3] - correction));
         }else{
             power[3] -= correction;
-        }
+        }**/
 
-        if(max > 1.0){
-            power[0] /= max;
-            power[1] /= max;
-            power[2] /= max;
-            power[3] /= max;
-        }
         return power;
     }
 
@@ -554,22 +562,17 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public double getCorrection(double currAngle, double tAngle){
-        double leftCoefficient = 0.06, rightCoefficient = 0.02;
-        double correction = 0, hError;
-
+        double leftCoefficient = 0.06, rightCoefficient = 0.02, correction = 0, hError;
         hError = tAngle - currAngle;
-
-        if(hError > 0){
+        if(hError > 0)
             correction = hError * leftCoefficient; //strafe bad on this side so more
-        }else if(hError < 0){
+        else if(hError < 0)
             correction = hError * rightCoefficient; //less aggressive on this side
-        }
-
         return Range.clip(correction, -0.4, 0.4);
     }
 
     public double[] strafeCorrection(double strafePower, double correction, boolean right){
-        double[] power = {0.0, 0.0, 0.0, 0.0};
+        double[] power = new double[4];
         if (right){
             power[0] = -strafePower;
             power[1] = -strafePower;
@@ -585,7 +588,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public double[] getCorrectionPID(double currAngle, double tAngle, double kP, double kI, double kD, double time, double pastTime, double pastError){
-        double[] correction = {0, 0, 0};
+        double[] correction = new double[3];
         double hError, prevError, dT, prevTime, currTime;
 
         if(Math.abs(tAngle - currAngle) > 4){
@@ -604,19 +607,16 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public void setEachPower(double lf, double rf, double lb, double rb, boolean halfspeed){
-
         if (halfspeed){
             lf /= 2;
             rf /= 2;
             lb /= 2;
             rb /= 2;
         }
-
         LF.setPower(lf);
         RF.setPower(rf);
         LB.setPower(lb);
         RB.setPower(rb);
-
     }
 
     public void setMotorPowers(double leftPower, double rightPower) {
@@ -627,7 +627,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     }
 
     public void setEachMotorPowers(double lf, double rf, double lb, double rb, boolean halfspeed) {
-
         if (halfspeed){
             lf /= 2;
             rf /= 2;
