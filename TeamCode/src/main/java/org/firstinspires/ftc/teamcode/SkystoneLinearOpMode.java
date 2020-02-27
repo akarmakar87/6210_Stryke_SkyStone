@@ -486,7 +486,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3], correction);
     }    
 
-    public double[] fieldOriented(double leftX, double leftY, double rightX, double correction, double zeroAng){
+    /**public double[] fieldOriented(double leftX, double leftY, double rightX, double correction, double zeroAng){
         double[] motorPower = new double[4];
 
         double magnitude = Math.hypot(leftX, leftY); //How fast it goes (slight push is slow etc)
@@ -499,6 +499,76 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         motorPower[3] = magnitude * Math.sin(angle + Math.PI / 4) + rotation; //Right back motor
 
         return scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3], correction);
+    }**/
+
+    public double[] proportionalPower(double lf, double rf, double lb, double rb){
+        double[] power = {lf, rf, lb, rb};
+        double max = 0;
+        int i = 0;
+        for(i = 0; i < power.length; i++){ //find the max power to scale all the powers down by it
+            if(Math.abs(power[i]) > max){
+                max = Math.abs(power[i]);
+            }
+        }
+
+        for(i = 0; i < power.length; i++){
+            power[i] /= max;
+            //power[i] = Math.floor(power[i] * 100) / 100;
+        }
+
+        return power;
+    }
+
+    public double[] autoTurn(double currHeading, boolean close){
+        double[] power = new double[4];
+        double coefficient = 0.05;
+        double mPower, error = 0;
+
+        if(close){
+            error =  0 - currHeading;
+            mPower = error * coefficient;
+        }else{
+            error = 180 - currHeading;
+            mPower = error * coefficient;
+        }
+
+        if(mPower < 0){ //negative turn left
+            power[0] = -mPower;
+            power[1] = mPower;
+            power[2] = -mPower;
+            power[3] = mPower;
+
+        }else{ //positive turn right
+            power[0] = mPower;
+            power[1] = -mPower;
+            power[2] = mPower;
+            power[3] = -mPower;
+        }
+
+
+        return power;
+    }
+
+    public double[] fieldOriented(double leftX, double leftY, double rightX, double correction, double zeroAng){
+        double[] motorPower = new double[4];
+
+        double magnitude = Math.hypot(leftX, leftY); //How fast it goes (slight push is slow etc)
+        double angle = Math.atan2(leftY, leftX) - Math.toRadians(getResetableYaw(zeroAng)); //Angle the joystick is turned in
+        double rotation = rightX;
+
+        motorPower[0] = magnitude * Math.sin(angle - Math.PI / 4) - rotation; //Left front motor
+        motorPower[1] = magnitude * Math.sin(angle - Math.PI / 4) + rotation; //Right front motor
+        motorPower[2] = magnitude * Math.sin(angle + Math.PI / 4) - rotation; //Left back motor
+        motorPower[3] = magnitude * Math.sin(angle + Math.PI / 4) + rotation; //Right back motor
+
+        motorPower = scalePower(motorPower[0], motorPower[1], motorPower[2], motorPower[3], correction);
+
+        if(magnitude > 0.9){
+            motorPower = proportionalPower(motorPower[0], motorPower[1], motorPower[2], motorPower[3]);
+        }
+
+        return motorPower;
+
     }
 
     public double[] scalePower(double LF, double RF, double LB, double RB, double correction){ //important for if we try to turn while strafing
