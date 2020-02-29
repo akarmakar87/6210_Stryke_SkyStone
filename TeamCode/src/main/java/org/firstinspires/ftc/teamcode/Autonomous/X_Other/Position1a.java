@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.X_Other;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -6,26 +6,30 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Position 1b", group = "auto") // PARKS NEXT TO WALL
+@Autonomous(name="Position 1a", group = "auto")  // PARKS AWAY FORM WALL
+
+// -------------------NOTE: DIFF VALUES AND DIRECTIONS FOR BLUE AND RED SIDE SO MAKE AN IF ELSE STATEMENT
+// THAT WILL RUN DIFFERENT CODE DEPENDING ON WHICH VUFORIA MARK IS IDENTIFIED ON THE WALL RIGHT NEXT TO ROBOT
+// ------------ ASK MINDY FOR CLARIFICATION
+
 @Disabled
-public class Position1b extends SkystoneLinearOpMode {
+public class Position1a extends SkystoneLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         init(hardwareMap, true);
-
         // SET UP DETECTOR
 
         initVuforia();
 
         telemetry.addData("Mode", "setting up detector...");
         telemetry.update();
-
         telemetry.addData("detector", "enabled");
         telemetry.update();
 
-        boolean red = isRed(1000); // outputs whether we are on red or blue side
+        wait(1000);
+        boolean red = isRed(3000); // outputs whether we are on red or blue side
         position();
 
         waitForStart();
@@ -39,16 +43,16 @@ public class Position1b extends SkystoneLinearOpMode {
 
             driveToPoint(0.8, x, -RobotCoordinates.four_1.get(1)); // drive forward to stone
             setClawPosition(true);
-            driveForward(x, -RobotCoordinates.five_1b.get(1), -0.5, -RobotCoordinates.five_1b.get(2)); // back up from stone
-            driveToPoint(0.5, RobotCoordinates.six_1b.get(0), -RobotCoordinates.six_1b.get(1)); // drive to other side
+            driveForward(x, -RobotCoordinates.five_1a.get(1), -0.5, -RobotCoordinates.five_1a.get(2)); // back up from stone
+            driveToPoint(0.5, RobotCoordinates.six_1a.get(0), -RobotCoordinates.six_1a.get(1)); // drive to other side
             setClawPosition(false);
-            driveForward(x, -RobotCoordinates.seven_1b.get(1), -0.5, -RobotCoordinates.seven_1b.get(2)); // drive back to other stone
+            driveForward(x, -RobotCoordinates.seven_1a.get(1), -0.5, -RobotCoordinates.seven_1a.get(2)); // drive back to other stone
             turnPIDV(90, 0, 0, 0, false); // turn to stone
-            driveToPoint(0.5, x, -RobotCoordinates.eight_1b.get(1)); // drive up to other stone
-            driveForward(x, -RobotCoordinates.nine_1b.get(1), -0.5, -RobotCoordinates.nine_1b.get(2)); // back up from stone
-            driveToPoint(0.5, RobotCoordinates.ten_1b.get(0), -RobotCoordinates.ten_1b.get(1)); // drive to other side
+            driveToPoint(0.5, x, -RobotCoordinates.eight_1a.get(1)); // drive up to other stone
+            driveForward(x, -RobotCoordinates.nine_1a.get(1), -0.5, -RobotCoordinates.nine_1a.get(2)); // back up from stone
+            driveToPoint(0.5, RobotCoordinates.ten_1a.get(0), -RobotCoordinates.ten_1a.get(1)); // drive to other side
             setClawPosition(false);
-            driveForward(RobotCoordinates.elev_1a.get(0), -RobotCoordinates.elev_1b.get(1), -0.5, -RobotCoordinates.elev_1b.get(2)); // back up and park
+            driveForward(RobotCoordinates.elev_1a.get(0), -RobotCoordinates.elev_1a.get(1), -0.5, -RobotCoordinates.elev_1a.get(2)); // back up and park
 
         } else {
             // blue code
@@ -70,7 +74,7 @@ public class Position1b extends SkystoneLinearOpMode {
             driveForward(RobotCoordinates.elev_1a.get(0), RobotCoordinates.elev_1a.get(1), -0.5, RobotCoordinates.elev_1a.get(2)); // back up and park
         }
 
-        telemetry.addData("mindy", "yes");
+        telemetry.addData("asha ", "no");
         telemetry.update();
     }
 }

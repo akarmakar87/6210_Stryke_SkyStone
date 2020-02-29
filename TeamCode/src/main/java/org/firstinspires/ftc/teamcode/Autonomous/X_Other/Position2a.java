@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.X_Other;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Position 2b", group = "auto") // PARKS AWAY FROM WALL
+@Autonomous(name="Position 2a", group = "auto") // PARKS NEXT TO WALL
 @Disabled
-public class Position2b extends SkystoneLinearOpMode {
+public class Position2a extends SkystoneLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -21,7 +21,6 @@ public class Position2b extends SkystoneLinearOpMode {
 
         telemetry.addData("Mode", "setting up detector...");
         telemetry.update();
-
         telemetry.addData("detector", "enabled");
         telemetry.update();
 
@@ -37,9 +36,7 @@ public class Position2b extends SkystoneLinearOpMode {
             driveForward(RobotCoordinates.three_2.get(0), -RobotCoordinates.three_2.get(1), -0.8, -RobotCoordinates.three_2.get(2)); // back up dragging foundation
             setClawPosition(false);
             driveForward(RobotCoordinates.four_2.get(0), -RobotCoordinates.four_2.get(1), -0.5, -RobotCoordinates.four_2.get(2)); // back up from foundation
-            driveToPoint(0.5, RobotCoordinates.five_2b.get(0), -RobotCoordinates.five_2b.get(1)); // drive forward
-            StrafetoPosition(0.5, RobotCoordinates.six_2b.get(0), -RobotCoordinates.six_2b.get(1), -RobotCoordinates.six_2b.get(2)); // strafe to park Y pos
-            driveForward(RobotCoordinates.seven_2b.get(0), -RobotCoordinates.seven_2b.get(1), 0.5, -RobotCoordinates.seven_2b.get(2)); // park
+            driveToPoint(0.5, RobotCoordinates.five_2a.get(0), -RobotCoordinates.five_2a.get(1)); // park
 
             /*
             driveToPoint(0.8, 50, 50); // drives up to foundation
@@ -57,12 +54,10 @@ public class Position2b extends SkystoneLinearOpMode {
             driveForward(RobotCoordinates.three_2.get(0), RobotCoordinates.three_2.get(1), -0.8, RobotCoordinates.three_2.get(2)); // back up dragging foundation
             setClawPosition(false);
             driveForward(RobotCoordinates.four_2.get(0), RobotCoordinates.four_2.get(1), -0.5, RobotCoordinates.four_2.get(2)); // back up from foundation
-            driveToPoint(0.5, RobotCoordinates.five_2b.get(0), RobotCoordinates.five_2b.get(1)); // drive forward
-            StrafetoPosition(0.5, RobotCoordinates.six_2b.get(0), RobotCoordinates.six_2b.get(1), RobotCoordinates.six_2b.get(2)); // strafe to park Y pos
-            driveForward(RobotCoordinates.seven_2b.get(0), RobotCoordinates.seven_2b.get(1), 0.5, RobotCoordinates.seven_2b.get(2)); // park
+            driveToPoint(0.5, RobotCoordinates.five_2a.get(0), RobotCoordinates.five_2a.get(1)); // park
         }
 
-        telemetry.addData("jerry", "yes");
+        telemetry.addData("garrett", "yes");
         telemetry.update();
     }
 }
