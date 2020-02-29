@@ -23,6 +23,7 @@ public class TeleOp extends SkystoneLinearOpMode {
         boolean lControl = true, aControl = true, foundation = false, strafeD = true, rHook = false, lHook = false, stopTurn = false, robotOriented = true;
         double lTime = 0, rTime = 0, fTime = 0, htime = 0, dtime = 0, deployTime = 0, min = 0, max = 0, pow = 0, turnTime = 0;
         double[] motorP = {0.0, 0.0, 0.0, 0.0};
+        boolean correctionBool = true;
 
 
         //For more controlled movement when moving the foundation
@@ -61,7 +62,7 @@ public class TeleOp extends SkystoneLinearOpMode {
              */
             currHeading = get180Yaw();
 
-            if (ifPressed(gamepad1.left_trigger) || ifPressed(gamepad1.right_trigger)) {
+            if (correctionBool) {
                 tHeading = get180Yaw();
             }
 
@@ -106,15 +107,23 @@ public class TeleOp extends SkystoneLinearOpMode {
 
                 //RIGHT AUTO STRAFE
             } else if (gamepad1.right_trigger > 0.05) {
+                correctionBool = false;
                 correction = getCorrection(currHeading, tHeading);
                 motorP = strafeCorrection(rStrafePower, correction, true);
 
                 //LEFT AUTO STRAFE
             } else if (gamepad1.left_trigger > 0.05) {
+                correctionBool = false;
                 correction = getCorrection(currHeading, tHeading);
                 motorP = strafeCorrection(lStrafePower, correction, false);
 
-            } else {
+            }else if(gamepad1.dpad_down) {
+                autoTurn(currHeading, true);
+            }else if(gamepad1.dpad_up){
+                autoTurn(currHeading, false);
+
+            }
+            else {
                 motorP[0] = 0;
                 motorP[1] = 0;
                 motorP[2] = 0;
