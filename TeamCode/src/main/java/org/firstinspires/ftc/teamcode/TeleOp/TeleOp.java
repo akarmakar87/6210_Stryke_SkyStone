@@ -118,12 +118,13 @@ public class TeleOp extends SkystoneLinearOpMode {
                 motorP = strafeCorrection(lStrafePower, correction, false);
 
             }else if(gamepad1.dpad_down) {
-                autoTurn(currHeading, true);
+                motorP = autoTurn(currHeading, true);
             }else if(gamepad1.dpad_up){
-                autoTurn(currHeading, false);
+                motorP = autoTurn(currHeading, false);
 
             }
             else {
+                correctionBool = true;
                 motorP[0] = 0;
                 motorP[1] = 0;
                 motorP[2] = 0;

@@ -17,7 +17,7 @@ public class RevisedTeleOp extends SkystoneLinearOpMode {
         int lowestArm = 0;
         double xAxis = 0, yAxis = 0, zAxis = 0, lStrafePower = 0, rStrafePower = 0, currHeading = 0, tHeading = 0, correction = 0, zeroAng = 0;
         double armPower = 0, liftPower = 0;
-        boolean foundation = false, rHook = false, lHook = false, robotOriented = true;
+        boolean foundation = false, rHook = false, lHook = false, robotOriented = true, correctionBool = true;
         double deployTime = 0, min = 0, max = 0, pow = 0;
         double[] motorP = new double[4];
 
@@ -53,7 +53,7 @@ public class RevisedTeleOp extends SkystoneLinearOpMode {
              */
             currHeading = get180Yaw();
 
-            if (ifPressed(gamepad1.left_trigger) || ifPressed(gamepad1.right_trigger))
+            if (correctionBool)
                 tHeading = get180Yaw();
 
             //RESET GYRO
@@ -89,15 +89,26 @@ public class RevisedTeleOp extends SkystoneLinearOpMode {
 
                 //RIGHT AUTO STRAFE
             } else if (gamepad1.right_trigger > 0.05) {
+                correctionBool = false;
                 correction = getCorrection(currHeading, tHeading);
                 motorP = strafeCorrection(rStrafePower, correction, true);
 
                 //LEFT AUTO STRAFE
             } else if (gamepad1.left_trigger > 0.05) {
+                correctionBool = false;
                 correction = getCorrection(currHeading, tHeading);
                 motorP = strafeCorrection(lStrafePower, correction, false);
 
-            } else {
+                //AUTO TURNS
+            } else if (gamepad1.dpad_down) {
+                motorP = autoTurn(currHeading, true);
+
+            } else if(gamepad1.dpad_up) {
+                motorP = autoTurn(currHeading, false);
+            }
+
+            else {
+                correctionBool = true;
                 for(int i = 0; i < motorP.length; i++){ motorP[i] = 0.0;}
             }
 
@@ -170,8 +181,6 @@ public class RevisedTeleOp extends SkystoneLinearOpMode {
                 pow = -gamepad2.right_stick_y;
                 if (arm.getCurrentPosition() > lowestArm) //technically higher because its weird
                     lowestArm = arm.getCurrentPosition();
-                if (gamepad2.right_stick_y > -0.6 && gamepad2.right_stick_y < 0.6)
-                    pow /= 2;
                 if (gamepad2.right_stick_y > 0.05 && arm.getCurrentPosition() > 100)
                     max = 0.2;
                 if (gamepad2.right_stick_y < -0.05 && arm.getCurrentPosition() < 120)
@@ -193,8 +202,8 @@ public class RevisedTeleOp extends SkystoneLinearOpMode {
             }
 
             //DEPLOY ARM
-            if (goArm && !changeMode){ //if inside (goArm) and manuel movement is not being used (changeMode)
-                if (deployTime > time.milliseconds() - 1000){ //expel block for 1 second
+            if (goArm && !changeMode){ //if inside (goArm is true) and manuel movement is not being used (changeMode)
+                if (deployTime > time.milliseconds() - 5000){ //expel block for 5 second
                     actuallyGo = true;
                     intakeL.setPower(1);
                     intakeR.setPower(-1);
@@ -203,14 +212,13 @@ public class RevisedTeleOp extends SkystoneLinearOpMode {
                     intakeR.setPower(0);
                 }
 
-                if (actuallyGo){
-                    arm.setTargetPosition(lowestArm - 540); //-540 for up, -830 for horizontal
-                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    arm.setPower(1);
-                }
+                arm.setTargetPosition(lowestArm - 540); //-540 for up, -830 for horizontal
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                arm.setPower(1);
+
             }
 
-            if (!goArm && !changeMode){ //if outside of robot (goArm)
+            if (!goArm && !changeMode){ //if outside of robot (goArm is false)
                 //move lift down
                 lift.setTargetPosition(0);
                 lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -228,18 +236,13 @@ public class RevisedTeleOp extends SkystoneLinearOpMode {
             if (changeMode) {
                 if (gamepad2.right_trigger > 0.05){
                     lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                    liftPower = Range.clip(gamepad2.right_trigger, 0, 0.7);  //LIFT DOWN
+                    liftPower = Range.clip(gamepad2.right_trigger, 0, 1);  //LIFT DOWN
                 } else if (gamepad2.left_trigger > 0.05) {
-                    liftPower = -Range.clip(gamepad2.left_trigger, 0, 0.7);  //LIFT UP
+                    liftPower = -Range.clip(gamepad2.left_trigger, 0, 1);  //LIFT UP
                 } else {
                     liftPower = 0;
                 }
 
-                if (lift.getCurrentPosition() < -4600 && gamepad2.left_trigger > 0.05) {
-                    liftPower = 0;
-                } else if (lift.getCurrentPosition() > 0 && gamepad2.right_trigger > 0.05) {
-                    liftPower = 0;
-                }
                 lift.setPower(liftPower);
             }
             //Automatic...
@@ -291,6 +294,7 @@ public class RevisedTeleOp extends SkystoneLinearOpMode {
             {
                 changeMode = true;
             }
+
             booleanIncrementer = 0;
             telemetry.addData("Drive Mode (Y): ", robotOriented ? "Robot Oriented" : "Field Oriented")
                      .addData("Halfspeed (X): ", halfSpeed)

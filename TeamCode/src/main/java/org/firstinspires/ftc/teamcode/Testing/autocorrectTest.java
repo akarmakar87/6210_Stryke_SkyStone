@@ -92,7 +92,7 @@ public class autocorrectTest extends SkystoneLinearOpMode {
                 start = false;
             }
 
-            double correction[] = getCorrectionPID(currHeading, tHeading, 0.004, 0, 0, time.milliseconds(), prevTime, prevError);
+            double correction[] = getCorrectionPID(currHeading, tHeading, 0.6/180, 0.0001, 0.5, time.milliseconds(), prevTime, prevError);
 
             prevError = correction[1]; //feed PID loop past error
             prevTime = correction[2]; //feed PID loop past time

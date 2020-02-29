@@ -661,7 +661,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         double[] correction = new double[3];
         double hError, prevError, dT, prevTime, currTime;
 
-        if(Math.abs(tAngle - currAngle) > 4){
+        if(Math.abs(tAngle - currAngle) > 1){
             prevError = pastError;
             hError = tAngle - currAngle;
             prevTime = pastTime;
