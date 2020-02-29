@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.X_Other;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -7,10 +7,10 @@ import com.vuforia.CameraDevice;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="bread and two bananas", group = "auto")
+@Autonomous(name="bread and two apples", group = "auto")
 
 @Disabled
-public class Backup2b extends SkystoneLinearOpMode{
+public class Backup2a extends SkystoneLinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -32,18 +32,16 @@ public class Backup2b extends SkystoneLinearOpMode{
             driveDistance(0.8, -25); //Drive back to building zone
             setClawPosition(false); //Drop off foundation
             driveDistance(0.5, 5); //Drive back from foundation
-            strafeDistance(0.8, 15, false); //Strafe to park
-            driveDistance(0.8, 25);
+            strafeDistance(0.8, 50,false); //Strafe to park
         }
         else {
-            strafeDistance(0.8, 15, true); //Strafe to middle of foundation
+            strafeDistance(0.8, 15, false); //Strafe to middle of foundation
             driveDistance(0.8, 30); //Drive forward to foundation
             setClawPosition(true); //Pick up foundation
             driveDistance(0.8, -25); //Drive back to building zone
             setClawPosition(false); //Drop off foundation
             driveDistance(0.5, 5); //Drive back from foundation
             strafeDistance(0.8, 50, true); //Strafe to park
-            driveDistance(0.8, 15);
         }
 
     }

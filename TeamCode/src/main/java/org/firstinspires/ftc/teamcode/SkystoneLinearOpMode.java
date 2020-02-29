@@ -3,12 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import android.graphics.Bitmap;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
-import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -18,12 +15,10 @@ import com.vuforia.Image;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.SensorREV2mDistance;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -32,7 +27,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -81,7 +75,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     //ARM MOVEMENT
     private double armSpeed = 0;
 
-
     //GYRO VARIABLES
     Orientation angles;
 
@@ -93,9 +86,14 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     //Motor revolutions = COUNTS_PER_MOTOR_REV
     //gear up ratio = 2:1   (ratio beyond motor)
     //wheel diameter = WHEEL_DIAMETER_INCHES
-    static final double     COUNTS_PER_MOTOR_REV    = 560 ;    // REV Motor Encoder (1120 for 40:1) (560 for 20:1) (336 for 12:1)
-    static final double     DRIVE_GEAR_REDUCTION    = 0.5 ;   // This is < 1.0 if geared UP   (ratio is 2:1)
-    static final double     WHEEL_DIAMETER_INCHES   = 2 * (3 + (15 / 16)) ;     // For figuring circumference
+     static final double     COUNTS_PER_MOTOR_REV    = 560 ;    // REV Motor Encoder (1120 for 40:1) (560 for 20:1) (336 for 12:1)
+     static final double     DRIVE_GEAR_REDUCTION    = 0.5 ;   // This is < 1.0 if geared UP   (ratio is 2:1)
+     static final double     WHEEL_DIAMETER_INCHES   = 2 * (3 + (15 / 16));     // For figuring circumference
+
+   /* static final double     COUNTS_PER_MOTOR_REV    = 420 ;    // REV Motor Encoder (420 for 15:1) (336 for 12:1)
+    static final double     DRIVE_GEAR_REDUCTION    = ? ;   // This is < 1.0 if geared UP   (ratio is 2:1)
+    static final double     WHEEL_DIAMETER_INCHES   = 100 / 25.4; // GoBilda Mecanum is 100mm in diameter
+    */
 
     public double encoderToInches = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION)/(WHEEL_DIAMETER_INCHES * Math.PI); //Multiply desired distance (inches)
 
@@ -137,7 +135,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public float phoneYRotate    = 0;
     public float phoneZRotate    = 0;
 
-    public VuforiaLocalizer vuforiaWC = null;
+    public VuforiaLocalizer vuforiaPC = null;
 
     VuforiaLocalizer.CloseableFrame frame; //takes the frame at the head of the queue
     Image rgb = null;
@@ -162,21 +160,21 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     // INITIALIZE
     public void init(HardwareMap map, boolean auto){
 
-        runtime     = new ElapsedTime();
-        LF  = map.dcMotor.get("LF");
-        RF  = map.dcMotor.get("RF");
-        LB  = map.dcMotor.get("LB");
-        RB  = map.dcMotor.get("RB");
-        intakeR  = map.dcMotor.get("iR");
-        intakeL = map.dcMotor.get("iL");
-        imu = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
-        arm = map.dcMotor.get("arm");
-        lift = map.dcMotor.get("lift");
-        claw = map.servo.get("claw");
+        runtime = new ElapsedTime();
+        LF          = map.dcMotor.get("LF");
+        RF          = map.dcMotor.get("RF");
+        LB          = map.dcMotor.get("LB");
+        RB          = map.dcMotor.get("RB");
+        intakeR     = map.dcMotor.get("iR");
+        intakeL     = map.dcMotor.get("iL");
+        imu         = map.get(BNO055IMU.class, "imu"); // Check which IMU is being used
+        arm         = map.dcMotor.get("arm");
+        lift        = map.dcMotor.get("lift");
+        claw        = map.servo.get("claw");
         foundationL = map.servo.get("fL");
         foundationR = map.servo.get("fR");
-        stickL = map.servo.get("stickL");
-        stickR = map.servo.get("stickR");
+        stickL      = map.servo.get("stickL");
+        stickR      = map.servo.get("stickR");
         //distanceSensor = map.get(DistanceSensor.class, "distanceSensor");
 
         LF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -404,10 +402,10 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         VuforiaLocalizer.Parameters paramWC = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         paramWC.vuforiaLicenseKey = VUFORIA_KEY;
         //paramWC.cameraName = LogitechC310;
-        vuforiaWC = ClassFactory.getInstance().createVuforia(paramWC);
+        vuforiaPC = ClassFactory.getInstance().createVuforia(paramWC);
 
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true); //enables RGB565 format for the image
-        vuforiaWC.setFrameQueueCapacity(1); //tells VuforiaLocalizer to only store one frame at a time
+        vuforiaPC.setFrameQueueCapacity(1); //tells VuforiaLocalizer to only store one frame at a time
 
         telemetry.addData("Vuforia:", "initialized");
         telemetry.update();
@@ -472,7 +470,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         booleanIncrementer += 1;
         return output;
     }
-
 
     //DRIVE METHODS
     public double[] holonomicDrive(double leftX, double leftY, double rightX, double correction){
@@ -1090,7 +1087,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
 
         stopMotors();
     }
-
 
     /*public void strafeDistance(double power, double distance, boolean right) throws InterruptedException{
         resetEncoders();
@@ -1790,45 +1786,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         sleep(10000);**/
     }
 
-    public void turnPIDAsha(double tAngle, double maxPower, double I, double D, double timeOut){
-
-        double power, prevError, error, dT, prevTime, currTime; //DECLARE ALL VARIABLES
-
-        prevError = error = tAngle - getYaw(); //INITIALIZE THESE VARIABLES
-
-        double kP = maxPower / error;
-        double kI = I;
-        double kD = D;
-
-        power = dT = prevTime = currTime = 0.0;
-
-        ElapsedTime time = new ElapsedTime(); //CREATE NEW TIME OBJECT
-        resetTime();
-        while (opModeIsActive() && Math.abs(error) > 0.7 && currTime < timeOut){
-            prevError = error;
-            error = tAngle - getYaw(); //GET ANGLE REMAINING TO TURN (tANGLE MEANS TARGET ANGLE, AS IN THE ANGLE YOU WANNA GO TO)
-            prevTime = currTime;
-            currTime = time.milliseconds();
-            dT = currTime - prevTime; //GET DIFFERENCE IN CURRENT TIME FROM PREVIOUS TIME
-            power = (error * kP) + (error * dT * kI) + ((error - prevError)/dT * kD);
-
-            if (power > 0)
-                setMotorPowers(Range.clip(power, 0.3, 0.7), -Range.clip(power, 0.3, 0.7));
-            else
-                setMotorPowers(-Range.clip(power, 0.3, 0.7), Range.clip(power, 0.3, 0.7));
-
-            telemetry.addData("tAngle: ", tAngle)
-                    .addData("kP:", error * kP)
-                    .addData("kI:", error * dT * kI)
-                    .addData("kD:", (error - prevError)/dT * kD)
-                    .addData("power", power)
-                    .addData("error: ", error)
-                    .addData("currTime: ", currTime);
-            telemetry.update();
-        }
-        stopMotors();
-    }
-
     public void turnTime(double power, boolean right, long seconds){
         if (right)
             setMotorPowers(power, -power);
@@ -1934,7 +1891,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public Bitmap getBitmap() throws InterruptedException {
         Bitmap bm = null;
         if(opModeIsActive()&& !isStopRequested()){
-            frame = vuforiaWC.getFrameQueue().take();
+            frame = vuforiaPC.getFrameQueue().take();
             long num = frame.getNumImages();
 
             for(int i = 0; i < num; i++){
