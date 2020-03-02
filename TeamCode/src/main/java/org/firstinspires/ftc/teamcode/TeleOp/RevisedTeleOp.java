@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group="teleop")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Rivised TeleOp", group="teleop")
 //@Disabled
 public class RevisedTeleOp extends SkystoneLinearOpMode {
 
@@ -72,7 +72,8 @@ public class RevisedTeleOp extends SkystoneLinearOpMode {
             //CONTROLLER INPUTS
             yAxis = gamepad1.left_stick_y;
             xAxis = -gamepad1.left_stick_x;
-            zAxis = -gamepad1.right_stick_x * 0.75;
+            zAxis = -gamepad1.right_stick_x;
+            if(halfSpeed) zAxis *= .75;
             lStrafePower = gamepad1.left_trigger * 0.75;
             rStrafePower = gamepad1.right_trigger * 0.75;
 
