@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Rivised TeleOp", group="teleop")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Revised TeleOp", group="teleop")
 //@Disabled
 public class RevisedTeleOp extends SkystoneLinearOpMode {
 
