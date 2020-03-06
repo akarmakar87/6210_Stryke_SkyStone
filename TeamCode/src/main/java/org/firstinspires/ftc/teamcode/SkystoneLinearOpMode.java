@@ -58,6 +58,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public Servo claw;
     public Servo stickL;
     public Servo stickR;
+    public Servo fangL;
+    public Servo fangR;
     //public RevColorSensorV3 colorSensor;
     //public DistanceSensor distanceSensor;
     public Servo foundationR;
@@ -175,6 +177,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         foundationR = map.servo.get("fR");
         stickL      = map.servo.get("stickL");
         stickR      = map.servo.get("stickR");
+        fangL       = map.servo.get("fangL");
+        fangR       = map.servo.get("fangR");
         //distanceSensor = map.get(DistanceSensor.class, "distanceSensor");
 
         LF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -1470,17 +1474,26 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     //1 = right when servo testing
     public void hook( boolean left, boolean right)
     {
-        if(left){
+        if(left)
             foundationL.setPosition(0);
-        }
         else
             foundationL.setPosition(1);
-        if(right){
+        if(right)
             foundationR.setPosition(1);
-        }
         else
             foundationR.setPosition(0);
+    }
 
+    public void fang( boolean left, boolean right)
+    {
+        if(left)
+            fangL.setPosition(0);
+        else
+            fangL.setPosition(1);
+        if(right)
+            fangR.setPosition(1);
+        else
+            fangR.setPosition(0);
     }
 
     /*public void setArm(int target, double pwr){
