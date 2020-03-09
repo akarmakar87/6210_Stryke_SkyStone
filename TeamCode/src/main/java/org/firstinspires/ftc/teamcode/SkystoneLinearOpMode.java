@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Bitmap;
+import android.hardware.Sensor;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -60,7 +62,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     public Servo stickR;
     public Servo fangL;
     public Servo fangR;
-    //public RevColorSensorV3 colorSensor;
+    public ColorSensor colorSensor;
     //public DistanceSensor distanceSensor;
     public Servo foundationR;
     public Servo foundationL;
@@ -179,7 +181,8 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stickR      = map.servo.get("stickR");
         fangL       = map.servo.get("fangL");
         fangR       = map.servo.get("fangR");
-        //distanceSensor = map.get(DistanceSensor.class, "distanceSensor");
+        colorSensor = map.colorSensor.get("colorsensor");
+        //distanceSensor = map.get(.class, "distanceSensor");
 
         LF.setDirection(DcMotorSimple.Direction.REVERSE);
         RF.setDirection(DcMotorSimple.Direction.FORWARD);//r
@@ -208,6 +211,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         if (auto) {
             foundationD(false);
             hook(false, false);
+            fang(false, false);
         }
 
         BNO055IMU.Parameters bparameters = new BNO055IMU.Parameters();

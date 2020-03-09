@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Regionals;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Red Skystone", group = "auto") // BLUE SIDE
-
+@Disabled
 public class skystoneRed extends SkystoneLinearOpMode {
 
     @Override
