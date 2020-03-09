@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Blue Skystone", group = "auto") // BLUE SIDE
-
+@Disabled
 public class skystoneBlue extends SkystoneLinearOpMode {
 
     @Override

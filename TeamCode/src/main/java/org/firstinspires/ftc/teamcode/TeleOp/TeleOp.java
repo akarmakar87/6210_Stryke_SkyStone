@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 import java.util.concurrent.TimeUnit;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="TeleOp", group="teleop")
-//@Disabled
+@Disabled
 public class TeleOp extends SkystoneLinearOpMode {
 
     @Override
