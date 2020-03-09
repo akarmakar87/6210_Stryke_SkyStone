@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Red Skystone", group = "auto") // BLUE SIDE
+@Autonomous(name="Blue Skystone", group = "auto") // BLUE SIDE
 
-public class twoSkystoneParkRed extends SkystoneLinearOpMode {
+public class twoSkystoneParkBlue extends SkystoneLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -22,10 +22,10 @@ public class twoSkystoneParkRed extends SkystoneLinearOpMode {
         waitForStart();
 
         // DETECT SKYSTONE
-        pos = detectSkystoneOnePix(getBitmap(),true);
+        pos = detectSkystoneOnePix(getBitmap(),false);
 
         // MOVE ROBOT FORWARD OR BACKWARD ALONG WALL TO LINE UP WITH SKYSTONE
-        adjustForSkystone(pos, true);
+        adjustForSkystone(pos, false);
 
         // LOWER RIGHT GRABBER
 
@@ -35,9 +35,9 @@ public class twoSkystoneParkRed extends SkystoneLinearOpMode {
 
         // STRAFE AWAY FROM STONE
 
-        // MOVE BACKWARD UNTIL COLOR SENSOR DETECTS LINE
+        // MOVE FORWARD UNTIL COLOR SENSOR DETECTS LINE
 
-        // MOVE BACKWARD A SET DISTANCE TO THE FOUNDATION
+        // MOVE FORWARD A SET DISTANCE TO THE FOUNDATION
 
         // STRAFE RIGHT AGAINST FOUNDATION
 
@@ -51,11 +51,11 @@ public class twoSkystoneParkRed extends SkystoneLinearOpMode {
 
         //ROTATE 180 IF SKYSTONE POSITION == -1 (reverse all movements if true)
 
-        // MOVE FORWARD UNTIL DETECTS LINE
+        // MOVE BACK UNTIL DETECTS LINE
 
-        // MOVE FORWARD UNTIL HITS WALL
+        // MOVE BACK UNTIL HITS WALL
 
-        // MOVE BACKWARD TO REACH SECOND SKYSTONE
+        // MOVE FORWARD TO REACH SECOND SKYSTONE
 
         // LOWER GRABBER SERVO (ALREADY OPEN)
 
@@ -65,9 +65,9 @@ public class twoSkystoneParkRed extends SkystoneLinearOpMode {
 
         // STRAFE LEFT AWAY FROM STONE
 
-        // MOVE BACKWARD UNTIL DETECTS LINE
+        // MOVE FORWARD UNTIL DETECTS LINE
 
-        // MOVE BACKWARD A SET DISTANCE TO THE FOUNDATION
+        // MOVE FORWARD A SET DISTANCE TO THE FOUNDATION
 
         // STRAFE RIGHT AGAINST FOUNDATION
 
@@ -79,7 +79,7 @@ public class twoSkystoneParkRed extends SkystoneLinearOpMode {
 
         // STRAFE LEFT AWAY FROM FOUNDATION
 
-        // MOVE FORWARD UNTIL DETECTS LINE AND PARK
+        // MOVE BACK UNTIL DETECTS LINE AND PARK
 
 
 

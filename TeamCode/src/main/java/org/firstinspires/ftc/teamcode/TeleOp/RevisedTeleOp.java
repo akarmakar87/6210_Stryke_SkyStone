@@ -45,10 +45,12 @@ public class RevisedTeleOp extends SkystoneLinearOpMode {
              * Right Joystick - Robot Movement (Arcade Drive)
              * Left Joystick - Robot Orientation
              * Right Trigger - Right Strafe , Left Trigger - Left Strafe
-             * Right Bumper - Right Hook , Left Bumper - Left Hook
+             * Right Dpad - Right Hook, Left Dpad - Left Hook
+             * Right Bumper - Right Grabber , Left Bumper - Left Grabber
              * X - Half Speed , B - Foundation Hooks
              * Y - Switch Drive Modes (Robot Oriented or Field Oriented)
              * A - Reset Gyro
+             *
              *
              */
             currHeading = get180Yaw();
