@@ -17,7 +17,7 @@ public class RevisedTeleOp extends SkystoneLinearOpMode {
         int lowestArm = 0;
         double xAxis = 0, yAxis = 0, zAxis = 0, lStrafePower = 0, rStrafePower = 0, currHeading = 0, tHeading = 0, correction = 0, zeroAng = 0;
         double armPower = 0, liftPower = 0;
-        boolean foundation = false, rHook = false, lHook = false, robotOriented = true, correctionBool = true;
+        boolean foundation = false, rHook = false, lHook = false, robotOriented = true, correctionBool = true, rFang = false, lFang = false;
         double deployTime = 0, min = 0, max = 0, pow = 0;
         double[] motorP = new double[4];
 
@@ -45,10 +45,12 @@ public class RevisedTeleOp extends SkystoneLinearOpMode {
              * Right Joystick - Robot Movement (Arcade Drive)
              * Left Joystick - Robot Orientation
              * Right Trigger - Right Strafe , Left Trigger - Left Strafe
-             * Right Bumper - Right Hook , Left Bumper - Left Hook
+             * Right Dpad - Right Hook, Left Dpad - Left Hook
+             * Right Bumper - Right Grabber , Left Bumper - Left Grabber
              * X - Half Speed , B - Foundation Hooks
              * Y - Switch Drive Modes (Robot Oriented or Field Oriented)
              * A - Reset Gyro
+             *
              *
              */
             currHeading = get180Yaw();
@@ -116,19 +118,30 @@ public class RevisedTeleOp extends SkystoneLinearOpMode {
             //SET ALL POWERS
             setEachPower(motorP[0], motorP[1], motorP[2], motorP[3], halfSpeed);
 
-            //HOOK CONTROLS
+            //FOUNDATION GRABBER CONTROLS
             if (ifPressed(gamepad1.b)) {
                 foundation = !foundation;
                 foundationD(foundation);
             }
 
-            if (ifPressed(gamepad1.right_bumper)) {
+            //HOOK CONTROLS
+            if (ifPressed(gamepad1.dpad_right)) {
                 rHook = !rHook;
                 hook(lHook, rHook);
             }
-            if (ifPressed(gamepad1.left_bumper)) {
+            if (ifPressed(gamepad1.dpad_left)) {
                 lHook = !lHook;
                 hook(lHook, rHook);
+            }
+
+            //SKYSTONE GRABBER CONTROLS
+            if (ifPressed(gamepad1.right_bumper)) {
+                rFang = !rFang;
+                fang(lFang, rFang);
+            }
+            if (ifPressed(gamepad1.left_bumper)) {
+                lFang = !lFang;
+                fang(lFang, rFang);
             }
 
             /**
