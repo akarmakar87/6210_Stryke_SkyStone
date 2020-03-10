@@ -29,6 +29,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -165,7 +166,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
     // INITIALIZE
     public void init(HardwareMap map, boolean auto){
 
-        runtime = new ElapsedTime();
+        runtime     = new ElapsedTime();
         LF          = map.dcMotor.get("LF");
         RF          = map.dcMotor.get("RF");
         LB          = map.dcMotor.get("LB");
@@ -182,7 +183,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         stickR      = map.servo.get("stickR");
         fangL       = map.servo.get("fangL");
         fangR       = map.servo.get("fangR");
-        colorSensor = map.colorSensor.get("colorsensor");
+        colorSensor = map.get(ColorSensor.class, "colorSensor");
         //distanceSensor = map.get(.class, "distanceSensor");
 
         LF.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -2360,6 +2361,29 @@ public class SkystoneLinearOpMode extends LinearOpMode{
             }
         }
         return 2;//default
+    }
+
+    public boolean isRed(){
+        ArrayList<Integer> rgb = new ArrayList<>();
+        rgb.add(colorSensor.red());
+        rgb.add(colorSensor.green());
+        rgb.add(colorSensor.blue());
+
+        if(Collections.max(rgb) == colorSensor.red()) {
+            return true;
+        }else if (Collections.max(rgb) == colorSensor.green()) {
+            return true; //figure out red vs green values for red tape
+        }else {
+            return false;
+        }
+    }
+
+    public boolean goToLine(double power){
+        resetEncoders();
+        while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < 0 && !isRed()){ //some value
+            setEachMotorPowers(power, power, power, power, false);
+        }
+        return true;
     }
 
     //ROBOT ORIENTATION METHODS
