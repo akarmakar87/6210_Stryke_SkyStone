@@ -81,8 +81,6 @@ public class twoSkystoneParkBlue extends SkystoneLinearOpMode {
 
         // MOVE BACK UNTIL DETECTS LINE AND PARK
 
-
-
         telemetry.addData("auto:", "complete");
         telemetry.update();
     }

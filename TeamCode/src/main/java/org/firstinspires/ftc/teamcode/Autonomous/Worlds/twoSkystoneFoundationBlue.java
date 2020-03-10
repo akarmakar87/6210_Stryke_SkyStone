@@ -91,8 +91,6 @@ public class twoSkystoneFoundationBlue extends SkystoneLinearOpMode {
 
         //MOVE FORWARD UNTIL BLUE LINE DETECTED AND PARK
 
-
-
         telemetry.addData("auto:", "complete");
         telemetry.update();
     }
