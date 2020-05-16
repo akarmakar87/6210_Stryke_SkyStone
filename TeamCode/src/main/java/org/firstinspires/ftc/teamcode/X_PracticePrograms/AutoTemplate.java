@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
 @Autonomous(name="Give name to show on DS", group = "auto")
 @Disabled
-public class Template extends SkystoneLinearOpMode {
+public class AutoTemplate extends SkystoneLinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -17,9 +17,9 @@ public class Template extends SkystoneLinearOpMode {
 
         waitForStart();
 
-        driveDistance(0.3, 4);
+        //WRITE ACTIONS HERE
 
-        telemetry.addData("Distance: ", getEncoderAvg());
+        telemetry.addData("LABEL:", "VALUE HERE");
         telemetry.update();
 
     }
