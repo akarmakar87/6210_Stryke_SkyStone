@@ -15,7 +15,7 @@ import static android.graphics.Color.red;
 
 @Autonomous(name="Yellow Cube Detector", group = "auto")
 @Disabled
-public class BitMapTest_Garrett extends SkystoneLinearOpMode {
+public class PracticeBitmap_Garrett extends SkystoneLinearOpMode {
 
     public int detectSkystoneOnePix(Bitmap bm, boolean red){
 
