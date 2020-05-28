@@ -62,9 +62,11 @@ public class TeleOp extends SkystoneLinearOpMode {
              */
             currHeading = get180Yaw();
 
+
             if (correctionBool) {
                 tHeading = get180Yaw();
             }
+
 
             //RESET GYRO
             if (gamepad1.a) {
