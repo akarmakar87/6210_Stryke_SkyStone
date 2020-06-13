@@ -14,6 +14,7 @@ public class skystoneRed extends SkystoneLinearOpMode {
 
         //sets up imu and vuforia
         init(hardwareMap, true);
+
         initBitmapVuforia();
 
         int pos = 0;
