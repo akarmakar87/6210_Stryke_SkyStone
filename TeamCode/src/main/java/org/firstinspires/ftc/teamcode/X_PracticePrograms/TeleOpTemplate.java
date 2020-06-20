@@ -13,7 +13,7 @@ public class TeleOpTemplate extends SkystoneLinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        //DECLARE VARIABLES 
+        //DECLARE VARIABLES
         double leftPower = 0;
         double rightPower = 0;
 
