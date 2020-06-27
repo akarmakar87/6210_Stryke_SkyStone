@@ -848,7 +848,6 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         idle();
 
-
     }
 
     public void resetLift(){
@@ -875,7 +874,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         t.reset();
         resetEncoders();
 
-        while (opModeIsActive()&& !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < 10){
+        while (opModeIsActive() && !isStopRequested() && getEncoderAvg() < distance * encoderToInches && t.seconds() < 10){
             remaining = total - getEncoderAvg();
             finalPower = (remaining/total) * power;
             //put in range clip if necessary
