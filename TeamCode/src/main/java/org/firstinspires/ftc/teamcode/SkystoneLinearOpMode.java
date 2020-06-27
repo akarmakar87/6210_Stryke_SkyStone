@@ -867,7 +867,7 @@ public class SkystoneLinearOpMode extends LinearOpMode{
         idle();*/
     }
 
-    public void driveDistance(double power, double distance) throws InterruptedException{
+    public void driveDistance(double power, double distance) throws InterruptedException {
 
         double total = distance * encoderToInches;
         double remaining, finalPower;
