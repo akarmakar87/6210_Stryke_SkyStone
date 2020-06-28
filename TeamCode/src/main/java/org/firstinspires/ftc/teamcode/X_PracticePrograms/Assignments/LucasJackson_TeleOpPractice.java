@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.X_PracticePrograms;
+package org.firstinspires.ftc.teamcode.X_PracticePrograms.Assignments;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;

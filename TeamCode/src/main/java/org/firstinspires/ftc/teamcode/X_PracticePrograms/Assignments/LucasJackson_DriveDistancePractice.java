@@ -14,11 +14,9 @@ public class LucasJackson_DriveDistancePractice extends SkystoneLinearOpMode {
         resetEncoders();
         setMotorPowers(power, power);
 
-        while (opModeIsActive() && et.seconds() < timeout && getEncoderAvg() <= encodedDistance ) {
+        while (opModeIsActive() && et.seconds() < timeout && getEncoderAvg() <= encodedDistance) {
         }
-
         setMotorPowers(0, 0);
 
     }
-
 }
