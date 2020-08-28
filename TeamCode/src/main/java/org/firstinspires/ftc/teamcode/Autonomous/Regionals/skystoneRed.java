@@ -21,6 +21,7 @@ public class skystoneRed extends SkystoneLinearOpMode {
         double adjust = 0.0;
         double longAdjust = 0.0;
 
+        //test comment
         waitForStart();
 
         pos = detectSkystoneOnePix(getBitmap(),false); //DETECT SKYSTONE
