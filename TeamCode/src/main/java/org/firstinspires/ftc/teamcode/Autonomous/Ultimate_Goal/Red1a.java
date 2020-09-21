@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.SkystoneLinearOpMode;
 
-@Autonomous(name="Red 1a", group = "auto") // BLUE SIDE
+@Autonomous(name="Red 1a", group = "auto") // RED SIDE
 
 public class Red1a extends SkystoneLinearOpMode {
 
